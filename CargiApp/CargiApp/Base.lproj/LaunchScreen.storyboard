@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
+                        <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cargi-padding.png" translatesAutoresizingMaskIntoConstraints="NO" id="YbN-4L-A4y">
+                                <rect key="frame" x="40" y="161.5" width="520" height="277"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="YbN-4L-A4y" secondAttribute="height" multiplier="15:8" id="6oa-9N-1ua"/>
+                                    <constraint firstAttribute="width" constant="240" id="Y17-Vn-gNG"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Y17-Vn-gNG"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="2:5" id="8zo-n6-xMh"/>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="20" id="FEs-Jf-wEX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="YbN-4L-A4y" secondAttribute="trailing" constant="20" id="Jmo-jZ-Lyg"/>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="VV1-ne-wEJ"/>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="sHR-q5-fNB"/>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="216" id="uSP-gT-f4C"/>
+                            <constraint firstItem="YbN-4L-A4y" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ySb-TR-Nuu"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="8zo-n6-xMh"/>
+                                <exclude reference="VV1-ne-wEJ"/>
+                                <exclude reference="uSP-gT-f4C"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="cargi-padding.png" width="1143" height="605"/>
+    </resources>
+</document>
