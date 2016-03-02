@@ -13,6 +13,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
     
     @IBOutlet var mapView: UIView!
     
+    let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
     var map: GMSMapView?
     var marker: GMSMarker = GMSMarker()
     var data: NSData?
@@ -37,6 +38,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
         marker.map = mapView
 
         view.addSubview(self.mapView)
+        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
         
         // Print all the contacts
         let contacts = ContactList.getAllContacts()
@@ -45,6 +47,23 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
                 print(contact + ": " + number)
             }
         }
+    }
+    
+    func getTimeToDestination(origin: String, dest: String) {
+        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin)&destinations=\(dest)&key=\(apiKey)"
+        print(url)
+        let request: NSURLRequest? = NSURLRequest(URL: NSURL(string: url)!)
+        guard let URLrequest = request else {
+            print("-___-")
+            return
+        }
+//        let config = NSURLSessionConfiguration()
+//        guard let session = NSURLSession(configuration: NSURLSessionConfiguration())
+        guard let connection = NSURLConnection(request: URLrequest, delegate: self) else {
+            print(":(")
+            return
+        }
+        connection.start()
     }
     
     func connectionDidFinishLoading(connection: NSURLConnection) {
