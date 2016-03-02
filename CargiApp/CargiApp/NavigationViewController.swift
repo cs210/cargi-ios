@@ -37,6 +37,14 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
         marker.map = mapView
 
         view.addSubview(self.mapView)
+        
+        // Print all the contacts
+        let contacts = ContactList.getAllContacts()
+        for (contact, numbers) in contacts {
+            for number in numbers {
+                print(contact + ": " + number)
+            }
+        }
     }
     
     func connectionDidFinishLoading(connection: NSURLConnection) {
