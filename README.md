@@ -6,3 +6,4 @@ Many tools in our lives are personalized, and we should expect the same things f
 To run the iOS app, you must import the GoogleMaps framework, which is stored in our Google Drive due to its large size. Place the GoogleMaps.framework file in `iOS > CargiApp > Pods > GoogleMaps > Frameworks`.
 
 **Important**: Do not use `.xcodeproject` file to open Xcode; use `iOS > CargiApp > CargiApp.xcworkspace` instead.
+When you open the project, on the file viewer on the left side "Cargi.xcodeproj" will be in red. Click on Cargi.xcodeproj and then look on the panel on the right. The absolute path will have Edwin's directory in it - change it to be wherever this file is in your directory.
