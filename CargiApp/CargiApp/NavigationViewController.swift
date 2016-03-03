@@ -34,8 +34,17 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
 //        marker.snippet = "Australia"
         marker.map = mapView
 
-        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
+//        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
+//        print("CONTACTS: ")
+//        printContacts()
+        print("EVENTS: ")
+        printEvents()
+        print("REMINDERS: ")
+        printReminders()
         
+    }
+    
+    private func printContacts() {
         // Print all the contacts
         let contacts = ContactList.getAllContacts()
         for (contact, numbers) in contacts {
@@ -43,7 +52,25 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
                 print(contact + ": " + number)
             }
         }
-        CalendarList.getAllEvents()
+    }
+    
+    private func printEvents() {
+        // Print all events in calendars.
+        guard let events = CalendarList.getAllCalendarEvents() else { return }
+        for ev in events {
+            print("EVENT: \(ev.title)" )
+            print("\t-startDate: \(ev.startDate)" )
+            print("\t-endDate: \(ev.endDate)" )
+            if let location = ev.location {
+                print("\t-location: \(location)")
+            }
+            print("\n")
+        }
+    }
+    
+    private func printReminders() {
+        // Print all reminders
+        CalendarList.getAllReminders()
     }
     
     func getTimeToDestination(origin: String, dest: String) {

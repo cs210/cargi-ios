@@ -10,13 +10,77 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NavigationViewController.swift"
-            timestampString = "478687295.225957"
+            timestampString = "478691429.184956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
             landmarkName = "NavigationViewController"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarList.swift"
+            timestampString = "478691429.184956"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "getAllCalendarEvents()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarList.swift"
+            timestampString = "478690993.315971"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "requestForAccessToCalendarEvents()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Cargi.CalendarList.getAllEvents (Cargi.CalendarList.Type)() -&gt; (Swift.String, Swift.Optional&lt;Swift.Array&lt;__ObjC.EKCalendar&gt;&gt;)"
+                  moduleName = "Cargi"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/EdwinPark/cs210a/cargi-ios/CargiApp/CargiApp/CalendarList.swift"
+                  timestampString = "478690303.104533"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21"
+                  offsetFromSymbolStart = "400">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Cargi.CalendarList.(getAllEvents (Cargi.CalendarList.Type) -&gt; () -&gt; (Swift.String, Swift.Optional&lt;Swift.Array&lt;__ObjC.EKCalendar&gt;&gt;)).(closure #1)"
+                  moduleName = "Cargi"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/EdwinPark/cs210a/cargi-ios/CargiApp/CargiApp/CalendarList.swift"
+                  timestampString = "478690303.104819"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
