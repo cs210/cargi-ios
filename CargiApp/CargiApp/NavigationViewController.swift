@@ -47,6 +47,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
                 print(contact + ": " + number)
             }
         }
+        CalendarList.getAllEvents()
     }
     
     func getTimeToDestination(origin: String, dest: String) {
