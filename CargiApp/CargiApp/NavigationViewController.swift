@@ -11,10 +11,9 @@ import GoogleMaps
 
 class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
     
-    @IBOutlet var mapView: UIView!
+    @IBOutlet var mapView: GMSMapView!
     
     let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
-    var map: GMSMapView?
     var marker: GMSMarker = GMSMarker()
     var data: NSData?
     
@@ -25,19 +24,16 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
         let camera = GMSCameraPosition.cameraWithLatitude(-33.86,
             longitude: 151.20, zoom: 6)
 //        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        let mapView = GMSMapView.mapWithFrame(CGRectMake(20, 20, 340, 600), camera: camera)
+        mapView.camera = camera
         
         mapView.myLocationEnabled = true
-        self.mapView = mapView
-        self.map = mapView
         
         marker = GMSMarker()
         marker.position = CLLocationCoordinate2DMake(-33.86, 151.20)
         marker.title = "Sydney"
-        marker.snippet = "Australia"
+//        marker.snippet = "Australia"
         marker.map = mapView
 
-        view.addSubview(self.mapView)
         getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
         
         // Print all the contacts
@@ -104,10 +100,10 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         print("Place attributions: \(place.attributions)")
         print("Place coordinates: \(place.coordinate)")
         self.dismissViewControllerAnimated(true, completion: nil)
-        map?.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
-        marker.position = place.coordinate
+        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
+        let marker = GMSMarker(position: place.coordinate)
         marker.title = place.name
-        marker.map = map
+        marker.map = mapView
     }
     
     func viewController(viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: NSError) {
