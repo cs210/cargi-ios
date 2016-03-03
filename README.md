@@ -6,3 +6,13 @@ Many tools in our lives are personalized, and we should expect the same things f
 To run the iOS app, you must import the GoogleMaps framework, which is stored in our Google Drive due to its large size. Place the GoogleMaps.framework file in `iOS > CargiApp > Pods > GoogleMaps > Frameworks`.
 
 **Important**: Do not use `.xcodeproject` file to open Xcode; use `iOS > CargiApp > CargiApp.xcworkspace` instead.
+
+# Development Milestones:
+- [x] Set up Google Maps view and basic Google Places search
+- [x] Compute ETA given origin & destination
+- [x] Parse events from Apple Calendar
+- [x] Parse reminders from Reminders app
+- [ ] Update NavigationView interface to more Uber-esque design
+- [ ] Redirect to Google Maps with destination set up using deep linking (only for demo)
+- [ ] Create and send text messages or iMessages to others users
+- [ ] Dashboard UI
