@@ -11,7 +11,6 @@ import MessageUI
 
 class SendMessageViewController: UIViewController, MFMessageComposeViewControllerDelegate {
 
-    var count: Int = 0
     var phoneNumber: String = "6073791277"
     
     @IBOutlet var messageLabel: UILabel!

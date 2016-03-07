@@ -8,8 +8,9 @@
 
 import UIKit
 import GoogleMaps
+import CoreBluetooth
 
-class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate {
+class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -20,6 +21,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var didFindMyLocation = false
     let defaultLatitude = 37.426
     let defaultLongitude = -122.172
+    var manager: CBCentralManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,15 +40,48 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
 //        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
 //        print("CONTACTS: ")
 //        printContacts()
-        print("EVENTS: ")
-        printEvents()
-        print("REMINDERS: ")
-        printReminders()
+//        print("EVENTS: ")
+//        printEvents()
+//        print("REMINDERS: ")
+//        printReminders()
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
+        manager = CBCentralManager (delegate: self, queue: nil)
+        
 //        UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
+        
+    }
+    
+    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+        print("Peripheral: \(peripheral)")
+    }
+    
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        print("didConnectPeripheral")
+        print(peripheral.description)
+    }
+    
+    func centralManagerDidUpdateState(central: CBCentralManager) {
+        print("Checking")
+        switch(central.state)
+        {
+        case.Unsupported:
+            print("BLE is not supported")
+        case.Unauthorized:
+            print("BLE is unauthorized")
+        case.Unknown:
+            print("BLE is Unknown")
+        case.Resetting:
+            print("BLE is Resetting")
+        case.PoweredOff:
+            print("BLE service is powered off")
+        case.PoweredOn:
+            print("BLE service is powered on")
+            print("Start Scanning")
+            manager.scanForPeripheralsWithServices(nil, options: nil)
+        }
     }
     
     private func printContacts() {
