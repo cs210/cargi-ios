@@ -9,30 +9,31 @@
 import UIKit
 import GoogleMaps
 
-class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
+class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
     let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
     var marker: GMSMarker = GMSMarker()
     var data: NSData?
+    var locationManager = CLLocationManager()
+    var didFindMyLocation = false
+    let defaultLatitude = 37.426
+    let defaultLongitude = -122.172
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let camera = GMSCameraPosition.cameraWithLatitude(-33.86,
-            longitude: 151.20, zoom: 6)
+        let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
+            longitude: defaultLongitude, zoom: 13)
 //        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
         mapView.camera = camera
         
-        mapView.myLocationEnabled = true
-        
-        marker = GMSMarker()
-        marker.position = CLLocationCoordinate2DMake(-33.86, 151.20)
-        marker.title = "Sydney"
-//        marker.snippet = "Australia"
-        marker.map = mapView
+//        marker = GMSMarker()
+//        marker.position = CLLocationCoordinate2DMake(37.426, 151.20)
+//        marker.title = "Stanford"
+//        marker.map = mapView
 
 //        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
 //        print("CONTACTS: ")
@@ -42,6 +43,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate {
         print("REMINDERS: ")
         printReminders()
         
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+//        UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
     }
     
     private func printContacts() {
@@ -143,5 +148,11 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
     func wasCancelled(viewController: GMSAutocompleteViewController) {
         print("Autocomplete was cancelled.", terminator: "")
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
+            mapView.myLocationEnabled = true
+        }
     }
 }
