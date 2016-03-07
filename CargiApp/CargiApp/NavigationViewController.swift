@@ -49,6 +49,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         locationManager.requestWhenInUseAuthorization()
         
         manager = CBCentralManager (delegate: self, queue: nil)
+        LocalNotifications.sendNotification()
         
 //        UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
         
