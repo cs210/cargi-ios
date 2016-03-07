@@ -12,6 +12,9 @@
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactList.swift */; };
 		741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3761C8D380F003017CA /* SendMessageViewController.swift */; };
+		741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationServices.swift */; };
+		741CE37B1C8D5BED003017CA /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37A1C8D5BED003017CA /* phone.png */; };
+		741CE37D1C8D5BFD003017CA /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37C1C8D5BFD003017CA /* message.png */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
 		74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */; };
 		74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FA1C7FCBC800C468CC /* Main.storyboard */; };
@@ -27,6 +30,9 @@
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactList.swift; sourceTree = "<group>"; };
 		741CE3761C8D380F003017CA /* SendMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageViewController.swift; sourceTree = "<group>"; };
+		741CE3781C8D55BF003017CA /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
+		741CE37A1C8D5BED003017CA /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
+		741CE37C1C8D5BFD003017CA /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
 		74A2E5F31C7FCBC800C468CC /* Cargi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cargi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +78,8 @@
 		74131C451C7FD81E00CBB5F4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				741CE37A1C8D5BED003017CA /* phone.png */,
+				741CE37C1C8D5BFD003017CA /* message.png */,
 				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
 				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
 			);
@@ -103,6 +111,7 @@
 				74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */,
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
 				741CE3761C8D380F003017CA /* SendMessageViewController.swift */,
+				741CE3781C8D55BF003017CA /* LocationServices.swift */,
 				7417B5471C868A70005357CB /* ContactList.swift */,
 				74A2E5FA1C7FCBC800C468CC /* Main.storyboard */,
 				74A2E6081C7FCD6F00C468CC /* Podfile */,
@@ -181,6 +190,8 @@
 				74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */,
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
+				741CE37B1C8D5BED003017CA /* phone.png in Resources */,
+				741CE37D1C8D5BFD003017CA /* message.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,6 +240,7 @@
 				741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
+				741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

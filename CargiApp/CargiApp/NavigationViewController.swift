@@ -9,19 +9,28 @@
 import UIKit
 import GoogleMaps
 import CoreBluetooth
+import MessageUI
+import EventKit
 
-class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate {
+class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate,
+                                MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
     let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
     var marker: GMSMarker = GMSMarker()
     var data: NSData?
+    
     var locationManager = CLLocationManager()
     var didFindMyLocation = false
     let defaultLatitude = 37.426
     let defaultLongitude = -122.172
+    
     var manager: CBCentralManager!
+    
+    var contact: String?
+    var contactNumbers: [String]?
+    @IBOutlet var contactName: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,18 +49,70 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
 //        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
 //        print("CONTACTS: ")
 //        printContacts()
+        
 //        print("EVENTS: ")
 //        printEvents()
 //        print("REMINDERS: ")
 //        printReminders()
-        
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        mapView.settings.myLocationButton = true
+        mapView.settings.compassButton = true
+        syncData()
+//          manager = CBCentralManager(delegate: self, queue: nil)
+    }
+    
+    func syncData() {
+        let contacts = ContactList.getAllContacts()
+        guard let events = CalendarList.getAllCalendarEvents() else { return }
+        print(events)
         
-        manager = CBCentralManager (delegate: self, queue: nil)
+        var event: EKEvent?
+        for ev in events {
+            for contact in contacts.keys {
+                if ev.title.rangeOfString(contact) != nil {
+                    event = ev
+                    self.contact = contact
+                }
+            }
+        }
+        print(event)
         
-//        UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
+        contactNumbers = ContactList.getContactPhoneNumber(self.contact)
+
+        guard let ev = event else { return }
+        contactName.text = self.contact
+        LocationServices.searchLocation(ev.location!)
+    }
+    
+    @IBAction func update(sender: UIButton) {
+        syncData()
+    }
+    
+    func callPhone(phoneNumbers: [String]?) {
+        // UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
+        guard let numbers = phoneNumbers else { return }
+        let number = numbers[0] as NSString
         
+        let charactersToRemove = NSCharacterSet.alphanumericCharacterSet().invertedSet
+        let numberToCall = number.componentsSeparatedByCharactersInSet(charactersToRemove).joinWithSeparator("")
+        
+        let stringURL = "tel://\(numberToCall)"
+        print(stringURL)
+        guard let url = NSURL(string: stringURL) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    func sendMessage(phoneNumbers: [String]?) {
+        guard let numbers = phoneNumbers else { return }
+        if (MFMessageComposeViewController.canSendText()) {
+            let controller = MFMessageComposeViewController()
+            controller.body = "Hello, welcome to Cargi!"
+            controller.recipients = [numbers[0]] // Send only to the primary number
+            print(controller.recipients)
+            controller.messageComposeDelegate = self
+            self.presentViewController(controller, animated: true, completion: nil)
+        }
     }
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
@@ -142,9 +203,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func searchButtonClicked(sender: UIButton) {
-        let acController = GMSAutocompleteViewController()
-        acController.delegate = self
-        self.presentViewController(acController, animated: true, completion: nil)
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.delegate = self
+        self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
 
     /*
@@ -156,6 +217,18 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    @IBAction func sendTextMessage(sender: UIButton) {
+        sendMessage(contactNumbers)
+    }
+    
+    
+    @IBAction func callPhoneNumber(sender: UIButton) {
+        callPhone(contactNumbers)
+    }
+    
+    
 }
 
 extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
@@ -189,5 +262,14 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         if status == CLAuthorizationStatus.AuthorizedWhenInUse {
             mapView.myLocationEnabled = true
         }
+    }
+    
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        //... handle sms screen actions
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = false
     }
 }

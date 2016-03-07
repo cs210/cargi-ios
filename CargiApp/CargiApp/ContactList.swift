@@ -55,4 +55,11 @@ class ContactList {
         
         return contacts
     }
+    
+    static func getContactPhoneNumber(contactName: String?) -> [String]? {
+        let contacts = getAllContacts()
+        guard let name = contactName else { return nil }
+        guard let contact = contacts[name] else { return nil }
+        return contact
+    }
 }
