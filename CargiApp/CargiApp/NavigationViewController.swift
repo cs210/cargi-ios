@@ -60,6 +60,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         mapView.settings.compassButton = true
         syncData()
 //          manager = CBCentralManager(delegate: self, queue: nil)
+        LocalNotifications.sendNotification()
     }
     
     func syncData() {
@@ -93,7 +94,6 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         // UIApplication.sharedApplication().openURL(NSURL(string: "tel://6073791277")!)
         guard let numbers = phoneNumbers else { return }
         let number = numbers[0] as NSString
-        
         let charactersToRemove = NSCharacterSet.alphanumericCharacterSet().invertedSet
         let numberToCall = number.componentsSeparatedByCharactersInSet(charactersToRemove).joinWithSeparator("")
         

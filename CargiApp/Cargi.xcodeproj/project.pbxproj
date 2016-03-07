@@ -22,6 +22,7 @@
 		74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FF1C7FCBC800C468CC /* LaunchScreen.storyboard */; };
 		74A2E6091C7FCD6F00C468CC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E6081C7FCD6F00C468CC /* Podfile */; };
 		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
+		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
+		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 		74A2E5F51C7FCBC800C468CC /* CargiApp */ = {
 			isa = PBXGroup;
 			children = (
+				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
 				BE6504EB1C88166C00C26AAA /* CalendarList.swift */,
 				74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */,
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */,
 				7417B5481C868A70005357CB /* ContactList.swift in Sources */,
 				741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
