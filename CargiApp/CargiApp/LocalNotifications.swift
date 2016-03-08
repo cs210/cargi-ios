@@ -62,7 +62,6 @@ class LocalNotifications {
         //Add one to the icon badge number
         
         //        localNotification.applicationIconBadgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber + 1;
-        //
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
         //            UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
         print("sent notification")

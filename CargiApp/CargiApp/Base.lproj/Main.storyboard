@@ -122,10 +122,10 @@
                                 <exclude reference="Vrh-lH-Zea"/>
                                 <exclude reference="l0q-a4-lDM"/>
                                 <exclude reference="smW-zo-SmL"/>
-                                <exclude reference="Mh7-eI-Lux"/>
-                                <exclude reference="Ryk-nk-9Rc"/>
                                 <exclude reference="lzY-zr-MZZ"/>
                                 <exclude reference="xZW-sE-Wqb"/>
+                                <exclude reference="Mh7-eI-Lux"/>
+                                <exclude reference="Ryk-nk-9Rc"/>
                             </mask>
                         </variation>
                     </view>

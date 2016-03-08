@@ -25,6 +25,8 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var didFindMyLocation = false
     let defaultLatitude = 37.426
     let defaultLongitude = -122.172
+    var destLatitude = String()
+    var destLongitude = String()
     
     var manager: CBCentralManager!
     
@@ -85,6 +87,17 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let ev = currentEvent else { return }
         contactName.text = self.contact
         LocationServices.searchLocation(ev.location!)
+        
+        let locationParams = LocationServices.getCoords(ev.location!)
+        destLatitude = String(locationParams.coordinate.latitude)
+        destLongitude = String(locationParams.coordinate.longitude)
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue: CLLocationCoordinate2D = manager.location!.coordinate
+        getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
+                             dest1: destLatitude, dest2: destLongitude)
     }
     
     @IBAction func update(sender: UIButton) {
@@ -192,6 +205,23 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         connection.start()
     }
     
+    func getTimeToDestination(origin1: String, origin2: String, dest1: String, dest2: String) {
+        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&key=\(apiKey)"
+        print(url)
+        let request: NSURLRequest? = NSURLRequest(URL: NSURL(string: url)!)
+        guard let URLrequest = request else {
+            print("-___-")
+            return
+        }
+        //        let config = NSURLSessionConfiguration()
+        //        guard let session = NSURLSession(configuration: NSURLSessionConfiguration())
+        guard let connection = NSURLConnection(request: URLrequest, delegate: self) else {
+            print(":(")
+            return
+        }
+        connection.start()
+    }
+    
     func connectionDidFinishLoading(connection: NSURLConnection) {
         print("connectionDidFinishLoading")
         let stringData: NSString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
@@ -208,17 +238,6 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         autocompleteController.delegate = self
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     
     @IBAction func sendTextMessage(sender: UIButton) {
         sendMessage(contactNumbers)
@@ -239,6 +258,21 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         } else {
             print("Can't use spotify://");
         }
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
+            mapView.myLocationEnabled = true
+        }
+    }
+    
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        //... handle sms screen actions
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = false
     }
     
     
@@ -269,20 +303,5 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
     func wasCancelled(viewController: GMSAutocompleteViewController) {
         print("Autocomplete was cancelled.", terminator: "")
         self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
-            mapView.myLocationEnabled = true
-        }
-    }
-    
-    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
-        //... handle sms screen actions
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
     }
 }
