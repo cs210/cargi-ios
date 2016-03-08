@@ -60,8 +60,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         mapView.settings.compassButton = true
         syncData()
 //          manager = CBCentralManager(delegate: self, queue: nil)
-//        LocalNotifications.sendNotification()
+        LocalNotifications.sendNotification()
     }
+    
     
     func syncData() {
         let contacts = ContactList.getAllContacts()
