@@ -19,12 +19,12 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
     var marker: GMSMarker = GMSMarker()
-    var data: NSData?
+    var data: NSMutableData = NSMutableData()
     
     var locationManager = CLLocationManager()
     var didFindMyLocation = false
-    let defaultLatitude = 37.426
-    let defaultLongitude = -122.172
+    let defaultLatitude: CLLocationDegrees = 37.426
+    let defaultLongitude: CLLocationDegrees = -122.172
     var destLatitude = String()
     var destLongitude = String()
     
@@ -58,17 +58,18 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
 //        printReminders()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        
         mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
-        syncData()
+        syncData(openMaps: true)
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
     }
     
-    func syncData() {
+    func syncData(openMaps openMaps: Bool) {
         let contacts = ContactList.getAllContacts()
         guard let events = CalendarList.getAllCalendarEvents() else { return }
-        print(events)
         
         var currentEvent: EKEvent?
         for ev in events {
@@ -80,28 +81,31 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
                 }
             }
         }
-        print(currentEvent)
         
         contactNumbers = ContactList.getContactPhoneNumber(self.contact)
 
         guard let ev = currentEvent else { return }
         contactName.text = self.contact
-        LocationServices.searchLocation(ev.location!)
         
-        let locationParams = LocationServices.getCoords(ev.location!)
-        destLatitude = String(locationParams.coordinate.latitude)
-        destLongitude = String(locationParams.coordinate.longitude)
-        locationManager.startUpdatingLocation()
+        guard let coordinate = ev.structuredLocation?.geoLocation?.coordinate else { return }
+        destLatitude = String(coordinate.latitude)
+        destLongitude = String(coordinate.longitude)
+        
+        if openMaps {
+            switch (CLLocationManager.authorizationStatus()) {
+                case .AuthorizedAlways, .AuthorizedWhenInUse:
+                    LocationServices.searchLocation(ev.location!)
+                default: break
+            }
+        }
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue: CLLocationCoordinate2D = manager.location!.coordinate
-        getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
-                             dest1: destLatitude, dest2: destLongitude)
+        print("updating location")
     }
     
     @IBAction func update(sender: UIButton) {
-        syncData()
+        syncData(openMaps: true)
     }
     
     func callPhone(phoneNumbers: [String]?) {
@@ -117,11 +121,11 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         UIApplication.sharedApplication().openURL(url)
     }
     
-    func sendMessage(phoneNumbers: [String]?) {
+    func sendMessage(phoneNumbers: [String]?, duration: String) {
         guard let numbers = phoneNumbers else { return }
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            controller.body = "Hello, welcome to Cargi!"
+            controller.body = "Hi, I will arrive in \(duration)."
             controller.recipients = [numbers[0]] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
@@ -223,14 +227,40 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     func connectionDidFinishLoading(connection: NSURLConnection) {
-        print("connectionDidFinishLoading")
-        let stringData: NSString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
-        print(stringData)
+        print("\nconnectionDidFinishLoading\n")
+//        let stringData: NSString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+//        print(stringData)
+        var jsonResult: NSDictionary?
+        do {
+            jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+        } catch {
+            print("ERROR")
+        }
+        
+        guard let json = jsonResult else { return }
+        if let rows = json["rows"] as? NSArray {
+            if let row = rows[0] as? NSDictionary {
+                if let elements = row["elements"] as? NSArray {
+                    if let elem = elements[0] as? NSDictionary {
+                        if let duration = elem["duration"] as? NSDictionary {
+                            if let time = duration["text"] as? String {
+                                sendMessage(contactNumbers, duration: time)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+        // Received a new request, clear out the data object
+        self.data = NSMutableData()
     }
     
     func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-        print("YAY!")
-        self.data = data
+        print("\nYAY!\n")
+        self.data.appendData(data)
     }
     
     @IBAction func searchButtonClicked(sender: UIButton) {
@@ -240,7 +270,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func sendTextMessage(sender: UIButton) {
-        sendMessage(contactNumbers)
+        syncData(openMaps: false)
+        let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
+        getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
+                             dest1: destLatitude, dest2: destLongitude)
     }
     
     
