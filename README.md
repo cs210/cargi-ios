@@ -7,7 +7,13 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 
 **Important**: Do not use `.xcodeproject` file to open Xcode; use `iOS > CargiApp > CargiApp.xcworkspace` instead.
 
-# Development Milestones (MVP):
+# Development Workflow:
+1. For every feature or bug fix needed on the Cargi app, open up an issue first.
+2. Assign yourself, or another team member to the issue.
+3. When done with an issue, commit and push your code. Remember to `git pull` first to get the current changes.
+4. When your code has been pushed, notify Edwin, who will do a code review and make sure your code integrates smoothly into the iOS application, and close the issue.
+
+# Development Milestones:
 - [x] Set up Google Maps view and basic Google Places search
 - [x] Compute ETA given origin & destination
 - [x] Parse events from Apple Calendar
