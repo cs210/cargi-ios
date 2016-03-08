@@ -47,11 +47,11 @@ class CalendarList {
         return events
     }
     
-    
-    // Default version: get all events from 24 hours ago to now.
     private static func parseCalendar(calendar: EKCalendar) -> [EKEvent] {
-        let startDate = NSDate().dateByAddingTimeInterval(30*60)//.dateByAddingTimeInterval(-60*60*24)
-        let endDate = NSDate().dateByAddingTimeInterval(60*60)//.dateByAddingTimeInterval(60*60*24*3)
+        // Look at all events 30 minutes prior to the current time
+        let startDate = NSDate().dateByAddingTimeInterval(-30*60)
+        // Look at all events within 2 hours after the current time.
+        let endDate = NSDate().dateByAddingTimeInterval(2*60*60)
         return parseCalendar(calendar, startDate: startDate, endDate: endDate)
     }
     

@@ -15,7 +15,9 @@
 		741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationServices.swift */; };
 		741CE37B1C8D5BED003017CA /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37A1C8D5BED003017CA /* phone.png */; };
 		741CE37D1C8D5BFD003017CA /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37C1C8D5BFD003017CA /* message.png */; };
+		742743541C8EC28400D43A24 /* music.png in Resources */ = {isa = PBXBuildFile; fileRef = 742743531C8EC28400D43A24 /* music.png */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
+		749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749655721C8EAE5B003AE6B0 /* MusicViewController.swift */; };
 		74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */; };
 		74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FA1C7FCBC800C468CC /* Main.storyboard */; };
 		74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */; };
@@ -34,7 +36,9 @@
 		741CE3781C8D55BF003017CA /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
 		741CE37A1C8D5BED003017CA /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
 		741CE37C1C8D5BFD003017CA /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
+		742743531C8EC28400D43A24 /* music.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music.png; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
+		749655721C8EAE5B003AE6B0 /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		74A2E5F31C7FCBC800C468CC /* Cargi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cargi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74A2E5FB1C7FCBC800C468CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -80,6 +84,7 @@
 		74131C451C7FD81E00CBB5F4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				742743531C8EC28400D43A24 /* music.png */,
 				741CE37A1C8D5BED003017CA /* phone.png */,
 				741CE37C1C8D5BFD003017CA /* message.png */,
 				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
@@ -117,6 +122,7 @@
 				741CE3781C8D55BF003017CA /* LocationServices.swift */,
 				7417B5471C868A70005357CB /* ContactList.swift */,
 				74A2E5FA1C7FCBC800C468CC /* Main.storyboard */,
+				749655721C8EAE5B003AE6B0 /* MusicViewController.swift */,
 				74A2E6081C7FCD6F00C468CC /* Podfile */,
 				74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */,
 				74A2E5FF1C7FCBC800C468CC /* LaunchScreen.storyboard */,
@@ -194,6 +200,7 @@
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
 				741CE37B1C8D5BED003017CA /* phone.png in Resources */,
+				742743541C8EC28400D43A24 /* music.png in Resources */,
 				741CE37D1C8D5BFD003017CA /* message.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
 			);
@@ -243,6 +250,7 @@
 				7417B5481C868A70005357CB /* ContactList.swift in Sources */,
 				741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
+				749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
 				741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */,

@@ -60,7 +60,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         mapView.settings.compassButton = true
         syncData()
 //          manager = CBCentralManager(delegate: self, queue: nil)
-        LocalNotifications.sendNotification()
+//        LocalNotifications.sendNotification()
     }
     
     func syncData() {
@@ -68,20 +68,21 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let events = CalendarList.getAllCalendarEvents() else { return }
         print(events)
         
-        var event: EKEvent?
+        var currentEvent: EKEvent?
         for ev in events {
+            guard let _ = ev.location else { continue } // ignore event if it has no location info.
             for contact in contacts.keys {
                 if ev.title.rangeOfString(contact) != nil {
-                    event = ev
+                    currentEvent = ev
                     self.contact = contact
                 }
             }
         }
-        print(event)
+        print(currentEvent)
         
         contactNumbers = ContactList.getContactPhoneNumber(self.contact)
 
-        guard let ev = event else { return }
+        guard let ev = currentEvent else { return }
         contactName.text = self.contact
         LocationServices.searchLocation(ev.location!)
     }
@@ -226,6 +227,18 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     @IBAction func callPhoneNumber(sender: UIButton) {
         callPhone(contactNumbers)
+    }
+    
+    @IBAction func openMusicApp(sender: UIButton) {
+        let appName: String = "spotify"
+        
+        let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
+            print(appURL)
+            UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+        } else {
+            print("Can't use spotify://");
+        }
     }
     
     

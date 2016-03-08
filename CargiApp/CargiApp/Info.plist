@@ -6,6 +6,7 @@
 	<array>
 		<string>googlechromes</string>
 		<string>comgooglemaps</string>
+		<string>spotify</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>

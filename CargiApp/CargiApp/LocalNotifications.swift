@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import GoogleMaps
-import CoreBluetooth
 
 class LocalNotifications {
     
@@ -17,16 +15,14 @@ class LocalNotifications {
         let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge , .Sound], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         
-        var localNotification:UILocalNotification = UILocalNotification()
-        localNotification.fireDate = NSDate().dateByAddingTimeInterval(30.0)
+        let localNotification: UILocalNotification = UILocalNotification()
+        localNotification.fireDate = NSDate().dateByAddingTimeInterval(5.0)
         localNotification.alertBody = "hello";
-        localNotification.alertAction = nil;
-        localNotification.repeatInterval = NSCalendarUnit.Day
+        localNotification.hasAction = true
+        localNotification.repeatInterval = NSCalendarUnit.Minute
         
-        //Add one to the icon badge number
-        
-        localNotification.applicationIconBadgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber + 1;
-        
+        // Add one to the icon badge number
+//        localNotification.applicationIconBadgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber + 1
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     //        UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
     }
