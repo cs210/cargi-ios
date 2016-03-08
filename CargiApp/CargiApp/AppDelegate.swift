@@ -11,7 +11,16 @@ import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    enum Actions:String{
+        case increment = "INCREMENT_ACTION"
+        case decrement = "DECREMENT_ACTION"
+        case reset = "RESET_ACTION"
+    }
+    var categoryID:String {
+        get{
+            return "COUNTER_CATEGORY"
+        }
+    }
     var window: UIWindow?
 
 
@@ -20,7 +29,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey("AIzaSyBtm9mqbycBZedKCLWgxWU-aPbZDwO0jII")
         return true
     }
-
+    
+    func application(application: UIApplication,
+        handleActionWithIdentifier identifier: String?,
+        forLocalNotification notification: UILocalNotification,
+        completionHandler: () -> Void) {
+            
+            // Handle notification action *****************************************
+            if notification.category == categoryID {
+                
+                let action:Actions = Actions(rawValue: identifier!)!
+                var counter = 0;
+                
+                switch action{
+                    
+                case Actions.increment:
+                    counter++
+                    
+                case Actions.decrement:
+                    counter--
+                    
+                case Actions.reset:
+                    counter = 0
+                    
+                }
+                print(counter)
+            }
+            
+            completionHandler()
+    }
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -42,6 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    
+ 
+
 
 
 }

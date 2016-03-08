@@ -49,21 +49,25 @@ class LocalNotifications {
         counterCategory.setActions([incrementAction, decrementAction],
             forContext: UIUserNotificationActionContext.Minimal)
         
-        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge , .Sound], categories: nil)
+        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Sound], categories: NSSet(object: counterCategory) as! Set<UIUserNotificationCategory>)
+        
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         
-        var localNotification:UILocalNotification = UILocalNotification()
-        localNotification.fireDate = NSDate().dateByAddingTimeInterval(30.0)
-        localNotification.alertBody = "hello";
-        //        localNotification.alertAction = nil;
-        localNotification.category = "COUNTER_CATEGORY"
-        localNotification.repeatInterval = NSCalendarUnit.Day
+        let notification = UILocalNotification()
+        notification.alertBody = "Hey! Update your counter"
+        notification.soundName = UILocalNotificationDefaultSoundName
+        notification.fireDate = NSDate()
+        notification.category = "COUNTER_CATEGORY"
+        notification.repeatInterval = NSCalendarUnit.Minute
         
-        //Add one to the icon badge number
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+         //Add one to the icon badge number
         
         //        localNotification.applicationIconBadgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber + 1;
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
         //            UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
         print("sent notification")
     }
+    
+    
 }

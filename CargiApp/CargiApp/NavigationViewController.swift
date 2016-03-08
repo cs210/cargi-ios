@@ -64,7 +64,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         mapView.settings.compassButton = true
         syncData(openMaps: true)
 //          manager = CBCentralManager(delegate: self, queue: nil)
-//        LocalNotifications.sendNotification()
+        LocalNotifications.sendNotification()
     }
     
     func syncData(openMaps openMaps: Bool) {
