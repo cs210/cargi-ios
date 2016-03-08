@@ -16,7 +16,7 @@ class LocationServices {
         case GoogleMaps
     }
     
-    private static var type: MapsType = MapsType.GoogleMaps
+    private static var defaultMap: MapsType = MapsType.GoogleMaps
     
     static func searchLocation(address: String) {
         let geocoder = CLGeocoder()
@@ -25,11 +25,15 @@ class LocationServices {
             if let placemarks = placemarksOptional {
 //                print("placemark| \(placemarks.first)")
                 if let location = placemarks.first?.location {
-                    if type == MapsType.AppleMaps {
-                        searchLocationAppleMaps(location.coordinate.latitude, longitude: location.coordinate.longitude)
-                    } else {
-                        searchLocationGoogleMaps(location.coordinate.latitude, longitude: location.coordinate.longitude)
+                    // if Google Maps exists, then use Google Maps. Otherwise, use Apple Maps.
+                    if defaultMap == MapsType.GoogleMaps {
+                        if (UIApplication.sharedApplication().canOpenURL(NSURL(string:"comgooglemaps://")!)) {
+                            searchLocationGoogleMaps(location.coordinate.latitude, longitude: location.coordinate.longitude)
+                            return
+                        }
                     }
+                    searchLocationAppleMaps(location.coordinate.latitude, longitude: location.coordinate.longitude)
+                    
                 } else {
                     // Could not get a location from the geocode request. Handle error.
                 }
