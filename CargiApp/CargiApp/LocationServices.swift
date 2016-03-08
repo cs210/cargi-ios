@@ -75,5 +75,21 @@ class LocationServices {
         }
     }
     
+    static func getCoords(address: String) -> CLLocation {
+        let geocoder = CLGeocoder()
+        
+        geocoder.geocodeAddressString(address) { (placemarksOptional, error) -> Void in
+            if let placemarks = placemarksOptional {
+                //                print("placemark| \(placemarks.first)")
+                if let location = placemarks.first?.location {
+                    return location
+                } else {
+                    // Could not get a location from the geocode request. Handle error.
+                }
+            } else {
+                // Didn't get any placemarks. Handle error.
+            }
+        }
+    }
     
 }
