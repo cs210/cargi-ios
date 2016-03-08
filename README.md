@@ -14,12 +14,17 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 - [x] Parse reminders from Reminders app
 - [x] Set up messages and calling through Cargi
 - [x] Set up local notifications
-- [ ] [in progress] Experiment with bluetooth connection and automatic app launching
+- [ ] [blocked] Experiment with bluetooth connection and automatic app launching (3/8 received iBeacon from Michael and Robert, but need to obtain arduino)
 - [x] Redirect to Apple/Google Maps with destination set up using deep linking
 - [x] Create and send text messages or iMessages to others users
 - [x] Dashboard UI for easy access to Messages / Phone Calling
 - [x] Figure out whether or not accessing message and calling history is possible ... and it isn't
+- [x] Add Spotify to the dashboard
+- [x] Iterate on user interface prototypes (what happens when there are no calendar events?) 
+- [x] Retrieving contact information from calendar events (limited)
+- [ ] [in progress] Compute ETA given current location & destination
+- [ ] [in progress] Use origami to design the user interface
+- [ ] [in progress] Draw route on the map using Google Maps Directions API
 - [ ] Implement smart filtering of contacts (back end)
 - [ ] Implement smart filtering of contacts (front end - user interface)
-- [ ] Update NavigationView interface to more Uber-esque design (?)
 
