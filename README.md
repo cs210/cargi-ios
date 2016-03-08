@@ -25,6 +25,7 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 - [ ] [in progress] Compute ETA given current location & destination
 - [ ] [in progress] Use origami to design the user interface
 - [ ] [in progress] Draw route on the map using Google Maps Directions API
+- [ ] Need to parse JSON in a clean way: cleanly parse using built-in library, or import some third-party library (SwiftyJSON)
 - [ ] Implement smart filtering of contacts (back end)
 - [ ] Implement smart filtering of contacts (front end - user interface)
 
