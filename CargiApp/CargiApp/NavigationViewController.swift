@@ -11,6 +11,7 @@ import GoogleMaps
 import CoreBluetooth
 import MessageUI
 import EventKit
+import QuartzCore
 
 class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate,
                                 MFMessageComposeViewControllerDelegate {
@@ -28,6 +29,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var destLatitude = String()
     var destLongitude = String()
     
+    @IBOutlet var dashboardView: UIView!
     var manager: CBCentralManager!
     
     var contact: String?
@@ -38,6 +40,15 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        view.sendSubviewToBack(dashboardView)
+        view.sendSubviewToBack(mapView)
+        let layer: CALayer = self.dashboardView.layer
+        layer.shadowOffset = CGSizeMake(1, 1);
+        layer.shadowColor = UIColor.blackColor().CGColor
+        layer.shadowRadius = 1.5
+        layer.shadowOpacity = 0.7
+        layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
+        
         let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
             longitude: defaultLongitude, zoom: 13)
 //        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
