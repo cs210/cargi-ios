@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D8D9CE1E4323107188D46 /* libPods.a */; };
+		6320642E1C914916007FFE98 /* launchfile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6320642D1C914916007FFE98 /* launchfile@2x.png */; };
+		632064301C914A6C007FFE98 /* launchimage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6320642F1C914A6C007FFE98 /* launchimage@2x.png */; };
 		74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */ = {isa = PBXBuildFile; fileRef = 74131C461C7FD83A00CBB5F4 /* cargi-padding.png */; };
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactList.swift */; };
@@ -33,6 +35,8 @@
 
 /* Begin PBXFileReference section */
 		4058D7172640D24468A6E9E5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		6320642D1C914916007FFE98 /* launchfile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "launchfile@2x.png"; path = "../../../Downloads/cargi/launchfile@2x.png"; sourceTree = "<group>"; };
+		6320642F1C914A6C007FFE98 /* launchimage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "launchimage@2x.png"; path = "../../../Downloads/cargi/launchimage@2x.png"; sourceTree = "<group>"; };
 		74131C461C7FD83A00CBB5F4 /* cargi-padding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-padding.png"; sourceTree = "<group>"; };
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactList.swift; sourceTree = "<group>"; };
@@ -92,10 +96,12 @@
 		74131C451C7FD81E00CBB5F4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				6320642D1C914916007FFE98 /* launchfile@2x.png */,
 				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
+				6320642F1C914A6C007FFE98 /* launchimage@2x.png */,
 				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
 				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
 				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
@@ -209,6 +215,7 @@
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,
 				74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */,
+				6320642E1C914916007FFE98 /* launchfile@2x.png in Resources */,
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
 				74A3D8F01C9127020053D816 /* gas-button@2x.png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
@@ -216,6 +223,7 @@
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
+				632064301C914A6C007FFE98 /* launchimage@2x.png in Resources */,
 				74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
