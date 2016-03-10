@@ -87,12 +87,12 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         
         mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
-        syncData(openMaps: false)
+        syncData(shouldOpenMaps: false)
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
     }
     
-    func syncData(openMaps openMaps: Bool) {
+    func syncData(shouldOpenMaps shouldOpenMaps: Bool) {
         let contacts = ContactList.getAllContacts()
         guard let events = CalendarList.getAllCalendarEvents() else { return }
         
@@ -126,12 +126,16 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         destLatitude = String(coordinate.latitude)
         destLongitude = String(coordinate.longitude)
         
-        if openMaps {
-            switch (CLLocationManager.authorizationStatus()) {
-                case .AuthorizedAlways, .AuthorizedWhenInUse:
-                    LocationServices.searchLocation(ev.location!)
-                default: break
-            }
+        if shouldOpenMaps {
+            openMaps()
+        }
+    }
+    
+    func openMaps() {
+        switch (CLLocationManager.authorizationStatus()) {
+        case .AuthorizedAlways, .AuthorizedWhenInUse:
+            LocationServices.searchLocation(ev.location!)
+        default: break
         }
     }
     
@@ -140,7 +144,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func update(sender: UIButton) {
-        syncData(openMaps: true)
+        syncData(shouldOpenMaps: true)
     }
     
     func callPhone(phoneNumbers: [String]?) {
@@ -298,6 +302,13 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         self.data.appendData(data)
     }
     
+    func messageGasNotAvailable() {
+        let alert = UIAlertController(title: "Under Construction", message: "Oh no, Cargi is low on gas!", preferredStyle: UIAlertControllerStyle.Alert)
+//        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+//        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func searchButtonClicked(sender: UIButton) {
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
@@ -305,7 +316,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func sendTextMessage(sender: UIButton) {
-        syncData(openMaps: false)
+        syncData(shouldOpenMaps: false)
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
                              dest1: destLatitude, dest2: destLongitude)
