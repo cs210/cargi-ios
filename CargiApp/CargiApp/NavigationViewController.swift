@@ -22,6 +22,17 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var marker: GMSMarker = GMSMarker()
     var data: NSMutableData = NSMutableData()
     
+    
+    @IBOutlet weak var destLabel: UILabel!
+    @IBOutlet weak var addrLabel: UILabel!
+    @IBOutlet weak var eventLabel: UILabel!
+    @IBOutlet weak var destinationView: UIView!
+    @IBOutlet weak var callButton: UIButton!
+    @IBOutlet weak var textButton: UIButton!
+
+    
+    
+    
     var locationManager = CLLocationManager()
     var didFindMyLocation = false
     let defaultLatitude: CLLocationDegrees = 37.426
@@ -49,6 +60,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
         
+//        callButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
+//        textButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
+        
         let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
             longitude: defaultLongitude, zoom: 13)
 //        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
@@ -73,7 +87,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         
         mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
-        syncData(openMaps: true)
+        syncData(openMaps: false)
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
     }
@@ -97,6 +111,16 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
 
         guard let ev = currentEvent else { return }
         contactName.text = self.contact
+        eventLabel.text = ev.title
+        destLabel.text = ev.structuredLocation?.title
+        addrLabel.text = "" // how to get address?
+//        if destLabel?.text != "" || addrLabel?.text != "" {
+//            destinationView.backgroundColor = UIColor.clearColor()
+//        } else {
+//            destinationView.backgroundColor = UIColor.whiteColor()
+//            print(destLabel.text)
+//            print(addrLabel.text)
+//        }
         
         guard let coordinate = ev.structuredLocation?.geoLocation?.coordinate else { return }
         destLatitude = String(coordinate.latitude)
