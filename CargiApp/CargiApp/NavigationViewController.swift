@@ -44,6 +44,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     @IBOutlet var dashboardView: UIView!
     var manager: CBCentralManager!
+    var currentEvent: EKEvent?
     
     var contact: String?
     var contactNumbers: [String]?
@@ -117,7 +118,6 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         let contacts = ContactList.getAllContacts()
         guard let events = CalendarList.getAllCalendarEvents() else { return }
         
-        var currentEvent: EKEvent?
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             for contact in contacts.keys {
@@ -133,30 +133,32 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let ev = currentEvent else { return }
         contactName.text = self.contact
         eventLabel.text = ev.title
-        destLabel.text = ev.structuredLocation?.title
-        addrLabel.text = "" // how to get address?
-//        if destLabel?.text != "" || addrLabel?.text != "" {
-//            destinationView.backgroundColor = UIColor.clearColor()
-//        } else {
-//            destinationView.backgroundColor = UIColor.whiteColor()
-//            print(destLabel.text)
-//            print(addrLabel.text)
-//        }
+//        destLabel.text = ev.structuredLocation?.title
         
         guard let coordinate = ev.structuredLocation?.geoLocation?.coordinate else { return }
         destLatitude = String(coordinate.latitude)
         destLongitude = String(coordinate.longitude)
+        if let loc = ev.location {
+            let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
+            destLabel.text = locArr[0]
+            if locArr.count > 1 {
+                addrLabel.text = locArr[1]
+            } else {
+                addrLabel.text = ""
+            }
+        }
         
         if shouldOpenMaps {
-            openMaps(ev)
+            openMaps()
         }
     }
     
-    func openMaps(ev: EKEvent) {
+    func openMaps() {
+        guard let ev = currentEvent else { return }
         switch (CLLocationManager.authorizationStatus()) {
-        case .AuthorizedAlways, .AuthorizedWhenInUse:
-            LocationServices.searchLocation(ev.location!)
-        default: break
+            case .AuthorizedAlways, .AuthorizedWhenInUse:
+                LocationServices.searchLocation(ev.location!)
+            default: break
         }
     }
     
@@ -165,7 +167,11 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func update(sender: UIButton) {
-        syncData(shouldOpenMaps: true)
+        if let _ = currentEvent {
+            openMaps()
+        } else {
+            syncData(shouldOpenMaps: true)
+        }
     }
     
     func callPhone(phoneNumbers: [String]?) {
@@ -322,6 +328,13 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         print("\nYAY!\n")
         self.data.appendData(data)
     }
+    
+    @IBAction func refreshButtonClicked(sender: UIButton) {
+        syncData(shouldOpenMaps: false)
+    }
+    
+    
+    
     @IBAction func gasButtonClicked(sender: UIButton) {
         let alert = UIAlertController(title: "Under Construction", message: "Oh no, Cargi is low on gas!", preferredStyle: UIAlertControllerStyle.Alert)
         let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
