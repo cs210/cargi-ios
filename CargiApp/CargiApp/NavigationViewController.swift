@@ -30,6 +30,8 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var textButton: UIButton!
 
+    @IBOutlet weak var gasButton: UIButton!
+    @IBOutlet weak var musicButton: UIButton!
     
     
     
@@ -54,11 +56,30 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         view.sendSubviewToBack(dashboardView)
         view.sendSubviewToBack(mapView)
         let layer: CALayer = self.dashboardView.layer
-        layer.shadowOffset = CGSizeMake(1, 1);
+        layer.shadowOffset = CGSizeMake(1, 1)
         layer.shadowColor = UIColor.blackColor().CGColor
         layer.shadowRadius = 1.5
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
+        
+        // call button shadow
+        callButton.layer.shadowOffset = CGSizeMake(0, 3)
+        callButton.layer.shadowColor = UIColor.blackColor().CGColor
+        callButton.layer.shadowRadius = 2
+        callButton.layer.shadowOpacity = 0.27
+        
+        textButton.layer.shadowOffset = CGSizeMake(0, 3)
+        textButton.layer.shadowColor = UIColor.blackColor().CGColor
+        textButton.layer.shadowRadius = 2
+        textButton.layer.shadowOpacity = 0.27
+        
+        destinationView.layer.shadowOffset = CGSizeMake(0, -1)
+        destinationView.layer.shadowColor = UIColor.blackColor().CGColor
+        destinationView.layer.shadowRadius = 1.5
+        destinationView.layer.shadowOpacity = 0.7
+        
+        
+        
         
 //        callButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
 //        textButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
@@ -85,7 +106,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
-        mapView.settings.myLocationButton = true
+//        mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
         syncData(shouldOpenMaps: false)
 //          manager = CBCentralManager(delegate: self, queue: nil)
