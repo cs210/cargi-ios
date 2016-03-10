@@ -13,9 +13,6 @@
 		7417B5481C868A70005357CB /* ContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactList.swift */; };
 		741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3761C8D380F003017CA /* SendMessageViewController.swift */; };
 		741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationServices.swift */; };
-		741CE37B1C8D5BED003017CA /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37A1C8D5BED003017CA /* phone.png */; };
-		741CE37D1C8D5BFD003017CA /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 741CE37C1C8D5BFD003017CA /* message.png */; };
-		742743541C8EC28400D43A24 /* music.png in Resources */ = {isa = PBXBuildFile; fileRef = 742743531C8EC28400D43A24 /* music.png */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
 		749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749655721C8EAE5B003AE6B0 /* MusicViewController.swift */; };
 		74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */; };
@@ -23,6 +20,13 @@
 		74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */; };
 		74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FF1C7FCBC800C468CC /* LaunchScreen.storyboard */; };
 		74A2E6091C7FCD6F00C468CC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E6081C7FCD6F00C468CC /* Podfile */; };
+		74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8E51C9127020053D816 /* calendar-icon@2x.png */; };
+		74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8E61C9127020053D816 /* call-button@2x.png */; };
+		74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8E71C9127020053D816 /* close-button-dark@2x.png */; };
+		74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8E81C9127020053D816 /* close-button-light@2x.png */; };
+		74A3D8F01C9127020053D816 /* gas-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8E91C9127020053D816 /* gas-button@2x.png */; };
+		74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8EA1C9127020053D816 /* music-button@2x.png */; };
+		74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8EB1C9127020053D816 /* text-button@2x.png */; };
 		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
@@ -34,9 +38,6 @@
 		7417B5471C868A70005357CB /* ContactList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactList.swift; sourceTree = "<group>"; };
 		741CE3761C8D380F003017CA /* SendMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageViewController.swift; sourceTree = "<group>"; };
 		741CE3781C8D55BF003017CA /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
-		741CE37A1C8D5BED003017CA /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
-		741CE37C1C8D5BFD003017CA /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
-		742743531C8EC28400D43A24 /* music.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music.png; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
 		749655721C8EAE5B003AE6B0 /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		74A2E5F31C7FCBC800C468CC /* Cargi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cargi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +47,13 @@
 		74A2E6001C7FCBC800C468CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74A2E6021C7FCBC800C468CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74A2E6081C7FCD6F00C468CC /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		74A3D8E51C9127020053D816 /* calendar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-icon@2x.png"; sourceTree = "<group>"; };
+		74A3D8E61C9127020053D816 /* call-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "call-button@2x.png"; sourceTree = "<group>"; };
+		74A3D8E71C9127020053D816 /* close-button-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button-dark@2x.png"; sourceTree = "<group>"; };
+		74A3D8E81C9127020053D816 /* close-button-light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button-light@2x.png"; sourceTree = "<group>"; };
+		74A3D8E91C9127020053D816 /* gas-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gas-button@2x.png"; sourceTree = "<group>"; };
+		74A3D8EA1C9127020053D816 /* music-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music-button@2x.png"; sourceTree = "<group>"; };
+		74A3D8EB1C9127020053D816 /* text-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-button@2x.png"; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
@@ -84,9 +92,13 @@
 		74131C451C7FD81E00CBB5F4 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				742743531C8EC28400D43A24 /* music.png */,
-				741CE37A1C8D5BED003017CA /* phone.png */,
-				741CE37C1C8D5BFD003017CA /* message.png */,
+				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
+				74A3D8E61C9127020053D816 /* call-button@2x.png */,
+				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
+				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
+				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
+				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
+				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
 				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
 				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
 			);
@@ -198,11 +210,15 @@
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,
 				74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */,
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
+				74A3D8F01C9127020053D816 /* gas-button@2x.png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
-				741CE37B1C8D5BED003017CA /* phone.png in Resources */,
-				742743541C8EC28400D43A24 /* music.png in Resources */,
-				741CE37D1C8D5BFD003017CA /* message.png in Resources */,
+				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
+				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
+				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
+				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
+				74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
+				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
