@@ -127,11 +127,11 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         destLongitude = String(coordinate.longitude)
         
         if shouldOpenMaps {
-            openMaps()
+            openMaps(ev)
         }
     }
     
-    func openMaps() {
+    func openMaps(ev: EKEvent) {
         switch (CLLocationManager.authorizationStatus()) {
         case .AuthorizedAlways, .AuthorizedWhenInUse:
             LocationServices.searchLocation(ev.location!)
@@ -301,11 +301,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         print("\nYAY!\n")
         self.data.appendData(data)
     }
-    
-    func messageGasNotAvailable() {
+    @IBAction func gasButtonClicked(sender: UIButton) {
         let alert = UIAlertController(title: "Under Construction", message: "Oh no, Cargi is low on gas!", preferredStyle: UIAlertControllerStyle.Alert)
-//        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
-//        alert.addAction(alertAction)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(alertAction)
         presentViewController(alert, animated: true, completion: nil)
     }
     
