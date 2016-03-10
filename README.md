@@ -24,12 +24,12 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 - [x] Redirect to Apple/Google Maps with destination set up using deep linking
 - [x] Create and send text messages or iMessages to others users
 - [x] Dashboard UI for easy access to Messages / Phone Calling
-- [x] Figure out whether or not accessing message and calling history is possible ... and it isn't
+- [ ] [blocked] Access message and calling history ... and it isn't possible
 - [x] Add Spotify to the dashboard
 - [x] Iterate on user interface prototypes (what happens when there are no calendar events?) 
 - [x] Retrieving contact information from calendar events (limited)
-- [ ] [in progress] Compute ETA given current location & destination
-- [ ] [in progress] Use origami to design the user interface
+- [x] Compute ETA given current location & destination
+- [x] Use origami to design the user interface
 - [ ] [in progress] Draw route on the map using Google Maps Directions API
 - [ ] Need to parse JSON in a clean way: cleanly parse using built-in library, or import some third-party library (SwiftyJSON)
 - [ ] Implement smart filtering of contacts (back end)
