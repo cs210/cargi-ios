@@ -96,17 +96,8 @@
 		74131C451C7FD81E00CBB5F4 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				74A3D8F51C915F0A0053D816 /* refresh-button.png */,
-				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
-				74A3D8F31C91523D0053D816 /* launchimage@2x.png */,
-				74A3D8E61C9127020053D816 /* call-button@2x.png */,
-				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
-				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
-				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
-				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
-				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
-				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
-				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
+				74FBD3241C97D8D400D8B2AD /* Images */,
+				74FBD3231C97D8B500D8B2AD /* Icons */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -132,15 +123,10 @@
 		74A2E5F51C7FCBC800C468CC /* CargiApp */ = {
 			isa = PBXGroup;
 			children = (
-				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
-				BE6504EB1C88166C00C26AAA /* CalendarList.swift */,
 				74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */,
-				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
-				741CE3761C8D380F003017CA /* SendMessageViewController.swift */,
-				741CE3781C8D55BF003017CA /* LocationServices.swift */,
-				7417B5471C868A70005357CB /* ContactList.swift */,
+				74FBD3221C97D76E00D8B2AD /* Models */,
+				74FBD3211C97D76300D8B2AD /* Controllers */,
 				74A2E5FA1C7FCBC800C468CC /* Main.storyboard */,
-				749655721C8EAE5B003AE6B0 /* MusicViewController.swift */,
 				74A2E6081C7FCD6F00C468CC /* Podfile */,
 				74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */,
 				74A2E5FF1C7FCBC800C468CC /* LaunchScreen.storyboard */,
@@ -148,6 +134,52 @@
 				74131C451C7FD81E00CBB5F4 /* src */,
 			);
 			path = CargiApp;
+			sourceTree = "<group>";
+		};
+		74FBD3211C97D76300D8B2AD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
+				741CE3761C8D380F003017CA /* SendMessageViewController.swift */,
+				749655721C8EAE5B003AE6B0 /* MusicViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		74FBD3221C97D76E00D8B2AD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
+				BE6504EB1C88166C00C26AAA /* CalendarList.swift */,
+				741CE3781C8D55BF003017CA /* LocationServices.swift */,
+				7417B5471C868A70005357CB /* ContactList.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		74FBD3231C97D8B500D8B2AD /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				74A3D8F51C915F0A0053D816 /* refresh-button.png */,
+				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
+				74A3D8E61C9127020053D816 /* call-button@2x.png */,
+				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
+				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
+				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
+				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
+				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
+		74FBD3241C97D8D400D8B2AD /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				74A3D8F31C91523D0053D816 /* launchimage@2x.png */,
+				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
+				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
