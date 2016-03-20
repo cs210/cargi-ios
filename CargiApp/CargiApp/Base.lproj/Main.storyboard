@@ -31,7 +31,7 @@
                                 </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2KS-iL-BB1" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="498"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="jge-gY-rag">
@@ -74,16 +74,20 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BvQ-BT-s1k">
-                                                <rect key="frame" x="0.0" y="21.5" width="91.5" height="17"/>
+                                                <rect key="frame" x="0.0" y="21" width="91.5" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.56470588235294117" green="0.56470588235294117" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ce-lE-CRp">
-                                        <rect key="frame" x="531" y="17" width="61" height="30"/>
-                                        <state key="normal" title="Navigate"/>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ce-lE-CRp">
+                                        <rect key="frame" x="560" y="21" width="22" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="bsY-Vs-3dN"/>
+                                            <constraint firstAttribute="width" constant="22" id="xbF-l9-Mkg"/>
+                                        </constraints>
+                                        <state key="normal" image="navigate_button.png"/>
                                         <connections>
                                             <action selector="update:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sZ3-AE-PKF"/>
                                         </connections>
@@ -91,7 +95,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailingMargin" secondItem="0Ce-lE-CRp" secondAttribute="trailing" id="Bia-Cz-ZLy"/>
+                                    <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="TqS-h9-1Hc" secondAttribute="trailing" constant="32" id="9uc-1f-IJs"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="0Ce-lE-CRp" secondAttribute="trailing" constant="20" id="Bia-Cz-ZLy"/>
                                     <constraint firstAttribute="height" constant="64" id="COe-1N-Uwz"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="0Ce-lE-CRp" secondAttribute="trailing" id="MFg-X6-Itb"/>
                                     <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="BvQ-BT-s1k" secondAttribute="trailing" constant="32" id="NNX-G2-fsF"/>
@@ -101,6 +106,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="Bia-Cz-ZLy"/>
                                         <exclude reference="MFg-X6-Itb"/>
                                         <exclude reference="e8X-90-tzj"/>
                                     </mask>
@@ -119,6 +125,9 @@
                                                     <constraint firstAttribute="height" constant="24" id="dfR-JY-CnR"/>
                                                 </constraints>
                                                 <state key="normal" image="calendar-icon.png"/>
+                                                <connections>
+                                                    <action selector="openEventApp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qAQ-vp-qK7"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyH-yY-cEr">
                                                 <rect key="frame" x="32" y="0.0" width="84.5" height="24"/>
@@ -219,14 +228,16 @@
                         <constraints>
                             <constraint firstItem="12n-g8-OfW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1bN-AM-Ixa"/>
                             <constraint firstItem="12n-g8-OfW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="39x-Uk-K8o"/>
+                            <constraint firstItem="0Ce-lE-CRp" firstAttribute="centerX" secondItem="x8s-Be-dRK" secondAttribute="centerX" id="4k2-ue-TJk"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="jge-gY-rag" secondAttribute="bottom" constant="61" id="6p9-cE-jet"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="2KS-iL-BB1" secondAttribute="bottom" constant="102" id="8jd-hE-2Ry"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="2KS-iL-BB1" secondAttribute="bottom" id="8jd-hE-2Ry"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Oux-Qw-QIr" secondAttribute="trailing" id="BXN-5L-dLN"/>
                             <constraint firstItem="Oux-Qw-QIr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="DeR-xR-LaX"/>
                             <constraint firstItem="Dvo-Wz-vOi" firstAttribute="leading" secondItem="SyH-yY-cEr" secondAttribute="leading" id="IHh-1M-50m"/>
                             <constraint firstAttribute="trailing" secondItem="12n-g8-OfW" secondAttribute="trailing" id="Lps-fK-sD9"/>
                             <constraint firstItem="fcr-FQ-3iI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="MMq-RS-WNa"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="jge-gY-rag" secondAttribute="bottom" constant="61" id="MVT-5r-2GP"/>
+                            <constraint firstItem="0Ce-lE-CRp" firstAttribute="trailing" secondItem="x8s-Be-dRK" secondAttribute="trailing" id="QTG-bI-Jdp"/>
                             <constraint firstItem="fcr-FQ-3iI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="QYj-ii-8ur"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="rnV-DU-HU4" secondAttribute="bottom" id="S8i-wf-Q7d"/>
                             <constraint firstItem="rnV-DU-HU4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Xpi-UH-opC"/>
@@ -252,6 +263,7 @@
                                 <exclude reference="MMq-RS-WNa"/>
                                 <exclude reference="BXN-5L-dLN"/>
                                 <exclude reference="nXB-KQ-qSp"/>
+                                <exclude reference="QTG-bI-Jdp"/>
                                 <exclude reference="6p9-cE-jet"/>
                                 <exclude reference="MVT-5r-2GP"/>
                             </mask>
@@ -385,6 +397,7 @@
         <image name="call-button.png" width="81" height="81"/>
         <image name="gas-button.png" width="69" height="69"/>
         <image name="music-button.png" width="69" height="69"/>
+        <image name="navigate_button.png" width="20" height="20"/>
         <image name="refresh-button.png" width="32" height="32"/>
         <image name="text-button.png" width="81" height="81"/>
     </resources>

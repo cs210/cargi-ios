@@ -123,6 +123,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         
 //        mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
+        print("syncing data")
         syncData()
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
@@ -153,6 +154,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         contactNumbers = ContactList.getContactPhoneNumber(self.contact)
 
         guard let ev = currentEvent else { return }
+        print(ev.eventIdentifier)
         contactName.text = self.contact
         eventLabel.text = ev.title
 //        destLabel.text = ev.structuredLocation?.title
@@ -169,7 +171,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
                 addrLabel.text = locArr[0]
             }
         }
-        
+        print("showroute")
         showRoute()
     }
     
@@ -214,7 +216,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let originLocation = locationManager.location?.coordinate else { return }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
         let dest = addrLabel.text!
+        print("getting directions")
         self.directionTasks.getDirections(origin, dest: dest, waypoints: nil, travelMode: nil) { (status, success) in
+            print("got directions")
             if success {
                 print("success")
                 self.configureMap()
@@ -261,7 +265,8 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let numbers = phoneNumbers else { return }
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            controller.body = "Hi \(contact!), I will arrive at \(destLabel.text!) in \(duration)."
+            let firstName = contact?.componentsSeparatedByString(" ").first
+            controller.body = "Hi \(firstName!), I will arrive at \(destLabel.text!) in \(duration)."
             controller.recipients = [numbers[0]] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
@@ -430,6 +435,21 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         callPhone(contactNumbers)
     }
     
+    @IBAction func openEventApp(sender: UIButton) {
+        let appName: String = "calshow"
+        guard let ev = currentEvent else { return }
+        print(ev.eventIdentifier)
+        let eventID = ev.eventIdentifier
+        print(eventID)
+        let appURL: String = "\(appName)://eventid=\(eventID)"
+
+        
+        if UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!) {
+            print(appURL)
+            UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+        }
+    }
+    
     @IBAction func openMusicApp(sender: UIButton) {
         let appName: String = "spotify"
         
@@ -438,7 +458,13 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
             print(appURL)
             UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
         } else {
-            print("Can't use spotify://");
+            print("Can't use spotify://")
+            let appName: String = "music"
+            let appURL: String = "\(appName)://"
+            if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
+                print(appURL)
+                UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+            }
         }
     }
     

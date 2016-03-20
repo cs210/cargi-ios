@@ -51,10 +51,14 @@ class DirectionTasks {
         }
         var requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&key=\(APIKey)"
         requestURL = requestURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let url = NSURL(string: requestURL)
+        let request = NSURL(string: requestURL)
         
         dispatch_async(dispatch_get_main_queue()) {
-            let data = NSData(contentsOfURL: url!)
+            guard let url = request else {
+                print("url is not valid")
+                return
+            }
+            let data = NSData(contentsOfURL: url)
             var json: [NSObject:AnyObject]?
             do {
                 json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]

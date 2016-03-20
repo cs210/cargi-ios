@@ -31,6 +31,8 @@
 		74A3D8F61C915F0A0053D816 /* refresh-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8F51C915F0A0053D816 /* refresh-button.png */; };
 		74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */; };
 		74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */; };
+		74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783101C9F6A28003E0391 /* navigate_button@2x.png */; };
+		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
 		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		74A3D8F51C915F0A0053D816 /* refresh-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-button.png"; sourceTree = "<group>"; };
 		74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionTasks.swift; sourceTree = "<group>"; };
 		74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "destination_icon@2x.png"; sourceTree = "<group>"; };
+		74B783101C9F6A28003E0391 /* navigate_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigate_button@2x.png"; sourceTree = "<group>"; };
+		74B783121C9F6A2C003E0391 /* directions_button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions_button2@2x.png"; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
 				74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */,
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
+				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
+				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
 				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
@@ -251,12 +257,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
+				74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */,
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,
 				74A3D8F61C915F0A0053D816 /* refresh-button.png in Resources */,
 				74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */,
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
 				74A3D8F01C9127020053D816 /* gas-button@2x.png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
+				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
