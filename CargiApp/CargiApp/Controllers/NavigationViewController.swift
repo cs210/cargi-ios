@@ -42,13 +42,24 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var destLatitude = String()
     var destLongitude = String()
     
-    @IBOutlet var dashboardView: UIView!
     var manager: CBCentralManager!
     var currentEvent: EKEvent?
     
     var contact: String?
     var contactNumbers: [String]?
+    var directionTasks = DirectionTasks()
+    
+    
+    @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactName: UILabel!
+    
+    var syncRouteSuccess: Bool = false
+    var destMarker = GMSMarker()
+    var routePolyline = GMSPolyline() // lines that will show the route.
+    var routePath = GMSPath()
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +123,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         
 //        mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
-        syncData(shouldOpenMaps: false)
+        syncData()
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
     }
@@ -125,7 +136,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         }
     }
     
-    func syncData(shouldOpenMaps shouldOpenMaps: Bool) {
+    func syncData() {
         let contacts = ContactList.getAllContacts()
         guard let events = CalendarList.getAllCalendarEvents() else { return }
         
@@ -151,17 +162,15 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         destLongitude = String(coordinate.longitude)
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
-            destLabel.text = locArr[0]
             if locArr.count > 1 {
+                destLabel.text = locArr[0]
                 addrLabel.text = locArr[1]
             } else {
-                addrLabel.text = ""
+                addrLabel.text = locArr[0]
             }
         }
         
-        if shouldOpenMaps {
-            openMaps()
-        }
+        showRoute()
     }
     
     func openMaps() {
@@ -181,8 +190,58 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         if let _ = currentEvent {
             openMaps()
         } else {
-            syncData(shouldOpenMaps: true)
+            syncData()
+            openMaps()
         }
+    }
+    
+    func getRoute() {
+        guard let ev = currentEvent else { return }
+        guard let originLocation = locationManager.location?.coordinate else { return }
+        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
+        let dest = addrLabel.text!
+        self.directionTasks.getDirections(origin, dest: dest, waypoints: nil, travelMode: nil) { (status, success) in
+            if success {
+                self.syncRouteSuccess = true
+            } else {
+                self.syncRouteSuccess = false
+            }
+        }
+    }
+    
+    func showRoute() {
+        guard let ev = currentEvent else { return }
+        guard let originLocation = locationManager.location?.coordinate else { return }
+        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
+        let dest = addrLabel.text!
+        self.directionTasks.getDirections(origin, dest: dest, waypoints: nil, travelMode: nil) { (status, success) in
+            if success {
+                print("success")
+                self.configureMap()
+                self.drawRoute()
+            } else {
+                print(status)
+            }
+        }
+    }
+    
+    private func configureMap() {
+        destMarker.position = directionTasks.destCoordinate
+        destMarker.map = mapView
+        destMarker.icon = UIImage(named: "destination_icon")
+        print("configure maps done")
+    }
+    
+    private func drawRoute() {
+        let route = self.directionTasks.overviewPolyline["points"] as! String
+ 
+        let path: GMSPath = GMSPath(fromEncodedPath: route)!
+        routePolyline.path = path
+//        routePolyline = GMSPolyline(path: path)
+        routePolyline.map = mapView
+        routePolyline.strokeColor = UIColor.blueColor()
+        routePolyline.strokeWidth = 3.0
+        print("drawmaps done")
     }
     
     func callPhone(phoneNumbers: [String]?) {
@@ -202,7 +261,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         guard let numbers = phoneNumbers else { return }
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            controller.body = "Hi, I will arrive in \(duration)."
+            controller.body = "Hi \(contact!), I will arrive at \(destLabel.text!) in \(duration)."
             controller.recipients = [numbers[0]] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
@@ -341,7 +400,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func refreshButtonClicked(sender: UIButton) {
-        syncData(shouldOpenMaps: false)
+        syncData()
     }
     
     
@@ -360,7 +419,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func sendTextMessage(sender: UIButton) {
-        syncData(shouldOpenMaps: false)
+        syncData()
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
                              dest1: destLatitude, dest2: destLongitude)

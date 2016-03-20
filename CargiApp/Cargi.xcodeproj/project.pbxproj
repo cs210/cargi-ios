@@ -29,6 +29,8 @@
 		74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8EB1C9127020053D816 /* text-button@2x.png */; };
 		74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8F31C91523D0053D816 /* launchimage@2x.png */; };
 		74A3D8F61C915F0A0053D816 /* refresh-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A3D8F51C915F0A0053D816 /* refresh-button.png */; };
+		74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */; };
+		74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */; };
 		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
@@ -58,6 +60,8 @@
 		74A3D8EB1C9127020053D816 /* text-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-button@2x.png"; sourceTree = "<group>"; };
 		74A3D8F31C91523D0053D816 /* launchimage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launchimage@2x.png"; sourceTree = "<group>"; };
 		74A3D8F51C915F0A0053D816 /* refresh-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-button.png"; sourceTree = "<group>"; };
+		74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionTasks.swift; sourceTree = "<group>"; };
+		74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "destination_icon@2x.png"; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
+				74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */,
 				BE6504EB1C88166C00C26AAA /* CalendarList.swift */,
 				741CE3781C8D55BF003017CA /* LocationServices.swift */,
 				7417B5471C868A70005357CB /* ContactList.swift */,
@@ -162,6 +167,7 @@
 			children = (
 				74A3D8F51C915F0A0053D816 /* refresh-button.png */,
 				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
+				74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */,
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
@@ -258,6 +264,7 @@
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
 				74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
+				74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +316,7 @@
 				749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
 				741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */,
+				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
