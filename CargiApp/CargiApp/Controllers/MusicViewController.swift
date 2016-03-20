@@ -31,6 +31,12 @@ class MusicViewController: UIViewController {
             UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
         } else {
             print("Can't use spotify://");
+            let appName: String = "music"
+            let appURL: String = "\(appName)"
+            if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
+                print(appURL)
+                UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+            }
         }
     }
 
