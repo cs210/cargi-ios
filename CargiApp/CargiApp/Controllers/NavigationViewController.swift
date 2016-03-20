@@ -36,7 +36,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     
     var locationManager = CLLocationManager()
-    var didFindMyLocation = false
+    var didFindMyLocation = false // avoid unnecessary location updates
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
     var destLatitude = String()
@@ -79,6 +79,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         destinationView.layer.shadowRadius = 1.5
         destinationView.layer.shadowOpacity = 0.7
         
+        // observer for changes in myLocation of google's map view
+        mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
+
         
         
         
@@ -112,6 +115,14 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         syncData(shouldOpenMaps: false)
 //          manager = CBCentralManager(delegate: self, queue: nil)
 //        LocalNotifications.sendNotification()
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if !didFindMyLocation {
+            let myLocation: CLLocation = change![NSKeyValueChangeNewKey] as! CLLocation
+            mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 12.0)
+            didFindMyLocation = true
+        }
     }
     
     func syncData(shouldOpenMaps shouldOpenMaps: Bool) {
