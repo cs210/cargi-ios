@@ -447,12 +447,11 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     @IBAction func openEventApp(sender: UIButton) {
         let appName: String = "calshow"
-        guard let ev = currentEvent else { return }
-        print(ev.eventIdentifier)
-        let eventID = ev.eventIdentifier
-        print(eventID)
-        let appURL: String = "\(appName)://eventid=\(eventID)"
-
+//        guard let ev = currentEvent else { return }
+//        print(ev.eventIdentifier)
+//        let eventID = ev.eventIdentifier
+//        print(eventID)
+        let appURL: String = "\(appName):"
         
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!) {
             print(appURL)
