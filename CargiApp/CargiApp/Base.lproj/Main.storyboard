@@ -74,7 +74,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BvQ-BT-s1k">
-                                                <rect key="frame" x="0.0" y="21" width="91.5" height="17"/>
+                                                <rect key="frame" x="0.0" y="21.5" width="91.5" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.56470588235294117" green="0.56470588235294117" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -95,17 +95,18 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="TqS-h9-1Hc" secondAttribute="trailing" constant="32" id="9uc-1f-IJs"/>
+                                    <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" secondItem="Dvo-Wz-vOi" secondAttribute="trailing" constant="428" id="9av-xt-Uz9"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="0Ce-lE-CRp" secondAttribute="trailing" constant="20" id="Bia-Cz-ZLy"/>
                                     <constraint firstAttribute="height" constant="64" id="COe-1N-Uwz"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="0Ce-lE-CRp" secondAttribute="trailing" id="MFg-X6-Itb"/>
-                                    <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="BvQ-BT-s1k" secondAttribute="trailing" constant="32" id="NNX-G2-fsF"/>
                                     <constraint firstItem="Dvo-Wz-vOi" firstAttribute="centerY" secondItem="Oux-Qw-QIr" secondAttribute="centerY" id="YDC-1a-P6W"/>
+                                    <constraint firstItem="0Ce-lE-CRp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Dvo-Wz-vOi" secondAttribute="trailing" constant="32" id="c2O-h2-v4i"/>
                                     <constraint firstAttribute="trailing" secondItem="0Ce-lE-CRp" secondAttribute="trailing" id="e8X-90-tzj"/>
                                     <constraint firstItem="0Ce-lE-CRp" firstAttribute="centerY" secondItem="Oux-Qw-QIr" secondAttribute="centerY" id="wmE-Vt-Liz"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="9av-xt-Uz9"/>
                                         <exclude reference="Bia-Cz-ZLy"/>
                                         <exclude reference="MFg-X6-Itb"/>
                                         <exclude reference="e8X-90-tzj"/>

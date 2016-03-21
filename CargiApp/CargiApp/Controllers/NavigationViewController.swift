@@ -53,9 +53,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactName: UILabel!
     
-    var syncRouteSuccess: Bool = false
+    var syncRouteSuccess: Bool?
     var destMarker = GMSMarker()
     var routePolyline = GMSPolyline() // lines that will show the route.
+    var routePolylineBorder = GMSPolyline()
     var routePath = GMSPath()
     
     
@@ -99,10 +100,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
 //        callButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
 //        textButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
         
-        let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
-            longitude: defaultLongitude, zoom: 13)
+//        let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
+//            longitude: defaultLongitude, zoom: 13)
 //        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-        mapView.camera = camera
+//        mapView.camera = camera
         
 //        marker = GMSMarker()
 //        marker.position = CLLocationCoordinate2DMake(37.426, 151.20)
@@ -132,7 +133,10 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if !didFindMyLocation {
             let myLocation: CLLocation = change![NSKeyValueChangeNewKey] as! CLLocation
-            mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 12.0)
+            guard let routeSuccess = syncRouteSuccess else { return }
+            if !routeSuccess {
+                mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 15.0)
+            }
             didFindMyLocation = true
         }
     }
@@ -197,33 +201,27 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         }
     }
     
-    func getRoute() {
-        guard let ev = currentEvent else { return }
-        guard let originLocation = locationManager.location?.coordinate else { return }
-        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        let dest = addrLabel.text!
-        self.directionTasks.getDirections(origin, dest: dest, waypoints: nil, travelMode: nil) { (status, success) in
-            if success {
-                self.syncRouteSuccess = true
-            } else {
-                self.syncRouteSuccess = false
-            }
-        }
-    }
-    
     func showRoute() {
-        guard let ev = currentEvent else { return }
-        guard let originLocation = locationManager.location?.coordinate else { return }
+        guard let ev = currentEvent else {
+            syncRouteSuccess = false
+            return
+        }
+        guard let originLocation = locationManager.location?.coordinate else {
+            syncRouteSuccess = false
+            return
+        }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
         let dest = addrLabel.text!
         print("getting directions")
         self.directionTasks.getDirections(origin, dest: dest, waypoints: nil, travelMode: nil) { (status, success) in
             print("got directions")
             if success {
+                self.syncRouteSuccess = true
                 print("success")
                 self.configureMap()
                 self.drawRoute()
             } else {
+                self.syncRouteSuccess = false
                 print(status)
             }
         }
@@ -238,14 +236,26 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     private func drawRoute() {
         let route = self.directionTasks.overviewPolyline["points"] as! String
- 
+        
+        // Draw the path
         let path: GMSPath = GMSPath(fromEncodedPath: route)!
         routePolyline.path = path
-//        routePolyline = GMSPolyline(path: path)
         routePolyline.map = mapView
-        routePolyline.strokeColor = UIColor.blueColor()
-        routePolyline.strokeWidth = 3.0
+        routePolyline.strokeColor = UIColor(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0)
+        routePolyline.strokeWidth = 4.0
+        routePolyline.zIndex = 10
+        
+        // Draw the border around the path
+        routePolylineBorder.path = path
+        routePolylineBorder.strokeColor = UIColor.blackColor()
+        routePolylineBorder.strokeWidth = routePolyline.strokeWidth + 0.5
+        routePolylineBorder.zIndex = routePolyline.zIndex - 1
+        routePolylineBorder.map = mapView
         print("drawmaps done")
+        
+        let bounds = GMSCoordinateBounds(path: path)
+        let cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 165.0, right: 20.0))
+        mapView.moveCamera(cameraUpdate)
     }
     
     func callPhone(phoneNumbers: [String]?) {
@@ -350,8 +360,8 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         connection.start()
     }
     
-    func getTimeToDestination(origin1: String, origin2: String, dest1: String, dest2: String) {
-        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&key=\(apiKey)"
+    func getTimeToDestination(origin1: String, origin2: String, dest1: String, dest2: String, trafficModel: String) {
+        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(apiKey)&departure_time=now&traffic_model=\(trafficModel)"
         print(url)
         let request: NSURLRequest? = NSURLRequest(URL: NSURL(string: url)!)
         guard let URLrequest = request else {
@@ -379,11 +389,12 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         }
         
         guard let json = jsonResult else { return }
+        print(json.description)
         if let rows = json["rows"] as? NSArray {
             if let row = rows[0] as? NSDictionary {
                 if let elements = row["elements"] as? NSArray {
                     if let elem = elements[0] as? NSDictionary {
-                        if let duration = elem["duration"] as? NSDictionary {
+                        if let duration = elem["duration_in_traffic"] as? NSDictionary {
                             if let time = duration["text"] as? String {
                                 sendMessage(contactNumbers, duration: time)
                             }
@@ -424,10 +435,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     }
     
     @IBAction func sendTextMessage(sender: UIButton) {
-        syncData()
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
-                             dest1: destLatitude, dest2: destLongitude)
+                             dest1: destLatitude, dest2: destLongitude, trafficModel: "best_guess")
     }
     
     
