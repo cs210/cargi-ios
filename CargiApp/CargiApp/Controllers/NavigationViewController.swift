@@ -64,6 +64,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let db = AzureDatabase()
 
         // Do any additional setup after loading the view.
         view.sendSubviewToBack(dashboardView)
@@ -94,7 +95,6 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         // observer for changes in myLocation of google's map view
         mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
 
-        
         
         
 //        callButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)

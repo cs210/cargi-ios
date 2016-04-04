@@ -11,6 +11,7 @@ import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    var client: MSClient?
     enum Actions:String{
         case increment = "INCREMENT_ACTION"
         case decrement = "DECREMENT_ACTION"
@@ -27,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyBtm9mqbycBZedKCLWgxWU-aPbZDwO0jII")
+        self.client = MSClient(
+            applicationURLString:"https://cargiios.azure-mobile.net/",
+            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
+        )
         return true
     }
     
