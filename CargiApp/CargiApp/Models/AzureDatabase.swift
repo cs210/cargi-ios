@@ -8,6 +8,10 @@
 
 import Foundation
 
+
+/**
+    Database backed by Microsoft Azure.
+ */
 class AzureDatabase {
     
     init() {

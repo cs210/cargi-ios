@@ -9,15 +9,28 @@
 import Foundation
 import GoogleMaps
 
+
+/**
+    Class for converting between addresses and coordinates using geocoders.
+ 
+    Can use Google Maps or Apple Maps, depending on preference.
+ */
 class LocationServices {
     
+    // Types of Maps that can be used.
     private enum MapsType {
+        // Apple Maps
         case AppleMaps
+        
+        // Google Maps
         case GoogleMaps
     }
     
-    private static var defaultMap: MapsType = MapsType.GoogleMaps
+    private static var defaultMap: MapsType = MapsType.GoogleMaps // hard-coded to Google Maps, but may change depending on user's preference.
     
+    /**
+        Convert from street address to coordinates, and open appropriate maps/navigation app showing the directions/route to those coordinates.
+     */
     static func searchLocation(address: String) {
         let geocoder = CLGeocoder()
         
@@ -32,6 +45,7 @@ class LocationServices {
                             return
                         }
                     }
+                    // No need for checking whether Apple Maps exists, since the app exists on all iOS devices by default.
                     searchLocationAppleMaps(location.coordinate.latitude, longitude: location.coordinate.longitude)
                     
                 } else {
@@ -43,6 +57,9 @@ class LocationServices {
         }
     }
     
+    /**
+        Open Apple Maps showing the route to the given coordinates.
+     */
     static func searchLocationAppleMaps(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let query = "?q=\(latitude),\(longitude)"
         let path = "http://maps.apple.com/" + query
@@ -54,6 +71,9 @@ class LocationServices {
         }
     }
     
+    /**
+        Open Google Maps showing the route to the given coordinates.
+     */
     static func searchLocationGoogleMaps(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         if (UIApplication.sharedApplication().canOpenURL(NSURL(string:"comgooglemaps://")!)) {
             UIApplication.sharedApplication().openURL(NSURL(string:
@@ -64,11 +84,14 @@ class LocationServices {
         }
     }
     
+    /**
+        Open Apple Maps showing the route to the given address.
+     */
     static func searchLocationAddress(address: String) {
         let queries = address.componentsSeparatedByString("\n")
         let addr = queries[0]
         let query = "?addr=\(addr)"
-        let path = "http://maps.apple.com/" + query
+        let path = "http://maps.apple.com/" + query // might need to convert to percent-escape encoding.
         print(path)
         if let url = NSURL(string: path) {
             // UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?q=cupertino")!)

@@ -9,6 +9,10 @@
 import Foundation
 import GoogleMaps
 
+
+/**
+ Class that handles making requests to the Google Directions API and parsing responses.
+ */
 class DirectionTasks {
     
     // Google Maps API generic URL
@@ -39,8 +43,20 @@ class DirectionTasks {
     var totalTimeString: String!
     */
     
-    // travelMode will be driving, by default.
-    func getDirections(origin: String?, dest: String?, waypoints: [String]!, travelMode: AnyObject!, completionHandler: ((status: String, success: Bool) -> Void)) {
+    /**
+        Gets the direction from origin to destination and populates the instance variables defined above.
+        
+        - Origin/Destination should be properly formatted using either:
+            1) formatted address,
+            2) coordinates (latitude & longitude) separated by comma.
+        - Waypoints (optional) are required points that the route must go through.
+        - Completion Handler will be called once the response is successfully received, so that ViewControllers can properly update the views.
+    
+        Note: travelMode will be driving by default.
+     */
+    func getDirections(origin: String?, dest: String?, waypoints: [String]!, completionHandler: ((status: String, success: Bool) -> Void)) {
+
+        
         guard let originLocation = origin else {
             completionHandler(status: "Origin is nil", success: false)
             return
@@ -49,16 +65,21 @@ class DirectionTasks {
             completionHandler(status: "Destination is nil", success: false)
             return
         }
+        
+        // URL for making request to the Google Directions API.
         var requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&key=\(APIKey)"
         requestURL = requestURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURL(string: requestURL)
         
+        // Get and parse the response.
         dispatch_async(dispatch_get_main_queue()) {
             guard let url = request else {
                 print("url is not valid")
                 return
             }
             let data = NSData(contentsOfURL: url)
+            
+            // Convert JSON response into an NSDictionary.
             var json: [NSObject:AnyObject]?
             do {
                 json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]
@@ -70,18 +91,23 @@ class DirectionTasks {
             
             let status = dict["status"] as! String
             if status == "OK" {
+                // General Route Information
                 let routes = dict["routes"] as! [[NSObject:AnyObject]]
                 self.selectedRoute = routes.first!
                 self.overviewPolyline = self.selectedRoute["overview_polyline"] as! [NSObject:AnyObject]
                 
+                // Legs
                 let legs = self.selectedRoute["legs"] as! [[NSObject:AnyObject]]
-             
+                
+                // Start Location
                 let startLocationDictionary = legs.first!["start_location"] as! [NSObject:AnyObject]
                 self.originCoordinate = CLLocationCoordinate2DMake(startLocationDictionary["lat"] as! CLLocationDegrees, startLocationDictionary["lng"] as! CLLocationDegrees)
-
+                
+                // End Location
                 let endLocationDictionary = legs.last!["end_location"] as! [NSObject:AnyObject]
                 self.destCoordinate = CLLocationCoordinate2DMake(endLocationDictionary["lat"] as! CLLocationDegrees, endLocationDictionary["lng"] as! CLLocationDegrees)
-
+                
+                // Addresses
                 self.originAddress = legs.first!["start_address"] as! String
                 self.destAddress = legs.last!["end_address"] as! String
                 

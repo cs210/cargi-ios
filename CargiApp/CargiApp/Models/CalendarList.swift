@@ -9,8 +9,14 @@
 import Foundation
 import EventKit
 
+/**
+    Class used for accessing calendar events and reminders.
+*/
 class CalendarList {
     
+    /**
+        Asks for user's permission to access calendar events.
+     */
     private static func requestForAccessToCalendarEvents() {
         let eventStore = EKEventStore()
         eventStore.requestAccessToEntityType(.Event, completion: {
@@ -30,23 +36,29 @@ class CalendarList {
     }
     
     
+    /**
+         Looks through all calendar events and see which event is within the timeframe of interest.
+     */
     private static func parseCalendar(calendar: EKCalendar, startDate: NSDate, endDate: NSDate) -> [EKEvent] {
         let predicate = EKEventStore().predicateForEventsWithStartDate(startDate, endDate: endDate, calendars: nil)
         return parseCalendar(calendar, predicate: predicate)
     }
     
 
+    /**
+        Parse calendar events using a predicate (events that meet a specific condition).
+        Use NSPredicate that are used for event stores.
+     */
     private static func parseCalendar(calendar: EKCalendar, predicate: NSPredicate) -> [EKEvent] {
         let events = EKEventStore().eventsMatchingPredicate(predicate)
-        
-//        if i.title == "Test Title" {
-//            print("YES" )
-//            // Uncomment if you want to delete
-//            //eventStore.removeEvent(i, span: EKSpanThisEvent, error: nil)
-//        }
         return events
     }
     
+    /**
+        Default method for parsing calendar.
+     
+        Currently hard-coded to return all events that start 30 min before and 2 hrs after current time.
+     */
     private static func parseCalendar(calendar: EKCalendar) -> [EKEvent] {
         // Look at all events 30 minutes prior to the current time
         let startDate = NSDate().dateByAddingTimeInterval(-30*60)
@@ -55,6 +67,9 @@ class CalendarList {
         return parseCalendar(calendar, startDate: startDate, endDate: endDate)
     }
     
+    /**
+        Print all reminders found in the Reminders app.
+     */
     private static func printReminders() {
         let eventStore = EKEventStore()
         let predicate = eventStore.predicateForRemindersInCalendars([])
@@ -65,7 +80,11 @@ class CalendarList {
         })
     }
     
-    // Currently returns nil
+    /**
+        Returns an array of all reminders found in the Reminders app.
+     
+        Note: currently returns nil.
+     */
     static func getAllReminders() -> [EKReminder]? {
         let status = EKEventStore.authorizationStatusForEntityType(EKEntityType.Event)
         print(String(status))
@@ -81,6 +100,9 @@ class CalendarList {
         // return reminders
     }
     
+    /**
+        Returns an array of all events found in the Apple Calendar app.
+     */
     static func getAllCalendarEvents() -> [EKEvent]? {
         var events: [EKEvent]?
         let status = EKEventStore.authorizationStatusForEntityType(EKEntityType.Event)
@@ -95,7 +117,6 @@ class CalendarList {
             let calendars = EKEventStore().calendarsForEntityType(EKEntityType.Event)
             events = parseCalendar(calendars[0])
         case EKAuthorizationStatus.Restricted, EKAuthorizationStatus.Denied:
-            // We need to help them give us permission
             print("We need to help you give us permission")
         }
         return events

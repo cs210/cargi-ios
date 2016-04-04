@@ -9,8 +9,15 @@
 import Foundation
 import Contacts
 
+
+/**
+    Class for accessing and parsing contacts stored on the device.
+ */
 class ContactList {
     
+    /**
+        Retrieve all contacts stored on the device. Each key (name) maps to a list of phone numbers.
+     */
     static func getAllContacts() -> [String:[String]] {
         let contactStore = CNContactStore()
         let keysToFetch = [
@@ -44,6 +51,7 @@ class ContactList {
         
         var contacts = [String:[String]]()
         for person in results {
+            // Make full name as first and last name separated by space.
             let fullName = person.givenName + " " + person.familyName
             var numbers = [String]()
             for phoneNumber in person.phoneNumbers {
@@ -56,6 +64,7 @@ class ContactList {
         return contacts
     }
     
+    // Retrieve phone numbers for a particular ocntact.
     static func getContactPhoneNumber(contactName: String?) -> [String]? {
         let contacts = getAllContacts()
         guard let name = contactName else { return nil }
