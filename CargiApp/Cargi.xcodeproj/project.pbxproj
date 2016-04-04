@@ -33,6 +33,7 @@
 		74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */; };
 		74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783101C9F6A28003E0391 /* navigate_button@2x.png */; };
 		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
+		BE43816B1CB1FA5000909978 /* WindowsAzureMobileServices in Frameworks */ = {isa = PBXBuildFile; fileRef = BE43816A1CB1FA5000909978 /* WindowsAzureMobileServices */; };
 		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 		74B783121C9F6A2C003E0391 /* directions_button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions_button2@2x.png"; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE43816A1CB1FA5000909978 /* WindowsAzureMobileServices */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = WindowsAzureMobileServices; sourceTree = "<group>"; };
 		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
 		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE43816B1CB1FA5000909978 /* WindowsAzureMobileServices in Frameworks */,
 				407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +90,7 @@
 		55F4FEC86663CC9A928EF540 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE43816A1CB1FA5000909978 /* WindowsAzureMobileServices */,
 				A44D8D9CE1E4323107188D46 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -442,6 +446,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = CargiApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.CargiApp;
 				PRODUCT_NAME = Cargi;
 			};
@@ -455,6 +463,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = CargiApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.CargiApp;
 				PRODUCT_NAME = Cargi;
 			};
