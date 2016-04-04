@@ -11,10 +11,8 @@
 		74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */ = {isa = PBXBuildFile; fileRef = 74131C461C7FD83A00CBB5F4 /* cargi-padding.png */; };
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactList.swift */; };
-		741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3761C8D380F003017CA /* SendMessageViewController.swift */; };
 		741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationServices.swift */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
-		749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749655721C8EAE5B003AE6B0 /* MusicViewController.swift */; };
 		74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */; };
 		74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FA1C7FCBC800C468CC /* Main.storyboard */; };
 		74A2E5FE1C7FCBC800C468CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */; };
@@ -44,10 +42,8 @@
 		74131C461C7FD83A00CBB5F4 /* cargi-padding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-padding.png"; sourceTree = "<group>"; };
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactList.swift; sourceTree = "<group>"; };
-		741CE3761C8D380F003017CA /* SendMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageViewController.swift; sourceTree = "<group>"; };
 		741CE3781C8D55BF003017CA /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
-		749655721C8EAE5B003AE6B0 /* MusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		74A2E5F31C7FCBC800C468CC /* Cargi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cargi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74A2E5FB1C7FCBC800C468CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -156,8 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
-				741CE3761C8D380F003017CA /* SendMessageViewController.swift */,
-				749655721C8EAE5B003AE6B0 /* MusicViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -329,9 +323,7 @@
 				BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */,
 				7417B5481C868A70005357CB /* ContactList.swift in Sources */,
 				B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */,
-				741CE3771C8D380F003017CA /* SendMessageViewController.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
-				749655731C8EAE5B003AE6B0 /* MusicViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
 				741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */,
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
