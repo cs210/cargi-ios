@@ -10,8 +10,9 @@
 		407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D8D9CE1E4323107188D46 /* libPods.a */; };
 		74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */ = {isa = PBXBuildFile; fileRef = 74131C461C7FD83A00CBB5F4 /* cargi-padding.png */; };
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
-		7417B5481C868A70005357CB /* ContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactList.swift */; };
-		741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationServices.swift */; };
+		7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactDirectory.swift */; };
+		741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationGeocoder.swift */; };
+		747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
 		74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */; };
 		74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A2E5FA1C7FCBC800C468CC /* Main.storyboard */; };
@@ -33,7 +34,7 @@
 		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		B39CE0A71CB20A6C001EB723 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */; };
-		BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* CalendarList.swift */; };
+		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,8 +42,9 @@
 		4058D7172640D24468A6E9E5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		74131C461C7FD83A00CBB5F4 /* cargi-padding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-padding.png"; sourceTree = "<group>"; };
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
-		7417B5471C868A70005357CB /* ContactList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactList.swift; sourceTree = "<group>"; };
-		741CE3781C8D55BF003017CA /* LocationServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
+		7417B5471C868A70005357CB /* ContactDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDirectory.swift; sourceTree = "<group>"; };
+		741CE3781C8D55BF003017CA /* LocationGeocoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGeocoder.swift; sourceTree = "<group>"; };
+		747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceMatrixTasks.swift; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
 		74A2E5F31C7FCBC800C468CC /* Cargi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cargi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A2E5F61C7FCBC800C468CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +71,7 @@
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B39CE0A41CB20709001EB723 /* AzureDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureDatabase.swift; sourceTree = "<group>"; };
 		B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
-		BE6504EB1C88166C00C26AAA /* CalendarList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarList.swift; sourceTree = "<group>"; };
+		BE6504EB1C88166C00C26AAA /* EventDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDirectory.swift; sourceTree = "<group>"; };
 		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,9 +163,10 @@
 			children = (
 				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
 				74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */,
-				BE6504EB1C88166C00C26AAA /* CalendarList.swift */,
-				741CE3781C8D55BF003017CA /* LocationServices.swift */,
-				7417B5471C868A70005357CB /* ContactList.swift */,
+				747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */,
+				BE6504EB1C88166C00C26AAA /* EventDirectory.swift */,
+				741CE3781C8D55BF003017CA /* LocationGeocoder.swift */,
+				7417B5471C868A70005357CB /* ContactDirectory.swift */,
 				B39CE0A41CB20709001EB723 /* AzureDatabase.swift */,
 			);
 			path = Models;
@@ -321,13 +324,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */,
-				7417B5481C868A70005357CB /* ContactList.swift in Sources */,
+				7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */,
 				B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
-				741CE3791C8D55BF003017CA /* LocationServices.swift in Sources */,
+				741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */,
+				747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */,
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
-				BE6504EC1C88166C00C26AAA /* CalendarList.swift in Sources */,
+				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,12 +13,22 @@ import MessageUI
 import EventKit
 import QuartzCore
 
-class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate,
+class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate,
                                 MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
-    let apiKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
+    // Types of Maps that can be used.
+    private enum MapsType {
+        // Apple Maps
+        case Apple
+        
+        // Google Maps
+        case Google
+    }
+    
+    private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
+    
     var marker: GMSMarker = GMSMarker()
     var data: NSMutableData = NSMutableData()
     
@@ -44,6 +54,9 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent?
     
+    var eventDirectory = EventDirectory()
+    
+    var contactDirectory = ContactDirectory()
     var contact: String?
     var contactNumbers: [String]?
     
@@ -54,7 +67,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     var routePolylineBorder = GMSPolyline()
     var routePath = GMSPath()
     
-    
+    var distanceTasks = DistanceMatrixTasks()
     
     
     override func viewDidLoad() {
@@ -70,7 +83,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
         
-        // call button shadow
+        // Design of Buttons
         callButton.layer.shadowOffset = CGSizeMake(0, 3)
         callButton.layer.shadowColor = UIColor.blackColor().CGColor
         callButton.layer.shadowRadius = 2
@@ -86,42 +99,15 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         destinationView.layer.shadowRadius = 1.5
         destinationView.layer.shadowOpacity = 0.7
         
-        // observer for changes in myLocation of google's map view
+        // Observer for changes in myLocation of google's map view
         mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
 
-        
-        
-//        callButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
-//        textButton.contentEdgeInsets = UIEdgeInsetsMake(15, 15, 15, 15)
-        
-//        let camera = GMSCameraPosition.cameraWithLatitude(defaultLatitude,
-//            longitude: defaultLongitude, zoom: 13)
-//        let mapView = GMSMapView.mapWithFrame(CGRectZero, camera: camera)
-//        mapView.camera = camera
-        
-//        marker = GMSMarker()
-//        marker.position = CLLocationCoordinate2DMake(37.426, 151.20)
-//        marker.title = "Stanford"
-//        marker.map = mapView
-
-//        getTimeToDestination("Sydney+AUS", dest: "Newcastle+AUS")
-//        print("CONTACTS: ")
-//        printContacts()
-        
-//        print("EVENTS: ")
-//        printEvents()
-//        print("REMINDERS: ")
-//        printReminders()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
-//        mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
-        print("syncing data")
         syncData()
-//          manager = CBCentralManager(delegate: self, queue: nil)
-//        LocalNotifications.sendNotification()
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -139,8 +125,8 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
-        let contacts = ContactList.getAllContacts()
-        guard let events = CalendarList.getAllCalendarEvents() else { return }
+        let contacts = contactDirectory.getAllPhoneNumbers()
+        guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
@@ -152,13 +138,12 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
             }
         }
         
-        contactNumbers = ContactList.getContactPhoneNumber(self.contact)
+        contactNumbers = contactDirectory.getPhoneNumber(contact)
 
         guard let ev = currentEvent else { return }
         print(ev.eventIdentifier)
         contactName.text = self.contact
         eventLabel.text = ev.title
-//        destLabel.text = ev.structuredLocation?.title
         
         guard let coordinate = ev.structuredLocation?.geoLocation?.coordinate else { return }
         destLatitude = String(coordinate.latitude)
@@ -175,16 +160,82 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         print("showroute")
         showRoute()
     }
+
+    /**
+        Open Google Maps showing the route to the given coordinates.
+     */
+    func openGoogleMapsLocation(coordinate: CLLocationCoordinate2D) {
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(coordinate.latitude),\(coordinate.longitude)&directionsmode=driving")!)
+    }
     
     
-    /// Open Google Maps with the given destination.
+    /**
+        Open Google Maps showing the route to the given address.
+     */
+    func openGoogleMapsLocationAddress(address: String) {
+        let path = "comgooglemaps://saddr=&?daddr=\(address)&directionsmode=driving"
+        print(path)
+        guard let url = NSURL(string: path) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    /**
+        Open Apple Maps showing the route to the given coordinates.
+     */
+    func openAppleMapsLocation(coordinate: CLLocationCoordinate2D) {
+        guard let query = currentEvent?.location else { return }
+        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+        let near = "\(coordinate.latitude),\(coordinate.longitude)"
+        let path = "http://maps.apple.com/?q=\(address)&near=\(near)"
+        guard let url = NSURL(string: path) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    /**
+        Open Apple Maps showing the route to the given address.
+     */
+    func openAppleMapsLocationAddress(address: String) {
+        let path = "http://maps.apple.com/?daddr=\(address)&dirflg=d"
+        guard let url = NSURL(string: path) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    /**
+        Open Maps, given the current event's location.
+     */
     func openMaps() {
         guard let ev = currentEvent else { return }
-        switch (CLLocationManager.authorizationStatus()) {
+        let queries = ev.location!.componentsSeparatedByString("\n")
+        guard let query = queries.last else { return }
+        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+        
+        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+            self.openGoogleMapsLocationAddress(address)
+        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+            self.openAppleMapsLocationAddress(address)
+        }
+        
+        /* Only if Geocoder is needed */
+/*
+        switch CLLocationManager.authorizationStatus() {
             case .AuthorizedAlways, .AuthorizedWhenInUse:
-                LocationServices.searchLocation(ev.location!)
+                let geocoder = LocationGeocoder()
+                geocoder.getCoordinates(ev.location!) { (status, error) in
+                    guard let coordinate = geocoder.coordinate else {
+                        print(error)
+                        return
+                    }
+                    // Use Google Maps if it exists. Otherwise, use Apple Maps.
+                    print(ev.location!)
+                    if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+                        self.openGoogleMapsLocation(coordinate)
+                    } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                        self.openAppleMapsLocation(coordinate)
+                    }
+                }
             default: break
         }
+*/
     }
     
     /// Location is updated.
@@ -192,19 +243,11 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         print("updating location")
     }
     
-    /// Navigate Button clicked.
-    @IBAction func update(sender: UIButton) {
-        if let _ = currentEvent {
-            openMaps()
-        } else {
-            syncData()
-            openMaps()
-        }
-    }
+
     
     /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
     func showRoute() {
-        guard let ev = currentEvent else {
+        guard let _ = currentEvent else {
             syncRouteSuccess = false
             return
         }
@@ -292,7 +335,61 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         }
     }
     
-    /* START: Core Bluetooth Manager Methods */
+    
+    /// Show location on the Google Maps view if the user has given the app access to user's location.
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
+            mapView.myLocationEnabled = true
+        }
+    }
+    
+    /// Close the message view screen once the message is sent.
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        //... handle sms screen actions
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = false
+    }
+    
+    
+    /// Print all contacts in text format to the console.
+    private func printContacts() {
+        // Print all the contacts
+        let contacts = contactDirectory.getAllPhoneNumbers()
+        for (contact, numbers) in contacts {
+            for number in numbers {
+                print(contact + ": " + number)
+            }
+        }
+    }
+    
+    /// Print all events in text format to the console.
+    private func printEvents() {
+        // Print all events in calendars.
+        guard let events = eventDirectory.getAllCalendarEvents() else { return }
+        for ev in events {
+            print("EVENT: \(ev.title)" )
+            print("\t-startDate: \(ev.startDate)" )
+            print("\t-endDate: \(ev.endDate)" )
+            if let location = ev.location {
+                print("\t-location: \(location)")
+            }
+            print("\n")
+        }
+    }
+    
+    /// Print all reminders in text format to the console.
+    private func printReminders() {
+        // Print all reminders
+        let reminders = eventDirectory.getAllReminders()
+        print("REMINDERS:")
+        print(reminders?.description)
+    }
+    
+    
+    // MARK: Core Bluetooth Manager Methods
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Peripheral: \(peripheral)")
     }
@@ -322,121 +419,23 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
             manager.scanForPeripheralsWithServices(nil, options: nil)
         }
     }
-    /* END: Core Bluetooth Manager Methods */
     
-    /// Print all contacts in text format to the console.
-    private func printContacts() {
-        // Print all the contacts
-        let contacts = ContactList.getAllContacts()
-        for (contact, numbers) in contacts {
-            for number in numbers {
-                print(contact + ": " + number)
-            }
-        }
-    }
     
-    /// Print all events in text format to the console.
-    private func printEvents() {
-        // Print all events in calendars.
-        guard let events = CalendarList.getAllCalendarEvents() else { return }
-        for ev in events {
-            print("EVENT: \(ev.title)" )
-            print("\t-startDate: \(ev.startDate)" )
-            print("\t-endDate: \(ev.endDate)" )
-            if let location = ev.location {
-                print("\t-location: \(location)")
-            }
-            print("\n")
-        }
-    }
-    
-    /// Print all reminders in text format to the console.
-    private func printReminders() {
-        // Print all reminders
-        CalendarList.getAllReminders()
-    }
-    
-    /// Makes a request to get the estimated time from origin to destination using addresses.
-    func getTimeToDestination(origin: String, dest: String) {
-        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin)&destinations=\(dest)&key=\(apiKey)"
-        print(url)
-        let request: NSURLRequest? = NSURLRequest(URL: NSURL(string: url)!)
-        guard let URLrequest = request else {
-            print("-___-")
-            return
-        }
-//        let config = NSURLSessionConfiguration()
-//        guard let session = NSURLSession(configuration: NSURLSessionConfiguration())
-        guard let connection = NSURLConnection(request: URLrequest, delegate: self) else {
-            print(":(")
-            return
-        }
-        connection.start()
-    }
-    
-    /// Makes a request to get the estimated time from origin to destination using coordinates.
-    func getTimeToDestination(origin1: String, origin2: String, dest1: String, dest2: String, trafficModel: String) {
-        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(apiKey)&departure_time=now&traffic_model=\(trafficModel)"
-        print(url)
-        let request: NSURLRequest? = NSURLRequest(URL: NSURL(string: url)!)
-        guard let URLrequest = request else {
-            print("-___-")
-            return
-        }
-        //        let config = NSURLSessionConfiguration()
-        //        guard let session = NSURLSession(configuration: NSURLSessionConfiguration())
-        guard let connection = NSURLConnection(request: URLrequest, delegate: self) else {
-            print(":(")
-            return
-        }
-        connection.start()
-    }
-    
-    /// Parses the response (for ETA) after the data is successfully received.
-    func connectionDidFinishLoading(connection: NSURLConnection) {
-        print("\nconnectionDidFinishLoading\n")
-//        let stringData: NSString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
-//        print(stringData)
-        var jsonResult: NSDictionary?
-        do {
-            jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
-        } catch {
-            print("ERROR")
-        }
-        
-        guard let json = jsonResult else { return }
-        print(json.description)
-        if let rows = json["rows"] as? NSArray {
-            if let row = rows[0] as? NSDictionary {
-                if let elements = row["elements"] as? NSArray {
-                    if let elem = elements[0] as? NSDictionary {
-                        if let duration = elem["duration_in_traffic"] as? NSDictionary {
-                            if let time = duration["text"] as? String {
-                                sendMessage(contactNumbers, duration: time)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    /// Initialize new instance when new response has been received, so that it's prepared to add new updated data.
-    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
-        // Received a new request, clear out the data object
-        self.data = NSMutableData()
-    }
-    
-    /// Update data when data has been received after making a request.
-    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-        print("\nYAY!\n")
-        self.data.appendData(data)
-    }
-    
+    // MARK: IBAction Methods
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
         syncData()
+    }
+    
+    /// Navigate Button clicked.
+    @IBAction func navigateButtonClicked(sender: UIButton) {
+        if let _ = currentEvent {
+            openMaps()
+        } else {
+            syncData()
+            openMaps()
+        }
     }
     
     
@@ -448,28 +447,29 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
         presentViewController(alert, animated: true, completion: nil)
     }
     
-    // Search Button clicked
+    /// Send Message Button clicked.
+    @IBAction func messageButtonClicked(sender: UIButton) {
+        let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
+        distanceTasks.getETA(locValue.latitude.description, origin2: locValue.longitude.description, dest1: destLatitude, dest2: destLongitude) { (status, success) in
+            self.sendMessage(self.contactNumbers, duration: self.distanceTasks.durationInTrafficText)
+        }
+    }
+    
+    /// Search Button clicked
     @IBAction func searchButtonClicked(sender: UIButton) {
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
     
-    /// Send Message Button clicked.
-    @IBAction func sendTextMessage(sender: UIButton) {
-        let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
-        getTimeToDestination(locValue.latitude.description, origin2: locValue.longitude.description,
-                             dest1: destLatitude, dest2: destLongitude, trafficModel: "best_guess")
-    }
-    
     
     /// Starts a phone call using the phone number associated with current event.
-    @IBAction func callPhoneNumber(sender: UIButton) {
+    @IBAction func phoneButtonClicked(sender: UIButton) {
         callPhone(contactNumbers)
     }
     
     /// Opens the Apple Calendar app, using deep-linking.
-    @IBAction func openEventApp(sender: UIButton) {
+    @IBAction func eventButtonClicked(sender: UIButton) {
         let appName: String = "calshow"
         let appURL: String = "\(appName):"
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!) {
@@ -480,7 +480,7 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
     
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
-    @IBAction func openMusicApp(sender: UIButton) {
+    @IBAction func musicButtonClicked(sender: UIButton) {
         let appName: String = "spotify"
         
         let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
@@ -497,24 +497,6 @@ class NavigationViewController: UIViewController, NSURLConnectionDataDelegate, C
             }
         }
     }
-    
-    /// Show location on the Google Maps view if the user has given the app access to user's location.
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
-            mapView.myLocationEnabled = true
-        }
-    }
-    
-    /// Close the message view screen once the message is sent.
-    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
-        //... handle sms screen actions
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
-    }
-    
     
 }
 

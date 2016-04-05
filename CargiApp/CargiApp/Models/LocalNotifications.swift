@@ -49,7 +49,7 @@ class LocalNotifications {
         counterCategory.setActions([incrementAction, decrementAction],
             forContext: UIUserNotificationActionContext.Minimal)
         
-        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Sound], categories: NSSet(object: counterCategory) as! Set<UIUserNotificationCategory>)
+        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Sound], categories: NSSet(object: counterCategory) as? Set<UIUserNotificationCategory>)
         
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         

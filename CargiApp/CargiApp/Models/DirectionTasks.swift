@@ -57,18 +57,17 @@ class DirectionTasks {
     func getDirections(origin: String?, dest: String?, waypoints: [String]!, completionHandler: ((status: String, success: Bool) -> Void)) {
 
         
-        guard let originLocation = origin else {
+        guard let originLocation = origin?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
             completionHandler(status: "Origin is nil", success: false)
             return
         }
-        guard let destLocation = dest else {
+        guard let destLocation = dest?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
             completionHandler(status: "Destination is nil", success: false)
             return
         }
         
         // URL for making request to the Google Directions API.
-        var requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&key=\(APIKey)"
-        requestURL = requestURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&key=\(APIKey)"
         let request = NSURL(string: requestURL)
         
         // Get and parse the response.

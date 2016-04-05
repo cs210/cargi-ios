@@ -13,12 +13,14 @@ import Contacts
 /**
     Class for accessing and parsing contacts stored on the device.
  */
-class ContactList {
+class ContactDirectory {
+    
+    private var contacts = [String:[String]]()
     
     /**
         Retrieve all contacts stored on the device. Each key (name) maps to a list of phone numbers.
      */
-    static func getAllContacts() -> [String:[String]] {
+    init() {
         let contactStore = CNContactStore()
         let keysToFetch = [
             CNContactFormatter.descriptorForRequiredKeysForStyle(.FullName),
@@ -49,7 +51,7 @@ class ContactList {
             }
         }
         
-        var contacts = [String:[String]]()
+        self.contacts = [String:[String]]()
         for person in results {
             // Make full name as first and last name separated by space.
             let fullName = person.givenName + " " + person.familyName
@@ -58,17 +60,18 @@ class ContactList {
                 let number = phoneNumber.value as! CNPhoneNumber
                 numbers.append(number.stringValue)
             }
-            contacts[fullName] = numbers
+            self.contacts[fullName] = numbers
         }
         
+    }
+    
+    func getAllPhoneNumbers() -> [String : [String]] {
         return contacts
     }
     
-    // Retrieve phone numbers for a particular ocntact.
-    static func getContactPhoneNumber(contactName: String?) -> [String]? {
-        let contacts = getAllContacts()
+    // Retrieve phone numbers for a particular contact.
+    func getPhoneNumber(contactName: String?) -> [String]? {
         guard let name = contactName else { return nil }
-        guard let contact = contacts[name] else { return nil }
-        return contact
+        return contacts[name]
     }
 }

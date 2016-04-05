@@ -45,7 +45,7 @@
                                         </constraints>
                                         <state key="normal" image="call-button.png"/>
                                         <connections>
-                                            <action selector="callPhoneNumber:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0sR-Qp-uEZ"/>
+                                            <action selector="phoneButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vnw-D6-e5y"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDS-zg-Foj">
@@ -56,7 +56,7 @@
                                         </constraints>
                                         <state key="normal" image="text-button.png"/>
                                         <connections>
-                                            <action selector="sendTextMessage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cH0-5k-xdi"/>
+                                            <action selector="messageButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vk5-nI-Tdq"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -89,7 +89,7 @@
                                         </constraints>
                                         <state key="normal" image="navigate_button.png"/>
                                         <connections>
-                                            <action selector="update:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sZ3-AE-PKF"/>
+                                            <action selector="navigateButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Wz-oO-jDc"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -127,7 +127,7 @@
                                                 </constraints>
                                                 <state key="normal" image="calendar-icon.png"/>
                                                 <connections>
-                                                    <action selector="openEventApp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qAQ-vp-qK7"/>
+                                                    <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0tA-3s-2DO"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyH-yY-cEr">
@@ -203,7 +203,7 @@
                                         </constraints>
                                         <state key="normal" image="music-button.png"/>
                                         <connections>
-                                            <action selector="openMusicApp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yGn-mc-edK"/>
+                                            <action selector="musicButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yXk-oC-UXc"/>
                                         </connections>
                                     </button>
                                 </subviews>
