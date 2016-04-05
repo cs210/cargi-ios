@@ -14,6 +14,13 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 4. When your code has been pushed, notify Edwin, who will do a code review and make sure your code integrates smoothly into the iOS application, and close the issue.
 
 # Development Milestones:
+- [x] Navigation (Apple/Google) to the next event's location 
+- [x] Show route with directions from current location to destination
+- [x] Message ETA / Calling friends using event details
+- [x] Polished UI
+- [x] Easy access to music control
+
+# Completed Steps:
 - [x] Set up Google Maps view and basic Google Places search
 - [x] Compute ETA given origin & destination
 - [x] Parse events from Apple Calendar
@@ -30,7 +37,7 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 - [x] Retrieving contact information from calendar events (limited)
 - [x] Compute ETA given current location & destination
 - [x] Use origami to design the user interface
-- [ ] [in progress] Draw route on the map using Google Maps Directions API
+- [x] Draw route on the map using Google Maps Directions API
 - [ ] Need to parse JSON in a clean way: cleanly parse using built-in library, or import some third-party library (SwiftyJSON)
 - [ ] Implement smart filtering of contacts (back end)
 - [ ] Implement smart filtering of contacts (front end - user interface)
