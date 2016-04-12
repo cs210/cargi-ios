@@ -1,0 +1,34 @@
+database=Microsoft SQL Server
+user=corgis
+autoCommit=Yes
+type=Microsoft SQL Server
+type2=null
+driverClass=net.sourceforge.jtds.jdbc.Driver
+classLocation=/Applications/RazorSQL.app/Contents/Java/drivers/jtds/jtds12.jar
+connectUrl=jdbc:jtds:sqlserver://vudpc91ihx.database.windows.net:1433/cargibackend_db;appName=RazorSQL;useCursors=true
+overrideUrl=null
+profileName=cargi
+keepAliveQuery=select GETDATE()
+serviceUrl=null
+serviceType=null
+serviceInterfaceClass=
+serviceInterfaceMethod=
+connectionType=JDBC
+connectAs=
+host=vudpc91ihx.database.windows.net
+port=1433
+databaseName=cargibackend_db
+fetchSize=100
+isolationLevel=Read Uncommitted
+savePassword=true
+password={{{VFWcmknAaH2YdZn+Aek/+WTWw==!^*#$RIG
+saveServicePassword=true
+servicePassword=
+autoConnect=false
+useUnicode=false
+maxRows=0
+securityToken=null
+secure=true
+sqlRestrictions=1003
+connprops=appName|RazorSQL~useCursors|true
+((Z~]
