@@ -49,10 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 switch action{
                     
                 case Actions.increment:
-                    counter++
+                    counter += 1
                     
                 case Actions.decrement:
-                    counter--
+                    counter -= 1
                     
                 case Actions.reset:
                     counter = 0

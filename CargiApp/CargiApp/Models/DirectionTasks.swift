@@ -55,13 +55,17 @@ class DirectionTasks {
         Note: travelMode will be driving by default.
      */
     func getDirections(origin: String?, dest: String?, waypoints: [String]!, completionHandler: ((status: String, success: Bool) -> Void)) {
-
-        
+        print("origin")
         guard let originLocation = origin?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
             completionHandler(status: "Origin is nil", success: false)
             return
         }
+        print("dest")
         guard let destLocation = dest?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
+            completionHandler(status: "Destination is nil", success: false)
+            return
+        }
+        if destLocation.isEmpty {
             completionHandler(status: "Destination is nil", success: false)
             return
         }
@@ -73,20 +77,25 @@ class DirectionTasks {
         // Get and parse the response.
         dispatch_async(dispatch_get_main_queue()) {
             guard let url = request else {
-                print("url is not valid")
+                completionHandler(status: "url is not valid", success: false)
                 return
             }
             let data = NSData(contentsOfURL: url)
-            
+            print("JSON")
             // Convert JSON response into an NSDictionary.
             var json: [NSObject:AnyObject]?
             do {
                 json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]
             } catch {
-                completionHandler(status: "", success: false)
+                completionHandler(status: "Parsing JSON failed.", success: false)
+                return
             }
             
-            guard let dict = json else { return }
+            guard let dict = json else {
+                completionHandler(status: "Parsing JSON failed.", success: false)
+                return
+            }
+            print("HI")
             
             let status = dict["status"] as! String
             if status == "OK" {

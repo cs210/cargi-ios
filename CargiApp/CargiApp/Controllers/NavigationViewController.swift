@@ -20,16 +20,12 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     // Types of Maps that can be used.
     private enum MapsType {
-        // Apple Maps
-        case Apple
-        
-        // Google Maps
-        case Google
+        case Apple // Apple Maps
+        case Google // Google Maps
     }
     
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
-    var marker: GMSMarker = GMSMarker()
     var data: NSMutableData = NSMutableData()
     
     @IBOutlet weak var destLabel: UILabel!
@@ -42,22 +38,39 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     @IBOutlet weak var gasButton: UIButton!
     @IBOutlet weak var musicButton: UIButton!
     @IBOutlet var dashboardView: UIView!
-    @IBOutlet var contactName: UILabel!
+    @IBOutlet var contactLabel: UILabel!
     
     var locationManager = CLLocationManager()
     var didFindMyLocation = false // avoid unnecessary location updates
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
-    var destLatitude = String()
-    var destLongitude = String()
+    
+    var destLocation: String?
+    var destinationName: String?
+    var destCoordinates = CLLocationCoordinate2D()
     
     var manager: CBCentralManager! // Bluetooth Manager
-    var currentEvent: EKEvent?
+    var currentEvent: EKEvent? {
+        didSet {
+            eventLabel.text = currentEvent?.title
+        }
+    }
     
     var eventDirectory = EventDirectory()
     
     var contactDirectory = ContactDirectory()
-    var contact: String?
+    var contact: String? {
+        didSet {
+            contactLabel.text = contact
+            if contact == nil {
+                callButton.enabled = false
+                textButton.enabled = false
+            } else {
+                callButton.enabled = true
+                textButton.enabled = true
+            }
+        }
+    }
     var contactNumbers: [String]?
     
     var directionTasks = DirectionTasks() // Google Directions
@@ -74,6 +87,11 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        destMarker.icon = UIImage(named: "destination_icon")
+        
+        destLabel.text = nil
+        addrLabel.text = nil
+        
         view.sendSubviewToBack(dashboardView)
         view.sendSubviewToBack(mapView)
         let layer: CALayer = self.dashboardView.layer
@@ -125,15 +143,32 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
+        self.contact = nil
+        self.eventLabel.text = nil
+        self.destLabel.text = nil
+        self.addrLabel.text = nil
+        
         let contacts = contactDirectory.getAllPhoneNumbers()
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
+            self.currentEvent = ev
             for contact in contacts.keys {
                 if ev.title.rangeOfString(contact) != nil {
-                    currentEvent = ev
-                    self.contact = contact
+                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                        self.contact = contact
+                        break
+                    }
+                }
+            }
+            if contact != nil { break }
+        }
+        
+        if contact == nil {
+            for ev in events {
+                if !ev.allDay {
+                    self.currentEvent = ev
                 }
             }
         }
@@ -142,20 +177,28 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
 
         guard let ev = currentEvent else { return }
         print(ev.eventIdentifier)
-        contactName.text = self.contact
-        eventLabel.text = ev.title
         
-        guard let coordinate = ev.structuredLocation?.geoLocation?.coordinate else { return }
-        destLatitude = String(coordinate.latitude)
-        destLongitude = String(coordinate.longitude)
+        destLocation = ev.location
+        if let checkIfEmpty = ev.location {
+            if checkIfEmpty.isEmpty {
+                destLocation = nil
+            }
+        }
+        
+        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
+            destCoordinates = coordinate
+        }
+
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
-                destLabel.text = locArr[0]
+                destLabel.text = locArr.first
                 addrLabel.text = locArr[1]
             } else {
-                addrLabel.text = locArr[0]
+                destLabel.text = locArr.first
+                addrLabel.text = nil
             }
+            destinationName = locArr.first
         }
         print("showroute")
         showRoute()
@@ -204,9 +247,15 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         Open Maps, given the current event's location.
      */
     func openMaps() {
-        guard let ev = currentEvent else { return }
-        let queries = ev.location!.componentsSeparatedByString("\n")
-        guard let query = queries.last else { return }
+//        guard let ev = currentEvent else { return }
+//        let queries = ev.location!.componentsSeparatedByString("\n")
+//        print(queries)
+        guard let dest = destLocation else {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
+        let query = dest.componentsSeparatedByString("\n").joinWithSeparator(" ")
+        print(query)
         let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
         
         if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
@@ -247,6 +296,9 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
     func showRoute() {
+        routePolyline.path = nil
+        routePolylineBorder.path = nil
+        
         guard let _ = currentEvent else {
             syncRouteSuccess = false
             return
@@ -256,17 +308,18 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             return
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        let dest = addrLabel.text!
-        print("getting directions")
+        guard let dest = destLocation else { return }
+        print("getting directions for \(dest)")
         self.directionTasks.getDirections(origin, dest: dest, waypoints: nil) { (status, success) in
             print("got directions")
+            self.destMarker.map = nil
+            self.syncRouteSuccess = success
             if success {
-                self.syncRouteSuccess = true
                 print("success")
                 self.configureMap()
                 self.drawRoute()
             } else {
-                self.syncRouteSuccess = false
+                self.showAlertViewController(title: "Error", message: "No route found.")
                 print(status)
             }
         }
@@ -276,7 +329,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     private func configureMap() {
         destMarker.position = directionTasks.destCoordinate
         destMarker.map = mapView
-        destMarker.icon = UIImage(named: "destination_icon")
+        print(destMarker.position)
         print("configure maps done")
     }
     
@@ -322,15 +375,34 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     
     /// Opens up a message view with a preformatted message that shows destination and ETA.
-    func sendMessage(phoneNumbers: [String]?, duration: String) {
+    func sendETAMessage(phoneNumbers: [String]?) {
         guard let numbers = phoneNumbers else { return }
+        guard let _ = destLocation else { return }
+        let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            let firstName = contact?.componentsSeparatedByString(" ").first
-            controller.body = "Hi \(firstName!), I will arrive at \(destLabel.text!) in \(duration)."
+            let firstName = self.contact?.componentsSeparatedByString(" ").first
+            print(contact)
+            print(firstName)
+            distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: destCoordinates.latitude, dest2: destCoordinates.longitude) { (status, success) in
+                print(status)
+                if success {
+                    let duration = self.distanceTasks.durationInTrafficText
+                    if let dest = self.destinationName {
+                        controller.body = "Hi \(firstName!), I will arrive at \(dest) in \(duration)."
+                    } else {
+                        controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                    }
+                    print(controller.body)
+                } else {
+                    self.showAlertViewController(title: "Error", message: "No ETA found.")
+                }
+            }
+            print(phoneNumbers)
             controller.recipients = [numbers[0]] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
+            print("presenting view controller")
             self.presentViewController(controller, animated: true, completion: nil)
         }
     }
@@ -420,6 +492,13 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         }
     }
     
+    func showAlertViewController(title title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     
     // MARK: IBAction Methods
     
@@ -441,31 +520,17 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-        let alert = UIAlertController(title: "Under Construction", message: "Oh no, Cargi is low on gas!", preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
-        alert.addAction(alertAction)
-        presentViewController(alert, animated: true, completion: nil)
+        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
     }
     
     /// Send Message Button clicked.
     @IBAction func messageButtonClicked(sender: UIButton) {
-        let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
-        distanceTasks.getETA(locValue.latitude.description, origin2: locValue.longitude.description, dest1: destLatitude, dest2: destLongitude) { (status, success) in
-            self.sendMessage(self.contactNumbers, duration: self.distanceTasks.durationInTrafficText)
-        }
+        self.sendETAMessage(self.contactNumbers)
     }
-    
-    /// Search Button clicked
-    @IBAction func searchButtonClicked(sender: UIButton) {
-        let autocompleteController = GMSAutocompleteViewController()
-        autocompleteController.delegate = self
-        self.presentViewController(autocompleteController, animated: true, completion: nil)
-    }
-    
     
     /// Starts a phone call using the phone number associated with current event.
     @IBAction func phoneButtonClicked(sender: UIButton) {
-        callPhone(contactNumbers)
+        self.callPhone(contactNumbers)
     }
     
     /// Opens the Apple Calendar app, using deep-linking.
@@ -498,6 +563,14 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         }
     }
     
+    
+    /// Search Button clicked
+    @IBAction func searchButtonClicked(sender: UIButton) {
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.delegate = self
+        self.presentViewController(autocompleteController, animated: true, completion: nil)
+    }
+
 }
 
 // Extension for using the Google Places API.
@@ -510,10 +583,17 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         print("Place attributions: \(place.attributions)")
         print("Place coordinates: \(place.coordinate)")
         self.dismissViewControllerAnimated(true, completion: nil)
-        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
-        let marker = GMSMarker(position: place.coordinate)
-        marker.title = place.name
-        marker.map = mapView
+        self.destLocation = place.formattedAddress
+        self.destinationName = place.name
+        self.destCoordinates = place.coordinate
+        self.destLabel.text = place.name
+        self.addrLabel.text = place.formattedAddress
+        self.eventLabel.text = nil
+        self.showRoute()
+//        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
+//        let marker = GMSMarker(position: place.coordinate)
+//        marker.title = place.name
+//        marker.map = mapView
     }
     
     func viewController(viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: NSError) {

@@ -61,7 +61,7 @@ class DistanceMatrixTasks {
     
     
     /// Makes a request to get the estimated time from origin to destination using coordinates.
-    func getETA(origin1: String, origin2: String, dest1: String, dest2: String, completionHandler: ((status: String, success: Bool) -> Void)) {
+    func getETA(origin1: CLLocationDegrees, origin2: CLLocationDegrees, dest1: CLLocationDegrees, dest2: CLLocationDegrees, completionHandler: ((status: String, success: Bool) -> Void)) {
         // URL for making request to the Google Distance Matrix API.
         let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
         let request = NSURL(string: requestURL)
