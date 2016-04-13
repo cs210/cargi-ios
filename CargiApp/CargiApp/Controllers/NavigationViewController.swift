@@ -319,7 +319,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
                 self.configureMap()
                 self.drawRoute()
             } else {
-                self.showAlertViewController(title: "Error", message: "No route found.")
+                self.showAlertViewController(title: "Error", message: "Can't find a way there.")
                 print(status)
             }
         }
