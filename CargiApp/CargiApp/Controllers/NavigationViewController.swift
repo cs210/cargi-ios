@@ -125,6 +125,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
+        let db = AzureDatabase()
+        db.getDefaultUser()
         syncData()
     }
     
