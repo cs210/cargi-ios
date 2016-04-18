@@ -32,6 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             applicationURLString:"https://cargiios.azure-mobile.net/",
             applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
         )
+        let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
+        if launchedBefore  {
+            print("Not first launch.")
+        }
+        else {
+            print("First launch, setting NSUserDefault.")
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
+        }
         return true
     }
     
