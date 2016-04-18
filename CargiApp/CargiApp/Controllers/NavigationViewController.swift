@@ -415,6 +415,28 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         }
     }
     
+    func gasBtn() {
+        let stringURL = "https://cargiios.azure-mobile.net/api/calculator/add?a=1&b=5"
+        print(stringURL)
+        guard let url = NSURL(string: stringURL) else { return }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            let data = NSData(contentsOfURL: url)
+            
+            // Convert JSON response into an NSDictionary.
+            var json: [NSObject:AnyObject]?
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]
+            } catch {
+                //completionHandler(status: "", success: false)
+            }
+            //            print(json!.description)
+            
+            guard let dict = json else { return }
+            let result = dict["result"]
+            print(result)
+        }
+    }
     
     /// Show location on the Google Maps view if the user has given the app access to user's location.
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -528,7 +550,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
+        gasBtn()
+//        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
     }
     
     /// Send Message Button clicked.
