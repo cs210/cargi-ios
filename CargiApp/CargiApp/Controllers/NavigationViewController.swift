@@ -125,18 +125,21 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let db = AzureDatabase()
-        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-        print("device identifier: " + deviceID)
-
-        db.getUserID(deviceID) { (status, success) in
-            if success {
-                print(status)
-                print(db.userID)
-            } else {
-                print(status)
-            }
-        }
+        
+        findNearbyGas()
+        
+//        let db = AzureDatabase()
+//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+//        print("device identifier: " + deviceID)
+//
+//        db.getUserID(deviceID) { (status, success) in
+//            if success {
+//                print(status)
+//                print(db.userID)
+//            } else {
+//                print(status)
+//            }
+//        }
         syncData()
     }
     
@@ -149,6 +152,19 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
                 mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 15.0)
             }
             didFindMyLocation = true
+        }
+    }
+    
+    //get the nearest gas station
+    func findNearbyGas() {
+        let loc:String = "asd"
+        GasFinder().getNearbyGas(loc) { (text, success) -> Void in
+            // When download completes,control flow goes here.
+            if success {
+                print("yay")
+            } else {
+                print("fail")
+            }
         }
     }
     
