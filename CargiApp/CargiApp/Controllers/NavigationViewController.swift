@@ -551,7 +551,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
         gasBtn()
-//        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
+        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
     }
     
     /// Send Message Button clicked.
