@@ -301,10 +301,6 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
-        guard let _ = currentEvent else {
-            syncRouteSuccess = false
-            return
-        }
         guard let originLocation = locationManager.location?.coordinate else {
             syncRouteSuccess = false
             return
@@ -570,6 +566,9 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     @IBAction func searchButtonClicked(sender: UIButton) {
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
+        let visibleRegion = self.mapView.projection.visibleRegion()
+        autocompleteController.autocompleteBounds = GMSCoordinateBounds(
+            coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
 
