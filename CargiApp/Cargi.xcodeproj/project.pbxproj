@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D8D9CE1E4323107188D46 /* libPods.a */; };
+		630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */; };
 		74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */ = {isa = PBXBuildFile; fileRef = 74131C461C7FD83A00CBB5F4 /* cargi-padding.png */; };
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactDirectory.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		4058D7172640D24468A6E9E5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewCell.swift; path = Models/SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		74131C461C7FD83A00CBB5F4 /* cargi-padding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-padding.png"; sourceTree = "<group>"; };
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDirectory.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				74FBD3221C97D76E00D8B2AD /* Models */,
 				74FBD3211C97D76300D8B2AD /* Controllers */,
 				74A2E5FA1C7FCBC800C468CC /* Main.storyboard */,
+				630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */,
 				74A2E6081C7FCD6F00C468CC /* Podfile */,
 				74A2E5FD1C7FCBC800C468CC /* Assets.xcassets */,
 				74A2E5FF1C7FCBC800C468CC /* LaunchScreen.storyboard */,
@@ -335,6 +338,7 @@
 				741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */,
 				747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */,
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
+				630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
