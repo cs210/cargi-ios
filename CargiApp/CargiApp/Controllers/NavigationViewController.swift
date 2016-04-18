@@ -126,7 +126,17 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         
         mapView.settings.compassButton = true
         let db = AzureDatabase()
-        db.getDefaultUser()
+        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+        print("device identifier: " + deviceID)
+
+        db.getUserID(deviceID) { (status, success) in
+            if success {
+                print(status)
+                print(db.userID)
+            } else {
+                print(status)
+            }
+        }
         syncData()
     }
     
