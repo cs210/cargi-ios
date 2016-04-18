@@ -49,6 +49,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     var destinationName: String?
     var destCoordinates = CLLocationCoordinate2D()
     
+    
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
         didSet {
@@ -125,18 +126,19 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let db = AzureDatabase()
         let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-        print("device identifier: " + deviceID)
 
-        db.getUserID(deviceID) { (status, success) in
-            if success {
-                print(status)
+        let db = AzureDatabase()
+        db.initializeUserID(deviceID) { (status, success) in
+            if (success) {
                 print(db.userID)
+                
             } else {
                 print(status)
             }
+            
         }
+
         syncData()
     }
     
