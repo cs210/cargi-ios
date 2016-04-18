@@ -138,7 +138,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             }
             
         }
-
+        
+        findNearbyGas()
         syncData()
     }
     
@@ -151,6 +152,19 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
                 mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 15.0)
             }
             didFindMyLocation = true
+        }
+    }
+    
+    //get the nearest gas station
+    func findNearbyGas() {
+        let loc:String = "asd"
+        GasFinder().getNearbyGas(loc) { (text, success) -> Void in
+            // When download completes,control flow goes here.
+            if success {
+                print("yay")
+            } else {
+                print("fail")
+            }
         }
     }
     
@@ -553,7 +567,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
         gasBtn()
-//        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
+        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
     }
     
     /// Send Message Button clicked.

@@ -36,6 +36,7 @@
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		B39CE0A71CB20A6C001EB723 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */; };
+		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +76,7 @@
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B39CE0A41CB20709001EB723 /* AzureDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureDatabase.swift; sourceTree = "<group>"; };
 		B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		BE201F251CC4D2BA00A691B5 /* GasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasFinder.swift; sourceTree = "<group>"; };
 		BE6504EB1C88166C00C26AAA /* EventDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDirectory.swift; sourceTree = "<group>"; };
 		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,6 +175,7 @@
 				741CE3781C8D55BF003017CA /* LocationGeocoder.swift */,
 				7417B5471C868A70005357CB /* ContactDirectory.swift */,
 				B39CE0A41CB20709001EB723 /* AzureDatabase.swift */,
+				BE201F251CC4D2BA00A691B5 /* GasFinder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */,
 				747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */,
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
+				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
 				630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
 			);
