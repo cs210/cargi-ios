@@ -9,36 +9,40 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 
 # Development Workflow:
 1. For every feature or bug fix needed on the Cargi app, open up an issue first.
-2. Assign yourself, or another team member to the issue.
-3. When done with an issue, commit and push your code. Remember to `git pull` first to get the current changes.
-4. When your code has been pushed, notify Edwin, who will do a code review and make sure your code integrates smoothly into the iOS application, and close the issue.
+2. Assign yourself, or another team member to the issue, with proper labels (high/low priority, etc).
+3. When done with an issue, commit and push your code, and close the issue. Remember to `git pull` first to get the current changes.
 
-# Development Milestones:
-- [x] Navigation (Apple/Google) to the next event's location 
-- [x] Show route with directions from current location to destination
-- [x] Message ETA / Calling friends using event details
-- [x] Polished UI
-- [x] Easy access to music control
+#### Note regarding branches
+- When working on a feature that is still in the development phase, *always* work on the `dev` branch.
+- If the feature is fully-working, push to the `master` branch.
+- If the feature has been thoroughly tested and is ready for deployment, push to the `deploy` branch.
 
-# Completed Steps:
-- [x] Set up Google Maps view and basic Google Places search
-- [x] Compute ETA given origin & destination
-- [x] Parse events from Apple Calendar
-- [x] Parse reminders from Reminders app
-- [x] Set up messages and calling through Cargi
-- [x] Set up local notifications
-- [ ] [blocked] Experiment with bluetooth connection and automatic app launching (3/8 received iBeacon from Michael and Robert, but need to obtain arduino)
-- [x] Redirect to Apple/Google Maps with destination set up using deep linking
-- [x] Create and send text messages or iMessages to others users
-- [x] Dashboard UI for easy access to Messages / Phone Calling
-- [ ] [blocked] Access message and calling history ... and it isn't possible
-- [x] Add Spotify to the dashboard
-- [x] Iterate on user interface prototypes (what happens when there are no calendar events?) 
-- [x] Retrieving contact information from calendar events (limited)
-- [x] Compute ETA given current location & destination
-- [x] Use origami to design the user interface
-- [x] Draw route on the map using Google Maps Directions API
-- [ ] Need to parse JSON in a clean way: cleanly parse using built-in library, or import some third-party library (SwiftyJSON)
-- [ ] Implement smart filtering of contacts (back end)
-- [ ] Implement smart filtering of contacts (front end - user interface)
+<!--# Development Milestones:-->
+<!--- [x] Navigation (Apple/Google) to the next event's location -->
+<!--- [x] Show route with directions from current location to destination-->
+<!--- [x] Message ETA / Calling friends using event details-->
+<!--- [x] Polished UI-->
+<!--- [x] Easy access to music control-->
+
+<!--# Completed Steps:-->
+<!--- [x] Set up Google Maps view and basic Google Places search-->
+<!--- [x] Compute ETA given origin & destination-->
+<!--- [x] Parse events from Apple Calendar-->
+<!--- [x] Parse reminders from Reminders app-->
+<!--- [x] Set up messages and calling through Cargi-->
+<!--- [x] Set up local notifications-->
+<!--- [ ] [blocked] Experiment with bluetooth connection and automatic app launching (3/8 received iBeacon from Michael and Robert, but need to obtain arduino)-->
+<!--- [x] Redirect to Apple/Google Maps with destination set up using deep linking-->
+<!--- [x] Create and send text messages or iMessages to others users-->
+<!--- [x] Dashboard UI for easy access to Messages / Phone Calling-->
+<!--- [ ] [blocked] Access message and calling history ... and it isn't possible-->
+<!--- [x] Add Spotify to the dashboard-->
+<!--- [x] Iterate on user interface prototypes (what happens when there are no calendar events?) -->
+<!--- [x] Retrieving contact information from calendar events (limited)-->
+<!--- [x] Compute ETA given current location & destination-->
+<!--- [x] Use origami to design the user interface-->
+<!--- [x] Draw route on the map using Google Maps Directions API-->
+<!--- [ ] Need to parse JSON in a clean way: cleanly parse using built-in library, or import some third-party library (SwiftyJSON)-->
+<!--- [ ] Implement smart filtering of contacts (back end)-->
+<!--- [ ] Implement smart filtering of contacts (front end - user interface)-->
 
