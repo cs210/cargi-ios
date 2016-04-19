@@ -36,9 +36,15 @@ class SettingsTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        return "Section title"
+        
+    }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,6 +63,28 @@ class SettingsTableViewController: UITableViewController {
         // Configure the cell...
 
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let  headerCell = tableView.dequeueReusableCellWithIdentifier("SettingsHeaderTableViewCell") as! SettingsHeaderTableViewCell
+        //headerCell.backgroundColor = UIColor.cyanColor()
+        
+        switch (section) {
+        case 0:
+            headerCell.nameLabel.text = "Europe";
+            headerCell.nameLabel.text = headerCell.nameLabel.text?.uppercaseString
+        //return sectionHeaderView
+        case 1:
+            headerCell.nameLabel.text = "Asia";
+        //return sectionHeaderView
+        case 2:
+            headerCell.nameLabel.text = "South America";
+        //return sectionHeaderView
+        default:
+            headerCell.nameLabel.text = "Other";
+        }
+        
+        return headerCell
     }
 
     /*
