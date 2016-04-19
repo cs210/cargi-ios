@@ -9,6 +9,10 @@
 import UIKit
 
 class SettingsTableViewCell: UITableViewCell {
+    
+    // MARK: Properties
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var radioButtonView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
