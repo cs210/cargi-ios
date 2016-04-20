@@ -13,6 +13,7 @@
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
 		63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */; };
+		63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E0C1CC70844002280BA /* radiobutton-selected@2x.png */; };
 		74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */ = {isa = PBXBuildFile; fileRef = 74131C461C7FD83A00CBB5F4 /* cargi-padding.png */; };
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactDirectory.swift */; };
@@ -52,6 +53,7 @@
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewController.swift; path = Controllers/SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsHeaderTableViewCell.swift; path = Models/SettingsHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		63DE4E0C1CC70844002280BA /* radiobutton-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-selected@2x.png"; sourceTree = "<group>"; };
 		74131C461C7FD83A00CBB5F4 /* cargi-padding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-padding.png"; sourceTree = "<group>"; };
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDirectory.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				74A3D8F51C915F0A0053D816 /* refresh-button.png */,
+				63DE4E0C1CC70844002280BA /* radiobutton-selected@2x.png */,
 				63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */,
 				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
 				74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */,
@@ -294,6 +297,7 @@
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
 				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
+				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
