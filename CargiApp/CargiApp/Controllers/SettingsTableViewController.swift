@@ -33,8 +33,30 @@ class SettingsTableViewController: UITableViewController {
         sectionTitles += ["Connected Map", "Connected Music", "Text Options"]
         
         options += [[String] (), [String] (), [String] ()]
-        options[0] += ["Google Maps", "Apple Maps", "Waze"]
-        options[1] += ["Spotify", "Apple Music", "SoundCloud"]
+        
+        // adding maps
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!)) {
+            options[0] += ["Google Maps"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!)) {
+            options[0] += ["Apple Maps"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "waze://")!)) {
+            options[0] += ["Waze"]
+        }
+        
+        // adding music
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "spotify://")!)) {
+            options[1] += ["Spotify"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://music.apple.com/")!)) {
+            options[1] += ["Apple Music"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "soundloud://app")!)) {
+            options[1] += ["SoundCloud"]
+        }
+        
+        // adding text
         options[2] += ["Hi, I'll be there in [eta] minutes.", "I'm driving, but I'll be there soon."]
     }
 
