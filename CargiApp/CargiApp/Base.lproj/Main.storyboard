@@ -10,6 +10,7 @@
     <customFonts key="customFonts">
         <mutableArray key="Lato-Regular.ttf">
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -439,32 +440,51 @@
         <scene sceneID="r5Q-rL-SeH">
             <objects>
                 <tableViewController id="ed9-Ds-r3K" customClass="SettingsTableViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="24" sectionHeaderHeight="28" sectionFooterHeight="28" id="ynd-9o-e8S">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="36" sectionHeaderHeight="60" sectionFooterHeight="28" id="ynd-9o-e8S">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsTableViewCell" rowHeight="24" id="UHR-fn-CKC" customClass="SettingsTableViewCell" customModule="Cargi" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="24"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsHeaderTableViewCell" rowHeight="60" id="UHR-fn-CKC" customClass="SettingsHeaderTableViewCell" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="124" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UHR-fn-CKC" id="mPh-JS-yow">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="24"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="radiobutton-unselected.png" translatesAutoresizingMaskIntoConstraints="NO" id="KKN-Sd-Z5y">
-                                            <rect key="frame" x="22" y="4" width="16" height="16"/>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIm-lk-ko7">
-                                            <rect key="frame" x="52" y="0.0" width="102" height="24"/>
-                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="24" y="28" width="524" height="24"/>
+                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                            <color key="textColor" red="0.65098039215686276" green="0.65098039215686276" blue="0.65098039215686276" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="nameLabel" destination="DIm-lk-ko7" id="ujV-Ra-Tjq"/>
-                                    <outlet property="radioButtonView" destination="KKN-Sd-Z5y" id="97t-Pf-JHT"/>
+                                    <outlet property="nameLabel" destination="DIm-lk-ko7" id="jpY-wG-C5I"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingsTableViewCell" rowHeight="36" id="3As-UJ-rYo" customClass="SettingsTableViewCell" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="184" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3As-UJ-rYo" id="ysW-7K-h9c">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="radiobutton-unselected.png" translatesAutoresizingMaskIntoConstraints="NO" id="1VG-zw-Dvr">
+                                            <rect key="frame" x="41" y="10" width="16" height="16"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0a-SD-izj">
+                                            <rect key="frame" x="65" y="6" width="451" height="24"/>
+                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                            <color key="textColor" red="0.34901960784313724" green="0.34901960784313724" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="a0a-SD-izj" id="RPL-mr-QTn"/>
+                                    <outlet property="radioButtonView" destination="1VG-zw-Dvr" id="YL4-79-ahf"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -474,6 +494,7 @@
                             <outlet property="delegate" destination="ed9-Ds-r3K" id="DH1-cG-RoV"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Settings" id="mXD-1J-LUc"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qvT-Wb-N7P" userLabel="First Responder" sceneMemberID="firstResponder"/>

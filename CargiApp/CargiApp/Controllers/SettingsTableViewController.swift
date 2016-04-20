@@ -12,7 +12,10 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: Properties
     
-    var mapOptions = [String] ()
+    var sectionTitles = [String] ()
+    
+    var options = [[String]] ()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +29,13 @@ class SettingsTableViewController: UITableViewController {
     }
     
     func loadOptions() {
-        mapOptions += ["Google Maps", "Apple Maps", "Waze"]
+        
+        sectionTitles += ["Connected Map", "Connected Music", "Text Options"]
+        
+        options += [[String] (), [String] (), [String] ()]
+        options[0] += ["Google Maps", "Apple Maps", "Waze"]
+        options[1] += ["Spotify", "Apple Music", "SoundCloud"]
+        options[2] += ["Hi, I'll be there in [eta] minutes.", "I'm driving, but I'll be there soon."]
     }
 
 
@@ -36,20 +45,25 @@ class SettingsTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitles[section]
+        
+    }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return options.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mapOptions.count
+        return options[section].count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = "SettingsTableViewCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SettingsTableViewCell
         
-        let option = mapOptions[indexPath.row]
+        let option = options[indexPath.section][indexPath.row]
         
         cell.nameLabel.text = option
         
@@ -57,6 +71,14 @@ class SettingsTableViewController: UITableViewController {
         // Configure the cell...
 
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let  headerCell = tableView.dequeueReusableCellWithIdentifier("SettingsHeaderTableViewCell") as! SettingsHeaderTableViewCell
+        
+        headerCell.nameLabel.text = sectionTitles[section].uppercaseString
+        
+        return headerCell
     }
 
     /*
