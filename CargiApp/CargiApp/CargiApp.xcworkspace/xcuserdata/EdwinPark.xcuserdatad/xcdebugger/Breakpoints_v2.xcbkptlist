@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Controllers/NavigationViewController.swift"
-            timestampString = "482830667.651607"
+            timestampString = "482833044.048782"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "syncData()"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Controllers/NavigationViewController.swift"
-            timestampString = "482830667.651607"
+            timestampString = "482833044.048782"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "openMaps()"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Controllers/NavigationViewController.swift"
-            timestampString = "482830483.347309"
+            timestampString = "482833044.048782"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "observeValueForKeyPath(_:ofObject:change:context:)"
             landmarkType = "5">
          </BreakpointContent>

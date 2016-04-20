@@ -91,9 +91,6 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         // Do any additional setup after loading the view.
         destMarker.icon = UIImage(named: "destination_icon")
         
-        destLabel.text = nil
-        addrLabel.text = nil
-        
         view.sendSubviewToBack(dashboardView)
         view.sendSubviewToBack(mapView)
         let layer: CALayer = self.dashboardView.layer
@@ -140,6 +137,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             
         }
         
+        resetData()
         syncData()
     }
     
@@ -154,14 +152,19 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         }
     }
     
-    
-    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
-    func syncData() {
+    /// Reset Data
+    func resetData() {
         self.contact = nil
         self.eventLabel.text = nil
         self.destLabel.text = nil
         self.addrLabel.text = nil
-        
+        self.destLocation = nil
+        self.destinationName = nil
+        mapView.clear()
+    }
+    
+    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
+    func syncData() {
         let contacts = contactDirectory.getAllPhoneNumbers()
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
@@ -215,7 +218,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             destinationName = locArr.first
         }
         print("showroute")
-        showRoute()
+        showRoute(showDestMarker: true)
     }
 
     /**
@@ -308,7 +311,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
 
     
-    func showRouteWithWaypoints(waypoints: [String]!) {
+    func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
         mapView.clear()
         routePolyline.path = nil
         routePolylineBorder.path = nil
@@ -318,15 +321,16 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             return
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        guard let dest = destLocation else { return }
-        print("getting directions for \(dest)")
-        self.directionTasks.getDirections(origin, dest: dest, waypoints: waypoints) { (status, success) in
+
+        self.directionTasks.getDirections(origin, dest: destLocation, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
             if success {
                 print("success")
-                self.configureMap()
+                if showDestMarker {
+                    self.configureMap()
+                }
                 self.drawRoute()
             } else {
                 self.showAlertViewController(title: "Error", message: "Can't find a way there.")
@@ -336,8 +340,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     }
     
     /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
-    func showRoute() {
-        showRouteWithWaypoints(nil)
+    func showRoute(showDestMarker showDestMarker: Bool) {
+        showRouteWithWaypoints(waypoints: nil, showDestMarker: showDestMarker)
     }
     
     /// Shows a pin at the destination on the map.
@@ -541,6 +545,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
+        resetData()
         syncData()
     }
     
@@ -568,7 +573,12 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             if success {
                 print(self.gasFinder.stationName)
                 print(self.gasFinder.coordinates)
-                self.showRouteWithWaypoints(["place_id:\(self.gasFinder.placeID)"])
+                if self.destLocation != nil {
+                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
+                } else {
+                    self.destLocation = self.gasFinder.address
+                    self.showRoute(showDestMarker: false)
+                }
                 let marker = GMSMarker(position: self.gasFinder.coordinates)
                 marker.appearAnimation = kGMSMarkerAnimationPop
                 marker.title = self.gasFinder.stationName
@@ -649,7 +659,7 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         self.destLabel.text = place.name
         self.addrLabel.text = place.formattedAddress
         self.eventLabel.text = nil
-        self.showRoute()
+        self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
 //        let marker = GMSMarker(position: place.coordinate)
 //        marker.title = place.name
