@@ -87,6 +87,19 @@ class SettingsTableViewController: UITableViewController {
         
     }
     
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else { return indexPath }
+        
+        for selectedIndexPath in selectedIndexPaths {
+            if (selectedIndexPath.section == indexPath.section) {
+                tableView.deselectRowAtIndexPath(selectedIndexPath, animated:false)
+                let cell = tableView.cellForRowAtIndexPath(selectedIndexPath) as! SettingsTableViewCell
+                cell.radioButtonView.image = UIImage(named: "radiobutton-unselected")
+            }
+        }
+        return indexPath
+    }
+    
     override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SettingsTableViewCell
         cell.radioButtonView.image = UIImage(named: "radiobutton-unselected")

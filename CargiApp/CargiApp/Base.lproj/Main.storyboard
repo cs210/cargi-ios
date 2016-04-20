@@ -440,7 +440,7 @@
         <scene sceneID="r5Q-rL-SeH">
             <objects>
                 <tableViewController id="ed9-Ds-r3K" customClass="SettingsTableViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="36" sectionHeaderHeight="60" sectionFooterHeight="28" id="ynd-9o-e8S">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="36" sectionHeaderHeight="60" sectionFooterHeight="28" id="ynd-9o-e8S">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
