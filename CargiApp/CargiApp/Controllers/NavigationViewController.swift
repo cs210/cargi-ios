@@ -41,6 +41,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     @IBOutlet var contactLabel: UILabel!
     
     var locationManager = CLLocationManager()
+    var gasFinder = GasFinder()
     var didFindMyLocation = false // avoid unnecessary location updates
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
@@ -75,7 +76,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     var contactNumbers: [String]?
     
     var directionTasks = DirectionTasks() // Google Directions
-    var syncRouteSuccess: Bool?
+    var syncRouteSuccess: Bool = false
     var destMarker = GMSMarker()
     var routePolyline = GMSPolyline() // lines that will show the route.
     var routePolylineBorder = GMSPolyline()
@@ -139,7 +140,6 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             
         }
         
-        findNearbyGas()
         syncData()
     }
     
@@ -147,24 +147,10 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if !didFindMyLocation {
             let myLocation: CLLocation = change![NSKeyValueChangeNewKey] as! CLLocation
-            guard let routeSuccess = syncRouteSuccess else { return }
-            if !routeSuccess {
+            if !syncRouteSuccess {
                 mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 15.0)
             }
             didFindMyLocation = true
-        }
-    }
-    
-    //get the nearest gas station
-    func findNearbyGas() {
-        let loc:String = "asd"
-        GasFinder().getNearbyGas(loc) { (text, success) -> Void in
-            // When download completes,control flow goes here.
-            if success {
-                print("yay")
-            } else {
-                print("fail")
-            }
         }
     }
     
@@ -322,8 +308,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
 
     
-    /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
-    func showRoute() {
+    func showRouteWithWaypoints(waypoints: [String]!) {
+        mapView.clear()
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
@@ -334,7 +320,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
         guard let dest = destLocation else { return }
         print("getting directions for \(dest)")
-        self.directionTasks.getDirections(origin, dest: dest, waypoints: nil) { (status, success) in
+        self.directionTasks.getDirections(origin, dest: dest, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
@@ -347,6 +333,11 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
                 print(status)
             }
         }
+    }
+    
+    /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
+    func showRoute() {
+        showRouteWithWaypoints(nil)
     }
     
     /// Shows a pin at the destination on the map.
@@ -566,8 +557,27 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-        gasBtn()
-        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
+//        gasBtn()
+        guard let originLocation = locationManager.location?.coordinate else {
+            return
+        }
+        
+        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
+        print("origin: \(origin)")
+        gasFinder.getNearbyGas(origin) { (status: String, success: Bool) in
+            if success {
+                print(self.gasFinder.stationName)
+                print(self.gasFinder.coordinates)
+                self.showRouteWithWaypoints(["place_id:\(self.gasFinder.placeID)"])
+                let marker = GMSMarker(position: self.gasFinder.coordinates)
+                marker.appearAnimation = kGMSMarkerAnimationPop
+                marker.title = self.gasFinder.stationName
+                marker.snippet = self.gasFinder.address
+                marker.map = self.mapView
+            } else {
+                print("Error: \(status)")
+            }
+        }
     }
     
     /// Send Message Button clicked.

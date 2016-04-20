@@ -182,11 +182,11 @@
 				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
 				74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */,
 				747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */,
+				BE201F251CC4D2BA00A691B5 /* GasFinder.swift */,
 				BE6504EB1C88166C00C26AAA /* EventDirectory.swift */,
 				741CE3781C8D55BF003017CA /* LocationGeocoder.swift */,
 				7417B5471C868A70005357CB /* ContactDirectory.swift */,
 				B39CE0A41CB20709001EB723 /* AzureDatabase.swift */,
-				BE201F251CC4D2BA00A691B5 /* GasFinder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
