@@ -80,6 +80,18 @@ class SettingsTableViewController: UITableViewController {
         
         return headerCell
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! SettingsTableViewCell
+        cell.radioButtonView.image = UIImage(named: "radiobutton-selected")
+        
+    }
+    
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SettingsTableViewCell
+        cell.radioButtonView.image = UIImage(named: "radiobutton-unselected")
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.
