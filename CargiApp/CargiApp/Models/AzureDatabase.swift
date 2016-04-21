@@ -23,7 +23,8 @@ class AzureDatabase {
     var locationHistoryTable: MSTable
     var communicationHistoryTable: MSTable
     var userID: String?
-
+    
+   
     init() {
         delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         client = delegate.client!
@@ -47,9 +48,9 @@ class AzureDatabase {
         let userCheckPredicate = NSPredicate(format: "device_id == [c] %@", deviceID)
         
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
-            if error != nil {
-                print("Error in retrieval", error.description)
-                completionHandler(status: error.description, success: false)
+            if (error != nil) {
+                print("Error in retrieval", error!.description)
+                completionHandler(status: error!.description, success: false)
                 return
             } else if let items = result?.items {
                 if let item = items.first {
@@ -80,7 +81,7 @@ class AzureDatabase {
         let item = ["id": self.userID!, "phone_number": phoneNumber]
         userTable.update(item) { (result, error) in
             if error != nil {
-                print("error updating user phone number: " + error.description)
+                print("error updating user phone number: " + error!.description)
             } else {
                 print("updating user phone number worked?")
                 print(result);
@@ -118,23 +119,34 @@ class AzureDatabase {
             contactsTable.insert(contactObj) {
                 (insertedItem, error) in
                 if error != nil {
-                    print("Error" + error.description);
+                    print("Error" + error!.description);
                 } else {
-                    print("Item inserted, id: " + String(insertedItem["id"]))
+                    print("Item inserted, id: " + String(insertedItem!["id"]))
                 }
             }
         }
     }
     
-    func insertEvent() {
-        // TODO
-        // user_id
-        // event_name
-        // longitude
-        // latitude
-        // datetime
-        
-    }
+//    func insertEvent(eventName: String, longitude: String, latitude: String, dateTime: NSDate) {
+//        // TODO
+//        // user_id
+//        // event_name
+//        
+//        let eventObj = ["user_id": self.userID, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":eventName]
+//        
+//        eventTable.insert(eventObj) {
+//            (insertedItem, error) in
+//            if error != nil {
+//                print("Error in inserting an event" + error.description)
+//            } else {
+//                print("Event inserted, id: " + String(insertedItem["id"]))
+//            }
+//        }
+//        // longitude
+//        // latitude
+//        // datetime
+//        
+//    }
     func insertCommunication() {
         // TODO
         // user_id, event_id, contact_id, method
@@ -150,11 +162,11 @@ class AzureDatabase {
         userTable.insert(user) {
             (insertedItem, error) in
             if error != nil {
-                print("Error" + error.description);
-                completionHandler(status: error.description, success: false)
+                print("Error" + error!.description);
+                completionHandler(status: error!.description, success: false)
             } else {
-                print("Item inserted, id: " + String(insertedItem["id"]))
-                self.userID = String(insertedItem["id"])
+                print("Item inserted, id: " + String(insertedItem!["id"]))
+                self.userID = String(insertedItem!["id"])
                 completionHandler(status: "User inserted into database", success: true)
             }
         }
@@ -179,25 +191,25 @@ class AzureDatabase {
         locationHistoryTable.insert(obj1) {
             (insertedItem, error) in
             if error != nil {
-                print("Problem inserting location: " + error.description);
+                print("Problem inserting location: " + error!.description);
             } else {
-                print("Location 1 inserted, id: " + String(insertedItem["id"]))
+                print("Location 1 inserted, id: " + String(insertedItem!["id"]))
             }
         }
         locationHistoryTable.insert(obj2) {
             (insertedItem, error) in
             if error != nil {
-                print("Error" + error.description);
+                print("Error" + error!.description);
             } else {
-                print("Location 2 inserted, id: " + String(insertedItem["id"]))
+                print("Location 2 inserted, id: " + String(insertedItem!["id"]))
             }
         }
         locationHistoryTable.insert(obj3) {
             (insertedItem, error) in
             if error != nil {
-                print("Error" + error.description);
+                print("Error" + error!.description);
             } else {
-                print("Location 3 inserted, id: " + String(insertedItem["id"]))
+                print("Location 3 inserted, id: " + String(insertedItem!["id"]))
             }
         }
     }
@@ -212,9 +224,9 @@ class AzureDatabase {
         userTable.insert(defaultUser) {
             (insertedItem, error) in
             if error != nil {
-                print("Error" + error.description);
+                print("Error" + error!.description);
             } else {
-                print("Item inserted, id: " + String(insertedItem["id"]))
+                print("Item inserted, id: " + String(insertedItem!["id"]))
             }
         }
     }
@@ -228,7 +240,7 @@ class AzureDatabase {
         
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
             if error != nil {
-                print("Error in retrieval", error.description)
+                print("Error in retrieval", error!.description)
             } else if let items = result?.items {
                 for item in items {
                     print("User object: ", item["id"])

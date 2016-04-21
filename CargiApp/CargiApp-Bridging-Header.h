@@ -9,6 +9,6 @@
 #ifndef CargiApp_Bridging_Header_h
 #define CargiApp_Bridging_Header_h
 
-#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
-
+//#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
+#import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
 #endif /* CargiApp_Bridging_Header_h */

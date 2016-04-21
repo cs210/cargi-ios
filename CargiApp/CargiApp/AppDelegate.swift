@@ -29,8 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyBtm9mqbycBZedKCLWgxWU-aPbZDwO0jII")
         self.client = MSClient(
-            applicationURLString:"https://cargiios.azure-mobile.net/",
-            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
+              applicationURLString:"https://cargi.azurewebsites.net"
+//            applicationURLString:"https://cargiios.azure-mobile.net/",
+//            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
         )
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
         if launchedBefore  {

@@ -124,21 +124,36 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-
-        let db = AzureDatabase()
-        db.initializeUserID(deviceID) { (status, success) in
-            if (success) {
-                print(db.userID)
-                
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let client = delegate.client!
+        let item = ["text":"Awesome item"]
+        let itemTable = client.tableWithName("TodoItem")
+        itemTable.insert(item) {
+            (insertedItem, error) in
+            if error != nil{
+                print("Error" + error!.description);
             } else {
-                print(status)
+                print("Item inserted, id: " + String(insertedItem!["id"]))
             }
-            
         }
+
+//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+
+//        let db = AzureDatabase()
+//        db.initializeUserID(deviceID) { (status, success) in
+//            if (success) {
+//                print(db.userID)
+//                
+//            } else {
+//                print(status)
+//            }
+//            
+//        }
         
         resetData()
         syncData()
+        
+//        db.insertEvent()
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
