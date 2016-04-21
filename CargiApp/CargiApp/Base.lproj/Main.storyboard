@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="32c-H6-iRX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="32c-H6-iRX">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -501,10 +501,10 @@
             </objects>
             <point key="canvasLocation" x="1924" y="273"/>
         </scene>
-        <!--View Controller-->
+        <!--First View Controller-->
         <scene sceneID="aDe-ys-Dx7">
             <objects>
-                <viewController id="WZg-kF-R7Z" sceneMemberID="viewController">
+                <viewController id="WZg-kF-R7Z" customClass="firstViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="owI-HE-FZw"/>
                         <viewControllerLayoutGuide type="bottom" id="p3i-SH-d1B"/>
@@ -513,21 +513,79 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z4f-qw-fja">
-                                <rect key="frame" x="272" y="285" width="57" height="30"/>
-                                <state key="normal" title="Settings"/>
-                                <connections>
-                                    <segue destination="ed9-Ds-r3K" kind="show" id="EpK-CM-kpK"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YO9-mB-T6s" userLabel="Dashboard View">
+                                <rect key="frame" x="0.0" y="522" width="600" height="78"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vxW-rw-rrs">
+                                        <rect key="frame" x="78" y="24" width="30" height="30"/>
+                                        <state key="normal" title="Gas">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qZt-RY-ZeP">
+                                        <rect key="frame" x="280" y="24" width="41" height="30"/>
+                                        <state key="normal" title="Music">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z4f-qw-fja">
+                                        <rect key="frame" x="490" y="24" width="57" height="30"/>
+                                        <state key="normal" title="Settings">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="ed9-Ds-r3K" kind="show" id="EpK-CM-kpK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.65098039220000004" green="0.65098039220000004" blue="0.65098039220000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="375" id="00y-5Y-06Y"/>
+                                    <constraint firstAttribute="height" constant="78" id="0hx-Ca-CNu"/>
+                                    <constraint firstItem="qZt-RY-ZeP" firstAttribute="centerX" secondItem="YO9-mB-T6s" secondAttribute="centerX" id="NUu-ew-gZp"/>
+                                    <constraint firstItem="qZt-RY-ZeP" firstAttribute="leading" secondItem="vxW-rw-rrs" secondAttribute="trailing" constant="85" id="NqU-X3-G7q"/>
+                                    <constraint firstItem="Z4f-qw-fja" firstAttribute="leading" secondItem="qZt-RY-ZeP" secondAttribute="trailing" constant="85" id="W82-0u-izB"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ddq-bE-mSE" userLabel="Contact View">
+                                <rect key="frame" x="0.0" y="407" width="600" height="120"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBc-er-m4c">
+                                        <rect key="frame" x="0.0" y="21" width="88" height="78"/>
+                                        <color key="backgroundColor" red="0.24677639692646181" green="1" blue="0.22984959068626576" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Call"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PgZ-5R-LLt">
+                                        <rect key="frame" x="512" y="21" width="88" height="78"/>
+                                        <color key="backgroundColor" red="0.39439550314664096" green="0.65068536748434513" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="88" id="hd3-A0-8D2"/>
+                                        </constraints>
+                                        <state key="normal" title="Text"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="iBc-er-m4c" firstAttribute="leading" secondItem="ddq-bE-mSE" secondAttribute="leading" id="Mdb-Xl-MIA"/>
+                                    <constraint firstAttribute="width" constant="375" id="Upj-vy-hT3"/>
+                                    <constraint firstAttribute="height" constant="120" id="qrQ-eQ-gN2"/>
+                                    <constraint firstItem="PgZ-5R-LLt" firstAttribute="trailing" secondItem="ddq-bE-mSE" secondAttribute="trailing" id="sJT-Ua-cdK"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ddq-bE-mSE" firstAttribute="centerX" secondItem="Qqx-eY-Cqc" secondAttribute="centerX" id="1aF-9H-2DT"/>
+                            <constraint firstItem="YO9-mB-T6s" firstAttribute="centerX" secondItem="Qqx-eY-Cqc" secondAttribute="centerX" id="HWs-UG-bkZ"/>
+                            <constraint firstItem="p3i-SH-d1B" firstAttribute="top" secondItem="YO9-mB-T6s" secondAttribute="bottom" id="TXh-ep-o3r"/>
+                            <constraint firstItem="ddq-bE-mSE" firstAttribute="bottom" secondItem="YO9-mB-T6s" secondAttribute="top" id="sZo-LM-U73"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KzI-5u-tyQ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gn0-CX-u5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2522" y="1026"/>
+            <point key="canvasLocation" x="2446" y="1026"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ten-Z5-xaC">
