@@ -12,9 +12,9 @@ import CoreBluetooth
 import MessageUI
 import EventKit
 import QuartzCore
+import SpeechKit
 
-class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate,
-                                MFMessageComposeViewControllerDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -441,7 +441,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         }
     }
     
-    func gasBtn() {
+    //Temporary Azure REST API Test
+    func azureRESTAPITest() {
         let stringURL = "https://cargiios.azure-mobile.net/api/calculator/add?a=1&b=5"
         print(stringURL)
         guard let url = NSURL(string: stringURL) else { return }
@@ -577,7 +578,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-//        gasBtn()
+//        azureRESTAPITest()
         guard let originLocation = locationManager.location?.coordinate else {
             return
         }
