@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D8D9CE1E4323107188D46 /* libPods.a */; };
 		630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */; };
+		636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E01CCBF7A0006D2936 /* callbutton@2x.png */; };
+		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
+		636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E31CCC0039006D2936 /* musicbutton@2x.png */; };
+		636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E41CCC0039006D2936 /* textbutton@2x.png */; };
 		63DCE70A1CC72B1400925DF6 /* firstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCE7091CC72B1400925DF6 /* firstViewController.swift */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
@@ -50,6 +54,10 @@
 /* Begin PBXFileReference section */
 		4058D7172640D24468A6E9E5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewCell.swift; path = Models/SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		636E32E01CCBF7A0006D2936 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
+		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
+		636E32E31CCC0039006D2936 /* musicbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "musicbutton@2x.png"; sourceTree = "<group>"; };
+		636E32E41CCC0039006D2936 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
 		63DCE7091CC72B1400925DF6 /* firstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = firstViewController.swift; path = Models/firstViewController.swift; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewController.swift; path = Controllers/SettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -206,10 +214,14 @@
 				74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */,
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
 				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
+				636E32E21CCC0039006D2936 /* settingsbutton@2x.png */,
+				636E32E31CCC0039006D2936 /* musicbutton@2x.png */,
+				636E32E41CCC0039006D2936 /* textbutton@2x.png */,
 				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74F65EFB1CBBA01F00DE068C /* search@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
+				636E32E01CCBF7A0006D2936 /* callbutton@2x.png */,
 				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
 				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
 				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
@@ -290,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
+				636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */,
 				74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */,
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,
 				74A3D8F61C915F0A0053D816 /* refresh-button.png in Resources */,
@@ -301,13 +314,16 @@
 				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
+				636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */,
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */,
+				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
 				74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */,
 				74A2E5FC1C7FCBC800C468CC /* Main.storyboard in Resources */,
+				636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */,
 				74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */,
 				74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
