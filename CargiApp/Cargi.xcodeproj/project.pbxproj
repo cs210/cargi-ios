@@ -39,6 +39,7 @@
 		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */; };
+		86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
@@ -80,6 +81,7 @@
 		74B783121C9F6A2C003E0391 /* directions_button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions_button2@2x.png"; sourceTree = "<group>"; };
 		74F65EFB1CBBA01F00DE068C /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftAzureMobile.framework; path = CargiApp/Frameworks/MicrosoftAzureMobile.framework; sourceTree = "<group>"; };
+		86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = CargiApp/Frameworks/SpeechKit.framework; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */,
 				86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */,
 				407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */,
 			);
@@ -105,6 +108,7 @@
 		55F4FEC86663CC9A928EF540 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */,
 				86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */,
 				A44D8D9CE1E4323107188D46 /* libPods.a */,
 			);

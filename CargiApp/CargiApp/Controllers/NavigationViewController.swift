@@ -12,9 +12,9 @@ import CoreBluetooth
 import MessageUI
 import EventKit
 import QuartzCore
+import SpeechKit
 
-class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate,
-                                MFMessageComposeViewControllerDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
