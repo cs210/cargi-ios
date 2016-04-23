@@ -590,25 +590,28 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                   delegate: self)
     }
     
-    //find the best result and start gas action if it matches 
+    //find the best result and start gas action if it matches
     func transaction(transaction: SKTransaction!, didReceiveRecognition recognition: SKRecognition!) {
         print("Result of Speech Recognition: " + recognition.text)
         if (recognition.text.lowercaseString.rangeOfString("gas") != nil) {
-            print("gas button activated by voice")
-            gasFunction()
+            gasButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("music") != nil) {
+            musicButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("call") != nil) {
+            phoneButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("text") != nil) {
+            messageButtonClicked(nil)
         }
         voiceButton.setTitle("Listen", forState: .Normal)
     }
     
     /// Gas Button clicked
-    @IBAction func gasButtonClicked(sender: UIButton) {
+    @IBAction func gasButtonClicked(sender: UIButton?) {
         //        azureRESTAPITest()
-        print("gas button clicked");
-        gasFunction()
-
-    }
-    
-    func gasFunction() {
+        print("gas button activated");
         guard let originLocation = locationManager.location?.coordinate else {
             return
         }
@@ -637,12 +640,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     /// Send Message Button clicked.
-    @IBAction func messageButtonClicked(sender: UIButton) {
+    @IBAction func messageButtonClicked(sender: UIButton?) {
+        print("message button activated")
         self.sendETAMessage(self.contactNumbers)
     }
     
     /// Starts a phone call using the phone number associated with current event.
-    @IBAction func phoneButtonClicked(sender: UIButton) {
+    @IBAction func phoneButtonClicked(sender: UIButton?) {
+        print("phone button activated")
         self.callPhone(contactNumbers)
     }
     
@@ -658,11 +663,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
-    @IBAction func musicButtonClicked(sender: UIButton) {
-        musicFunction()
-    }
-    
-    func musicFunction () {
+    @IBAction func musicButtonClicked(sender: UIButton?) {
+        print("music button activated")
         let appName: String = "spotify"
         
         let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
@@ -679,6 +681,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
     }
+    
     
     
     /// Search Button clicked
