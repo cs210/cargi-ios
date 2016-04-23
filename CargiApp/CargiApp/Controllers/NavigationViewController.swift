@@ -39,6 +39,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet weak var musicButton: UIButton!
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactLabel: UILabel!
+
+    @IBOutlet weak var voiceButton: UIButton!
     
     var locationManager = CLLocationManager()
     var gasFinder = GasFinder()
@@ -574,11 +576,39 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             openMaps()
         }
     }
+
+    //Start session for voice capture/recognition
+    @IBAction func voiceButtonClicked(sender: AnyObject) {
+        print("listening for voice command");
+        voiceButton.setTitle("Listening...", forState: .Normal)
+        let url = "nmsps://NMDPTRIAL_team_cargi_co20160418020749@sslsandbox.nmdp.nuancemobility.net:443"
+        let token = "6ff1671b87d0259dc04a734edbf2ab4894184242e68c4cf3fac45545c7c10e37b376523a4677d706c14a549c3cffe5d0182713feb35ff2ad2447f2eb090122bc"
+        let session = SKSession(URL: NSURL(string: url), appToken: token)
+        session.recognizeWithType(SKTransactionSpeechTypeDictation,
+                                  detection: .Short,
+                                  language: "eng-USA",
+                                  delegate: self)
+    }
     
+    //find the best result and start gas action if it matches 
+    func transaction(transaction: SKTransaction!, didReceiveRecognition recognition: SKRecognition!) {
+        print("Result of Speech Recognition: " + recognition.text)
+        if (recognition.text.lowercaseString.rangeOfString("gas") != nil) {
+            print("gas button activated by voice")
+            gasFunction()
+        }
+        voiceButton.setTitle("Listen", forState: .Normal)
+    }
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-//        azureRESTAPITest()
+        //        azureRESTAPITest()
+        print("gas button clicked");
+        gasFunction()
+
+    }
+    
+    func gasFunction() {
         guard let originLocation = locationManager.location?.coordinate else {
             return
         }
@@ -629,6 +659,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
     @IBAction func musicButtonClicked(sender: UIButton) {
+        musicFunction()
+    }
+    
+    func musicFunction () {
         let appName: String = "spotify"
         
         let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
