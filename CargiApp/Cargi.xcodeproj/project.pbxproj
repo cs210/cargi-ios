@@ -13,7 +13,7 @@
 		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
 		636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E31CCC0039006D2936 /* musicbutton@2x.png */; };
 		636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E41CCC0039006D2936 /* textbutton@2x.png */; };
-		63DCE70A1CC72B1400925DF6 /* firstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCE7091CC72B1400925DF6 /* firstViewController.swift */; };
+		63DCE70A1CC72B1400925DF6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCE7091CC72B1400925DF6 /* FirstViewController.swift */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -59,7 +59,7 @@
 		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E31CCC0039006D2936 /* musicbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "musicbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E41CCC0039006D2936 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
-		63DCE7091CC72B1400925DF6 /* firstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = firstViewController.swift; path = Models/firstViewController.swift; sourceTree = "<group>"; };
+		63DCE7091CC72B1400925DF6 /* FirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirstViewController.swift; path = Models/FirstViewController.swift; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewController.swift; path = Controllers/SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 				74FBD3211C97D76300D8B2AD /* Controllers */,
 				630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */,
 				74A2E5FA1C7FCBC800C468CC /* Main.storyboard */,
-				63DCE7091CC72B1400925DF6 /* firstViewController.swift */,
+				63DCE7091CC72B1400925DF6 /* FirstViewController.swift */,
 				63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */,
 				63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */,
 				74A2E6081C7FCD6F00C468CC /* Podfile */,
@@ -387,7 +387,7 @@
 				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
 				630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
-				63DCE70A1CC72B1400925DF6 /* firstViewController.swift in Sources */,
+				63DCE70A1CC72B1400925DF6 /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
