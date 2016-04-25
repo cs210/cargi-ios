@@ -12,9 +12,9 @@ import CoreBluetooth
 import MessageUI
 import EventKit
 import QuartzCore
+import SpeechKit
 
-class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate,
-                                MFMessageComposeViewControllerDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -41,6 +41,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     @IBOutlet var contactLabel: UILabel!
     
     var locationManager = CLLocationManager()
+    var gasFinder = GasFinder()
     var didFindMyLocation = false // avoid unnecessary location updates
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
@@ -75,7 +76,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     var contactNumbers: [String]?
     
     var directionTasks = DirectionTasks() // Google Directions
-    var syncRouteSuccess: Bool?
+    var syncRouteSuccess: Bool = false
     var destMarker = GMSMarker()
     var routePolyline = GMSPolyline() // lines that will show the route.
     var routePolylineBorder = GMSPolyline()
@@ -89,9 +90,6 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
 
         // Do any additional setup after loading the view.
         destMarker.icon = UIImage(named: "destination_icon")
-        
-        destLabel.text = nil
-        addrLabel.text = nil
         
         view.sendSubviewToBack(dashboardView)
         view.sendSubviewToBack(mapView)
@@ -141,7 +139,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             
         }
         
-        findNearbyGas()
+        resetData()
         syncData()
 //        let latitudeNum = NSNumber(double: destCoordinates.latitude)
 //        let longitudeNum = NSNumber(double: destCoordinates.longitude)
@@ -153,35 +151,26 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if !didFindMyLocation {
             let myLocation: CLLocation = change![NSKeyValueChangeNewKey] as! CLLocation
-            guard let routeSuccess = syncRouteSuccess else { return }
-            if !routeSuccess {
+            if !syncRouteSuccess {
                 mapView.camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 15.0)
             }
             didFindMyLocation = true
         }
     }
     
-    //get the nearest gas station
-    func findNearbyGas() {
-        let loc:String = "asd"
-        GasFinder().getNearbyGas(loc) { (text, success) -> Void in
-            // When download completes,control flow goes here.
-            if success {
-                print("yay")
-            } else {
-                print("fail")
-            }
-        }
-    }
-    
-    
-    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
-    func syncData() {
+    /// Reset Data
+    func resetData() {
         self.contact = nil
         self.eventLabel.text = nil
         self.destLabel.text = nil
         self.addrLabel.text = nil
-        
+        self.destLocation = nil
+        self.destinationName = nil
+        mapView.clear()
+    }
+    
+    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
+    func syncData() {
         let contacts = contactDirectory.getAllPhoneNumbers()
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
@@ -234,7 +223,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             destinationName = locArr.first
         }
         print("showroute")
-        showRoute()
+        showRoute(showDestMarker: true)
     }
 
     /**
@@ -327,8 +316,8 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
 
     
-    /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
-    func showRoute() {
+    func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
+        mapView.clear()
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
@@ -337,21 +326,27 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
             return
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        guard let dest = destLocation else { return }
-        print("getting directions for \(dest)")
-        self.directionTasks.getDirections(origin, dest: dest, waypoints: nil) { (status, success) in
+
+        self.directionTasks.getDirections(origin, dest: destLocation, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
             if success {
                 print("success")
-                self.configureMap()
+                if showDestMarker {
+                    self.configureMap()
+                }
                 self.drawRoute()
             } else {
                 self.showAlertViewController(title: "Error", message: "Can't find a way there.")
                 print(status)
             }
         }
+    }
+    
+    /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
+    func showRoute(showDestMarker showDestMarker: Bool) {
+        showRouteWithWaypoints(waypoints: nil, showDestMarker: showDestMarker)
     }
     
     /// Shows a pin at the destination on the map.
@@ -555,6 +550,7 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
+        resetData()
         syncData()
     }
     
@@ -571,8 +567,32 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton) {
-        gasBtn()
-        showAlertViewController(title: "Under Construction", message: "Oh no, Cargi is low on gas!")
+//        gasBtn()
+        guard let originLocation = locationManager.location?.coordinate else {
+            return
+        }
+        
+        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
+        print("origin: \(origin)")
+        gasFinder.getNearbyGas(origin) { (status: String, success: Bool) in
+            if success {
+                print(self.gasFinder.stationName)
+                print(self.gasFinder.coordinates)
+                if self.destLocation != nil {
+                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
+                } else {
+                    self.destLocation = self.gasFinder.address
+                    self.showRoute(showDestMarker: false)
+                }
+                let marker = GMSMarker(position: self.gasFinder.coordinates)
+                marker.appearAnimation = kGMSMarkerAnimationPop
+                marker.title = self.gasFinder.stationName
+                marker.snippet = self.gasFinder.address
+                marker.map = self.mapView
+            } else {
+                print("Error: \(status)")
+            }
+        }
     }
     
     /// Send Message Button clicked.
@@ -644,7 +664,7 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         self.destLabel.text = place.name
         self.addrLabel.text = place.formattedAddress
         self.eventLabel.text = nil
-        self.showRoute()
+        self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
 //        let marker = GMSMarker(position: place.coordinate)
 //        marker.title = place.name

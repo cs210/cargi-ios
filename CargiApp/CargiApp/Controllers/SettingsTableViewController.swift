@@ -33,8 +33,30 @@ class SettingsTableViewController: UITableViewController {
         sectionTitles += ["Connected Map", "Connected Music", "Text Options"]
         
         options += [[String] (), [String] (), [String] ()]
-        options[0] += ["Google Maps", "Apple Maps", "Waze"]
-        options[1] += ["Spotify", "Apple Music", "SoundCloud"]
+        
+        // adding maps
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!)) {
+            options[0] += ["Google Maps"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!)) {
+            options[0] += ["Apple Maps"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "waze://")!)) {
+            options[0] += ["Waze"]
+        }
+        
+        // adding music
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "spotify://")!)) {
+            options[1] += ["Spotify"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://music.apple.com/")!)) {
+            options[1] += ["Apple Music"]
+        }
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "soundloud://app")!)) {
+            options[1] += ["SoundCloud"]
+        }
+        
+        // adding text
         options[2] += ["Hi, I'll be there in [eta] minutes.", "I'm driving, but I'll be there soon."]
     }
 
@@ -79,6 +101,31 @@ class SettingsTableViewController: UITableViewController {
         headerCell.nameLabel.text = sectionTitles[section].uppercaseString
         
         return headerCell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! SettingsTableViewCell
+        cell.radioButtonView.image = UIImage(named: "radiobutton-selected")
+        
+    }
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else { return indexPath }
+        
+        for selectedIndexPath in selectedIndexPaths {
+            if (selectedIndexPath.section == indexPath.section) {
+                tableView.deselectRowAtIndexPath(selectedIndexPath, animated:false)
+                let cell = tableView.cellForRowAtIndexPath(selectedIndexPath) as! SettingsTableViewCell
+                cell.radioButtonView.image = UIImage(named: "radiobutton-unselected")
+            }
+        }
+        return indexPath
+    }
+    
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SettingsTableViewCell
+        cell.radioButtonView.image = UIImage(named: "radiobutton-unselected")
+        
     }
 
     /*
