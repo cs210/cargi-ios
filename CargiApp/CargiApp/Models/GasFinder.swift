@@ -62,7 +62,9 @@ class GasFinder {
                 return
             }
             print("\n\n\n\n\n\n\n")
+
 //            print(dict.description)
+
             let status = dict["status"] as! String
             if status == "OK" {
                 // General Gas Information
