@@ -86,9 +86,12 @@ class DistanceMatrixTasks {
             } catch {
                 completionHandler(status: "", success: false)
             }
-            print(json!.description)
             
-            guard let dict = json else { return }
+            guard let dict = json else {
+                completionHandler(status: "Parsing JSON failed.", success: false)
+                return
+            }
+            print(dict.description)
             
             let status = dict["status"] as! String
             if status == "OK" {
@@ -119,5 +122,5 @@ class DistanceMatrixTasks {
             }
         }
     }
-
+    
 }

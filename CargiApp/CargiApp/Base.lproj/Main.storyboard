@@ -333,12 +333,18 @@
                                         <state key="normal" title="Gas">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="gasButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="cul-FD-VgO"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qZt-RY-ZeP" userLabel="musicButton">
                                         <rect key="frame" x="171" y="20" width="33" height="37"/>
                                         <state key="normal" backgroundImage="musicbutton.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="musicButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="Grd-vp-R5m"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z4f-qw-fja" userLabel="settingsButton">
                                         <rect key="frame" x="289" y="22" width="33" height="34"/>
@@ -369,6 +375,9 @@
                                         <rect key="frame" x="0.0" y="22" width="108" height="75"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" backgroundImage="callbutton.png"/>
+                                        <connections>
+                                            <action selector="phoneButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="GWy-iw-r4O"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PgZ-5R-LLt">
                                         <rect key="frame" x="267" y="22" width="108" height="75"/>
@@ -377,6 +386,9 @@
                                             <constraint firstAttribute="width" constant="108" id="hd3-A0-8D2"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="textbutton.png"/>
+                                        <connections>
+                                            <action selector="messageButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="tMc-ne-lHw"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EuS-JZ-z8i">
                                         <rect key="frame" x="166" y="49" width="42" height="21"/>
@@ -419,6 +431,7 @@
                                                 </variation>
                                                 <connections>
                                                     <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0tA-3s-2DO"/>
+                                                    <action selector="eventButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="z1i-qG-iY7"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Event Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyH-yY-cEr">
@@ -451,9 +464,6 @@
                                                 <exclude reference="ww3-So-Edq"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <action selector="refreshButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bR4-2F-NMc"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.42745098039215684" green="0.70588235294117641" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
@@ -514,7 +524,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="navigateButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Wz-oO-jDc"/>
+                                            <action selector="navigateButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="c4e-f4-saJ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iVS-0f-ell">
@@ -532,6 +542,7 @@
                                         </variation>
                                         <connections>
                                             <action selector="searchButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8S5-tK-hKV"/>
+                                            <action selector="searchButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="bAr-Hd-kXF"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -555,6 +566,13 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PMx-SN-dqu">
+                                <rect key="frame" x="278" y="484" width="42" height="30"/>
+                                <state key="normal" title="Listen"/>
+                                <connections>
+                                    <action selector="listenButtonClicked:" destination="WZg-kF-R7Z" eventType="touchUpInside" id="ZA6-bO-wlz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -574,17 +592,18 @@
                     <connections>
                         <outlet property="addrLabel" destination="BvQ-BT-s1k" id="ZQC-xJ-1hD"/>
                         <outlet property="callButton" destination="iBc-er-m4c" id="0hs-S4-lxp"/>
+                        <outlet property="contactLabel" destination="EuS-JZ-z8i" id="XWU-0Y-umH"/>
                         <outlet property="destLabel" destination="TqS-h9-1Hc" id="ZDe-9D-HXY"/>
                         <outlet property="destinationView" destination="Oux-Qw-QIr" id="IDb-53-Fqx"/>
-                        <outlet property="directionsButton" destination="0Ce-lE-CRp" id="Qwd-A4-IpC"/>
+                        <outlet property="eventButton" destination="apg-K4-88g" id="mcS-KF-o51"/>
                         <outlet property="eventLabel" destination="SyH-yY-cEr" id="15S-Wj-n9F"/>
                         <outlet property="gasButton" destination="vxW-rw-rrs" id="dY3-P6-rU7"/>
+                        <outlet property="listenButton" destination="PMx-SN-dqu" id="cJ1-es-Kp8"/>
                         <outlet property="mapView" destination="MDt-rv-Fr9" id="6rb-7O-jbc"/>
                         <outlet property="musicButton" destination="qZt-RY-ZeP" id="YGY-fI-uD4"/>
-                        <outlet property="nameLabel" destination="EuS-JZ-z8i" id="qMh-UM-Y5d"/>
-                        <outlet property="refreshButton" destination="x8s-Be-dRK" id="21o-yK-qFs"/>
-                        <outlet property="searchButton" destination="iVS-0f-ell" id="RBf-a6-mYp"/>
-                        <outlet property="settingsButton" destination="Z4f-qw-fja" id="S42-f1-6aM"/>
+                        <outlet property="navigateButton" destination="0Ce-lE-CRp" id="aC9-SF-k3s"/>
+                        <outlet property="refreshButton" destination="x8s-Be-dRK" id="3Dv-48-dwV"/>
+                        <outlet property="searchButton" destination="iVS-0f-ell" id="4xT-ni-khY"/>
                         <outlet property="textButton" destination="PgZ-5R-LLt" id="iIS-H3-gN9"/>
                     </connections>
                 </viewController>
