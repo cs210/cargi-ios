@@ -312,7 +312,7 @@
         <!--First View Controller-->
         <scene sceneID="aDe-ys-Dx7">
             <objects>
-                <viewController id="WZg-kF-R7Z" customClass="firstViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WZg-kF-R7Z" customClass="FirstViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="owI-HE-FZw"/>
                         <viewControllerLayoutGuide type="bottom" id="p3i-SH-d1B"/>
@@ -321,22 +321,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MDt-rv-Fr9" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YO9-mB-T6s" userLabel="Dashboard View">
                                 <rect key="frame" x="112" y="522" width="375" height="78"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vxW-rw-rrs">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vxW-rw-rrs" userLabel="gasButton">
                                         <rect key="frame" x="56" y="24" width="30" height="30"/>
                                         <state key="normal" title="Gas">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qZt-RY-ZeP">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qZt-RY-ZeP" userLabel="musicButton">
                                         <rect key="frame" x="171" y="20" width="33" height="37"/>
                                         <state key="normal" backgroundImage="musicbutton.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z4f-qw-fja">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z4f-qw-fja" userLabel="settingsButton">
                                         <rect key="frame" x="289" y="22" width="33" height="34"/>
                                         <state key="normal" backgroundImage="settingsbutton.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -374,13 +378,21 @@
                                         </constraints>
                                         <state key="normal" backgroundImage="textbutton.png"/>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EuS-JZ-z8i">
+                                        <rect key="frame" x="166" y="49" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="PgZ-5R-LLt" firstAttribute="centerY" secondItem="ddq-bE-mSE" secondAttribute="centerY" id="G4H-Kw-XAY"/>
                                     <constraint firstItem="iBc-er-m4c" firstAttribute="centerY" secondItem="ddq-bE-mSE" secondAttribute="centerY" id="KCi-4x-zkS"/>
                                     <constraint firstItem="iBc-er-m4c" firstAttribute="leading" secondItem="ddq-bE-mSE" secondAttribute="leading" id="Mdb-Xl-MIA"/>
+                                    <constraint firstItem="EuS-JZ-z8i" firstAttribute="centerX" secondItem="ddq-bE-mSE" secondAttribute="centerX" id="Oal-70-Yzb"/>
                                     <constraint firstAttribute="width" constant="375" id="Upj-vy-hT3"/>
+                                    <constraint firstItem="EuS-JZ-z8i" firstAttribute="centerY" secondItem="ddq-bE-mSE" secondAttribute="centerY" id="fwa-k0-Qzh"/>
                                     <constraint firstAttribute="height" constant="120" id="qrQ-eQ-gN2"/>
                                     <constraint firstItem="PgZ-5R-LLt" firstAttribute="trailing" secondItem="ddq-bE-mSE" secondAttribute="trailing" id="sJT-Ua-cdK"/>
                                 </constraints>
@@ -470,7 +482,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Dvo-Wz-vOi">
                                         <rect key="frame" x="-149" y="13" width="92" height="39"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqS-h9-1Hc">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqS-h9-1Hc" userLabel="Dest Label">
                                                 <rect key="frame" x="0.0" y="0.0" width="92" height="22"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -559,6 +571,22 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KzI-5u-tyQ"/>
+                    <connections>
+                        <outlet property="addrLabel" destination="BvQ-BT-s1k" id="ZQC-xJ-1hD"/>
+                        <outlet property="callButton" destination="iBc-er-m4c" id="0hs-S4-lxp"/>
+                        <outlet property="destLabel" destination="TqS-h9-1Hc" id="ZDe-9D-HXY"/>
+                        <outlet property="destinationView" destination="Oux-Qw-QIr" id="IDb-53-Fqx"/>
+                        <outlet property="directionsButton" destination="0Ce-lE-CRp" id="Qwd-A4-IpC"/>
+                        <outlet property="eventLabel" destination="SyH-yY-cEr" id="15S-Wj-n9F"/>
+                        <outlet property="gasButton" destination="vxW-rw-rrs" id="dY3-P6-rU7"/>
+                        <outlet property="mapView" destination="MDt-rv-Fr9" id="6rb-7O-jbc"/>
+                        <outlet property="musicButton" destination="qZt-RY-ZeP" id="YGY-fI-uD4"/>
+                        <outlet property="nameLabel" destination="EuS-JZ-z8i" id="qMh-UM-Y5d"/>
+                        <outlet property="refreshButton" destination="x8s-Be-dRK" id="21o-yK-qFs"/>
+                        <outlet property="searchButton" destination="iVS-0f-ell" id="RBf-a6-mYp"/>
+                        <outlet property="settingsButton" destination="Z4f-qw-fja" id="S42-f1-6aM"/>
+                        <outlet property="textButton" destination="PgZ-5R-LLt" id="iIS-H3-gN9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gn0-CX-u5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
