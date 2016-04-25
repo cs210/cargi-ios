@@ -38,7 +38,7 @@ class AzureDatabase {
     }
     
     /**
-     * getUserID
+     * initializeUserID
      * 
      * Given the device identifier string of the user's phone, this method looks up the userID associated 
      * with this particular device, for easy retrieval of other information about the user stored in the database.
@@ -46,7 +46,7 @@ class AzureDatabase {
      **/
     func initializeUserID(deviceID: String, completionHandler: (status: String, success: Bool) -> Void)  {
         let userCheckPredicate = NSPredicate(format: "device_id == [c] %@", deviceID)
-        
+
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)
@@ -88,7 +88,7 @@ class AzureDatabase {
             }
         }
     }
-    
+
     /**
     * Given an array of contacts, this method inserts the contacts of the user (associated with the userID). 
     *
@@ -97,7 +97,6 @@ class AzureDatabase {
     *   let contacts = self.contactDirectory.getAllPhoneNumbers()
     *   db.insertContacts(contacts)
     */
-    
     func insertContacts(contacts: [String : [String]]) {
         for (contact, numbers) in contacts {
             let names = contact.characters.split { $0 == " " }.map(String.init)
@@ -126,30 +125,38 @@ class AzureDatabase {
             }
         }
     }
+
+    // needs testing
+    func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
+        var event = ""
+        if eventName != nil {
+            event = eventName!
+        }
+        
+        let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
+        
+        eventTable.insert(eventObj) {
+            (insertedItem, error) in
+            if error != nil {
+                print("Error in inserting an event" + error!.description)
+            } else {
+                print("Event inserted, id: " + String(insertedItem!["id"]))
+            }
+        }
+    }
     
-//    func insertEvent(eventName: String, longitude: String, latitude: String, dateTime: NSDate) {
-//        // TODO
-//        // user_id
-//        // event_name
-//        
-//        let eventObj = ["user_id": self.userID, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":eventName]
-//        
-//        eventTable.insert(eventObj) {
-//            (insertedItem, error) in
-//            if error != nil {
-//                print("Error in inserting an event" + error.description)
-//            } else {
-//                print("Event inserted, id: " + String(insertedItem["id"]))
-//            }
-//        }
-//        // longitude
-//        // latitude
-//        // datetime
-//        
-//    }
-    func insertCommunication() {
-        // TODO
-        // user_id, event_id, contact_id, method
+    // needs testing
+    func insertCommunication(eventID: String, contactID: String, method: String) {
+        let commObj = ["user_id": self.userID!, "event_id": eventID, "contact_id": contactID, "method": method]
+
+        communicationHistoryTable.insert(commObj) {
+            (insertedItem, error) in
+            if error != nil {
+                print("Error in inserting a communication" + error!.description)
+            } else {
+                print("Communication inserted, id: " + String(insertedItem!["id"]))
+            }
+        }
     }
     
     /**
@@ -184,7 +191,7 @@ class AzureDatabase {
         let date3 = dateFormatter.dateFromString("2016-04-30 11:00:00")
         
         
-        let obj1 = ["datetime": date1!, "latitude": 37.425421, "longitude": -122.164089, "user_id": "kartiks2"]
+        let obj1 = ["datetime": date1!, "latitude": 37.425421, "longitude": -122.164089, "user_id": "emjtang"]
         let obj2 = ["datetime": date2!, "latitude": 37.425421, "longitude": -122.164089, "user_id": "kartiks2"]
         let obj3 = ["datetime": date3!, "latitude": 37.425575, "longitude": -122.165309, "user_id": "kartiks2"]
         

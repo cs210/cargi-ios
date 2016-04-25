@@ -126,36 +126,27 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let client = delegate.client!
-        let item = ["text":"Awesome item"]
-        let itemTable = client.tableWithName("TodoItem")
-        itemTable.insert(item) {
-            (insertedItem, error) in
-            if error != nil{
-                print("Error" + error!.description);
+
+        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+
+        let db = AzureDatabase()
+        print("deviceID: " + deviceID)
+        db.initializeUserID(deviceID) { (status, success) in
+            if (success) {
+                print(db.userID)
+                
             } else {
-                print("Item inserted, id: " + String(insertedItem!["id"]))
+                print(status)
             }
+            
         }
-
-//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-
-//        let db = AzureDatabase()
-//        db.initializeUserID(deviceID) { (status, success) in
-//            if (success) {
-//                print(db.userID)
-//                
-//            } else {
-//                print(status)
-//            }
-//            
-//        }
         
         findNearbyGas()
         syncData()
-        
-//        db.insertEvent()
+//        let latitudeNum = NSNumber(double: destCoordinates.latitude)
+//        let longitudeNum = NSNumber(double: destCoordinates.longitude)
+//        
+//        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -227,7 +218,6 @@ class NavigationViewController: UIViewController, CLLocationManagerDelegate, CBC
                 destLocation = nil
             }
         }
-        
         if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
             destCoordinates = coordinate
         }

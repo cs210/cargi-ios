@@ -39,7 +39,7 @@
 		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
-		B39CE0A71CB20A6C001EB723 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */; };
+		B3FEAB1E1CC741D3002E6B0B /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3FEAB1D1CC741D2002E6B0B /* MicrosoftAzureMobile.framework */; };
 		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
@@ -83,7 +83,7 @@
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B39CE0A41CB20709001EB723 /* AzureDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureDatabase.swift; sourceTree = "<group>"; };
-		B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		B3FEAB1D1CC741D2002E6B0B /* MicrosoftAzureMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MicrosoftAzureMobile.framework; sourceTree = "<group>"; };
 		BE201F251CC4D2BA00A691B5 /* GasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasFinder.swift; sourceTree = "<group>"; };
 		BE6504EB1C88166C00C26AAA /* EventDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDirectory.swift; sourceTree = "<group>"; };
 		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
@@ -94,8 +94,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B39CE0A71CB20A6C001EB723 /* WindowsAzureMobileServices.framework in Frameworks */,
 				407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */,
+				B3FEAB1E1CC741D3002E6B0B /* MicrosoftAzureMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +105,7 @@
 		55F4FEC86663CC9A928EF540 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B39CE0A61CB20A6C001EB723 /* WindowsAzureMobileServices.framework */,
+				B3FEAB1D1CC741D2002E6B0B /* MicrosoftAzureMobile.framework */,
 				A44D8D9CE1E4323107188D46 /* libPods.a */,
 			);
 			name = Frameworks;
