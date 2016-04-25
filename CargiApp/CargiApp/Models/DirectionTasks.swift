@@ -54,7 +54,7 @@ class DirectionTasks {
     
         Note: travelMode will be driving by default.
      */
-    func getDirections(origin: String?, dest: String?, waypoints: [String]!, completionHandler: ((status: String, success: Bool) -> Void)) {
+    func getDirections(origin: String?, dest: String?, waypoints: [String]?, completionHandler: ((status: String, success: Bool) -> Void)) {
         print("origin")
         guard let originLocation = origin?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
             completionHandler(status: "Origin is nil", success: false)
@@ -70,8 +70,14 @@ class DirectionTasks {
             return
         }
         
+        var waypoint = String()
+        if let waypointsString = waypoints?.joinWithSeparator("|") {
+            waypoint = "waypoints=\(waypointsString)"
+        }
+        print(waypoint)
+        
         // URL for making request to the Google Directions API.
-        let requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&key=\(APIKey)"
+        let requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&\(waypoint)&key=\(APIKey)"
         let request = NSURL(string: requestURL)
         
         // Get and parse the response.
@@ -95,7 +101,7 @@ class DirectionTasks {
                 completionHandler(status: "Parsing JSON failed.", success: false)
                 return
             }
-            print("HI")
+            print(dict.description)
             
             let status = dict["status"] as! String
             if status == "OK" {
