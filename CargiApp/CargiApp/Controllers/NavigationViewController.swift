@@ -124,18 +124,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let client = delegate.client!
-        let item = ["text":"Awesome item"]
-        let itemTable = client.tableWithName("TodoItem")
-        itemTable.insert(item) {
-            (insertedItem, error) in
-            if error != nil{
-                print("Error" + error!.description);
-            } else {
-                print("Item inserted, id: " + String(insertedItem!["id"]))
-            }
-        }
+//        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//        let client = delegate.client!
+//        let item = ["text":"Awesome item"]
+//        let itemTable = client.tableWithName("TodoItem")
+//        itemTable.insert(item) {
+//            (insertedItem, error) in
+//            if error != nil{
+//                print("Error" + error!.description);
+//            } else {
+//                print("Item inserted, id: " + String(insertedItem!["id"]))
+//            }
+//        }
 
 //        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
 
