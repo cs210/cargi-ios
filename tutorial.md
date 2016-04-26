@@ -1,6 +1,6 @@
 Hi! Welcome to Cargi, your one-stop personal driving assistant.
 
-Cargi automatically guesses where you’re driving to based on your calendar, and who you’re most likely to want to contact while you’re driving.
+Cargi automatically guesses where you’re driving to based on your calendar and location history, and who you would most likely want to contact while you’re driving. Cargi does this through machine learning methods - the more data Cargi has, the smarter she becomes.
 
 Use our one-touch buttons to navigate to your destination, go to your music app, or find nearby gas.
 
