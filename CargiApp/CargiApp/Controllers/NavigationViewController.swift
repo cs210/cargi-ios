@@ -170,6 +170,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         syncData()
         
 //        db.insertEvent()
+//        let latitudeNum = NSNumber(double: destCoordinates.latitude)
+//        let longitudeNum = NSNumber(double: destCoordinates.longitude)
+//        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -199,7 +202,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let contacts = contactDirectory.getAllPhoneNumbers()
         print("contacts size: ", contacts.count)
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
-        
+
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             self.currentEvent = ev
