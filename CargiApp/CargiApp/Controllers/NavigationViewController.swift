@@ -183,19 +183,39 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
         let contacts = contactDirectory.getAllPhoneNumbers()
+        print("contacts size: ", contacts.count)
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             self.currentEvent = ev
             for contact in contacts.keys {
+                print(contact)
+                let contactsArr = contact.componentsSeparatedByString(" ")
+                let firstName = contactsArr[0]
+                let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
                 if ev.title.rangeOfString(contact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
                         break
                     }
                 }
+                if ev.title.rangeOfString(firstName) != nil {
+                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                        self.contact = contact
+                        break
+                    }
+                }
+                if (lastName != nil) {
+                    if ev.title.rangeOfString(lastName!) != nil {
+                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                            self.contact = contact
+                            break
+                        }
+                    }
+                }
             }
+            
             if contact != nil { break }
         }
         
