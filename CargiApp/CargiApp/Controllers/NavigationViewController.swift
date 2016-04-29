@@ -203,7 +203,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             self.currentEvent = ev
+            var possibleContactArr: [String] = []
+            var possibleContact = false;
             for contact in contacts.keys {
+                possibleContact = false;
                 print(contact)
                 let contactsArr = contact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
@@ -211,24 +214,28 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 if ev.title.rangeOfString(contact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
-                        break
+                        possibleContact = true;
                     }
                 }
                 if ev.title.rangeOfString(firstName) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
-                        break
+                        possibleContact = true;
                     }
                 }
                 if (lastName != nil) {
                     if ev.title.rangeOfString(lastName!) != nil {
                         if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                             self.contact = contact
-                            break
+                            possibleContact = true;
                         }
                     }
                 }
+                if (possibleContact) {
+                    possibleContactArr.append(contact)
+                }
             }
+            print(possibleContactArr)
             
             if contact != nil { break }
         }
