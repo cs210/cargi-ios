@@ -28,8 +28,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     var data: NSMutableData = NSMutableData()
     
-    @IBOutlet weak var destLabel: UILabel!
-    @IBOutlet weak var addrLabel: UILabel!
+    var destLabel: UILabel?
+    var addrLabel: UILabel?
     @IBOutlet weak var eventLabel: UILabel!
     @IBOutlet weak var destinationView: UIView!
     
@@ -37,7 +37,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet weak var textButton: UIButton!
     @IBOutlet weak var gasButton: UIButton!
     @IBOutlet weak var musicButton: UIButton!
+    @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
+    
     @IBOutlet var dashboardView: UIView!
+    @IBOutlet var contactView: UIView!
     @IBOutlet var contactLabel: UILabel!
 
     @IBOutlet weak var voiceButton: UIButton!
@@ -103,20 +107,30 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
         
         // Design of Buttons
-        callButton.layer.shadowOffset = CGSizeMake(0, 3)
+        callButton.layer.shadowOffset = CGSizeMake(3, 3)
         callButton.layer.shadowColor = UIColor.blackColor().CGColor
         callButton.layer.shadowRadius = 2
         callButton.layer.shadowOpacity = 0.27
         
-        textButton.layer.shadowOffset = CGSizeMake(0, 3)
+        textButton.layer.shadowOffset = CGSizeMake(-3, 3)
         textButton.layer.shadowColor = UIColor.blackColor().CGColor
         textButton.layer.shadowRadius = 2
         textButton.layer.shadowOpacity = 0.27
         
-        destinationView.layer.shadowOffset = CGSizeMake(0, -1)
+//        contactView.layer.shadowOffset = CGSizeMake(0, -1)
+//        contactView.layer.shadowColor = UIColor.blackColor().CGColor
+//        contactView.layer.shadowRadius = 1.5
+//        contactView.layer.shadowOpacity = 0.7
+
+        contactView.layer.shadowOffset = CGSizeMake(0, -1)
+        contactView.layer.shadowColor = UIColor.blackColor().CGColor
+        contactView.layer.shadowRadius = 1.5
+        contactView.layer.shadowOpacity = 0.27
+        
+        destinationView.layer.shadowOffset = CGSizeMake(0, 3)
         destinationView.layer.shadowColor = UIColor.blackColor().CGColor
         destinationView.layer.shadowRadius = 1.5
-        destinationView.layer.shadowOpacity = 0.7
+        destinationView.layer.shadowOpacity = 0.27
         
         // Observer for changes in myLocation of google's map view
         mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
@@ -173,8 +187,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     func resetData() {
         self.contact = nil
         self.eventLabel.text = nil
-        self.destLabel.text = nil
-        self.addrLabel.text = nil
+//        self.destLabel.text = nil
+//        self.addrLabel.text = nil
         self.destLocation = nil
         self.destinationName = nil
         mapView.clear()
@@ -207,6 +221,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
         
+        if let _ = contact {
+            contactView.hidden = false
+        } else {
+            contactView.hidden = true
+        }
+        
         contactNumbers = contactDirectory.getPhoneNumber(contact)
 
         guard let ev = currentEvent else { return }
@@ -226,11 +246,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
-                destLabel.text = locArr.first
-                addrLabel.text = locArr[1]
+//                destLabel.text = locArr.first
+                searchButton.setTitle(locArr.first, forState: .Normal)
+//                addrLabel.text = locArr[1]
             } else {
-                destLabel.text = locArr.first
-                addrLabel.text = nil
+//                destLabel.text = locArr.first
+//                addrLabel.text = nil
+                searchButton.setTitle(locArr.first, forState: .Normal)
             }
             destinationName = locArr.first
         }
@@ -391,7 +413,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("drawmaps done")
         
         let bounds = GMSCoordinateBounds(path: path)
-        let cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 165.0, right: 20.0))
+        
+        // Depending on whether the contact view is hidden or not, we have different bounds.
+        var cameraUpdate: GMSCameraUpdate
+        if contactView.hidden {
+            cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 110.0, right: 20.0))
+        } else {
+            cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 230.0, right: 20.0))
+        }
         mapView.moveCamera(cameraUpdate)
     }
     
@@ -631,6 +660,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 let marker = GMSMarker(position: self.gasFinder.coordinates)
                 marker.appearAnimation = kGMSMarkerAnimationPop
                 marker.title = self.gasFinder.stationName
+                marker.icon = UIImage(named: "gasmarker")
                 marker.snippet = self.gasFinder.address
                 marker.map = self.mapView
             } else {
@@ -709,8 +739,9 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         self.destLocation = place.formattedAddress
         self.destinationName = place.name
         self.destCoordinates = place.coordinate
-        self.destLabel.text = place.name
-        self.addrLabel.text = place.formattedAddress
+//        self.destLabel.text = place.name
+        self.searchButton.setTitle(place.name, forState: .Normal)
+//        self.addrLabel.text = place.formattedAddress
         self.eventLabel.text = nil
         self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
