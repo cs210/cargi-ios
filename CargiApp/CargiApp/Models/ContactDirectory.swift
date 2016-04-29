@@ -77,22 +77,13 @@ class ContactDirectory {
     
     func getContactName(numberToFind: String) -> String? {
         for (contact, numbers) in contacts {
-//            let names = contact.characters.split { $0 == " " }.map(String.init)
-//            var firstName = ""
-//            var lastName = ""
             var phoneNumber = ""
-//            if let first = names.first {
-//                firstName = first
-//            }
-//            if let last = names.last {
-//                lastName = last
-//            }
             if let phone = numbers.first {
                 phoneNumber = phone
             }
             
             if (phoneNumber == numberToFind) {
-                return contact.characters
+                return contact
             }
         }
         return nil;

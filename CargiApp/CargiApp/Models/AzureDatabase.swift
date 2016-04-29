@@ -148,40 +148,48 @@ class AzureDatabase {
     /**
      *
      */
-    func getContactID(phoneNumber: String) {
-        let contactCheckPredicate = NSPredicate(format: "phone_number == [c] %@", phoneNumber)
-        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
-            if (error != nil) {
-                print("Error in retrieval", error!.description)
-                //                completionHandler(status: error!.description, success: false)
-                return
-            } else if let items = result?.items {
-                if let item = items.first {
-                    if let contact = item["id"] as? String {
-                        self.contactID = contact
-                        //                        completionHandler(status: "success", success: true)
-                        //                        return contactID
-                    }
-                }
-            }
-            
-            var contactName = self.contactDirectory.getContactName(phoneNumber);
-            var fullNameArr = contactName?.componentsSeparatedByString(" ")
-            var firstName: String? = fullNameArr.first
-            var lastName: String? = fullNameArr.count > 1 ? fullNameArr[1] : nil
-            
-            self.insertContact(firstName, lastName: lastName, phoneNumber: phoneNumber) { (status, success) in
-                if success {
-                    print(status)
-                    print("Just inserted user to database, user id: " + self.userID!)
-                } else {
-                    // TODO: print some error code
-                }
-            }
-            //            completionHandler(status: "No userID found, inserted user into database", success: false)
-        }
-        
-    }
+//    func getContactID(phoneNumber: String) {
+//        let contactCheckPredicate = NSPredicate(format: "phone_number == [c] %@", phoneNumber)
+//        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
+//            if (error != nil) {
+//                print("Error in retrieval", error!.description)
+//                return
+//            } else if let items = result?.items {
+//                if let item = items.first {
+//                    if let contact = item["id"] as? String {
+//                        self.contactID = contact
+//                    }
+//                }
+//            }
+//            
+//            var contactName = self.contactDirectory.getContactName(phoneNumber);
+//            if let contact = contactName {
+//                var names = contact.characters.split { $0 == " " }.map(String.init)
+//                var firstName = ""
+//                var lastName = ""
+//                if let first = names.first {
+//                    firstName = first
+//                }
+//                if let last = names.last {
+//                    lastName = last
+//                }
+//                self.insertContact(firstName, lastName: lastName, phoneNumber: phoneNumber) { (status, success) in
+//                    if success {
+//                        print(status)
+//                        print("Just inserted user to database, user id: " + self.userID!)
+//                    } else {
+//                        // TODO: print some error code
+//                    }
+//                }
+//            } else {
+//                
+//            }
+//            
+//            
+//                       //            completionHandler(status: "No userID found, inserted user into database", success: false)
+//        }
+//        
+//    }
     // needs testing
     //    func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
     //        var event = ""
