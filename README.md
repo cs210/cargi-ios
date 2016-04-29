@@ -17,6 +17,11 @@ To run the iOS app, you must import the GoogleMaps framework, which is stored in
 - If the feature is fully-working, push to the `master` branch.
 - If the feature has been thoroughly tested and is ready for deployment, push to the `deploy` branch.
 
+### Other APIs/SDKs
+- Maya built an API for finding cheap gas: https://github.com/mayanb/gaspriceapi
+- Nuance SpeechKit for speech recognition and text-to-speech
+- 
+
 <!--# Development Milestones:-->
 <!--- [x] Navigation (Apple/Google) to the next event's location -->
 <!--- [x] Show route with directions from current location to destination-->
