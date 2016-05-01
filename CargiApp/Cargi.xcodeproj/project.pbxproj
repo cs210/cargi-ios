@@ -13,6 +13,7 @@
 		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
 		636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E31CCC0039006D2936 /* musicbutton@2x.png */; };
 		636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E41CCC0039006D2936 /* textbutton@2x.png */; };
+		6381DC651CD6C06F000CB520 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6381DC641CD6C06F000CB520 /* TutorialViewController.swift */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -63,6 +64,7 @@
 		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E31CCC0039006D2936 /* musicbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "musicbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E41CCC0039006D2936 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
+		6381DC641CD6C06F000CB520 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				740354111CD5D13500155433 /* SignupViewController.swift */,
 				7403540F1CD5D12500155433 /* LoginViewController.swift */,
 				63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */,
+				6381DC641CD6C06F000CB520 /* TutorialViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -290,7 +293,7 @@
 				TargetAttributes = {
 					74A2E5F21C7FCBC800C468CC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 44NW45N853;
+						DevelopmentTeam = 9F8W5DM5X2;
 					};
 				};
 			};
@@ -401,6 +404,7 @@
 				740354121CD5D13500155433 /* SignupViewController.swift in Sources */,
 				63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */,
 				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
+				6381DC651CD6C06F000CB520 /* TutorialViewController.swift in Sources */,
 				630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */,
 				740354141CD5E76200155433 /* CheapGasFinder.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
@@ -530,7 +534,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
@@ -555,7 +559,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
