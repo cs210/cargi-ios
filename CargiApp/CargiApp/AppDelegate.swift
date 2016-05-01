@@ -47,6 +47,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
             // direct to Tutorial Screen?
         }
+        //return true
+        
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
+        pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
+        
         return true
     }
     
