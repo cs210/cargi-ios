@@ -25,8 +25,7 @@ class AzureDatabase {
     var userID: String?
     var contactDirectory = ContactDirectory()
     var contactID: String?
-    
-    //    var curEventID: String
+    var curEventID: String?
     
     
     init() {
@@ -73,7 +72,7 @@ class AzureDatabase {
                     // TODO: print some error code
                 }
             }
-            completionHandler(status: "No userID found, inserted user into database", success: false)
+            completionHandler(status: "No userID found, inserted user into database", success: true)
         }
     }
     
@@ -94,7 +93,7 @@ class AzureDatabase {
     }
     
     /**
-     * Given an array of contacts, this method inserts the contacts of the user (associated with the userID).
+     * Given an array of contacts, this method inserts all contacts of the user (associated with the userID).
      *
      * Note: azure does not check for uniqueness, so this method will insert duplicates as of right now.
      * example usage:
@@ -102,53 +101,128 @@ class AzureDatabase {
      *   db.insertContacts(contacts)
      */
     func insertContacts(contacts: [String : [String]]) {
-        for (contact, numbers) in contacts {
-            let names = contact.characters.split { $0 == " " }.map(String.init)
-            var firstName = ""
-            var lastName = ""
-            var phoneNumber = ""
-            if let first = names.first {
-                firstName = first
+        for (contact, _) in contacts {
+            let fullName = contact
+            self.insertContact(fullName) { (newContactID, success) in
+                if (success) {
+                    // do nothing, don't need new contact ID
+                } else {
+                    // problem with azure database
+                }
+                
             }
-            if let last = names.last {
-                lastName = last
-            }
-            if let phone = numbers.first {
-                phoneNumber = phone
-            }
-            
-            self.insertContact(firstName, lastName: lastName, phoneNumber: phoneNumber)
-            //            let contactObj = ["user_id": self.userID!, "first_name": firstName, "last_name": lastName, "phone_number": phoneNumber]
-            //
-            //            print(contactObj)
-            //            contactsTable.insert(contactObj) {
-            //                (insertedItem, error) in
-            //                if error != nil {
-            //                    print("Error" + error!.description);
-            //                } else {
-            //                    print("Item inserted, id: " + String(insertedItem!["id"]))
-            //                }
-            //            }
+                
         }
+        
     }
     
-    func insertContact(firstName: String, lastName: String, phoneNumber: String) {
-        let contactObj = ["user_id": self.userID!, "first_name": firstName, "last_name": lastName, "phone_number": phoneNumber]
-        
-        contactsTable.insert(contactObj) {
-            (insertedItem, error) in
-            if error != nil {
-                print("Error inserting contact: " + error!.description);
+    /**
+     * contactExists
+     *
+     * Given a contact name, this function checks if the given contact exists in the database already.
+     * If the contact exists, the contactID is returned in the status, and exists is set to true.
+     * If the contact does not exist, the status reflects that and exists is false.
+     * Usage:
+     *  self.contactExists(fullName) { (status, exists) in
+            if (exists) {
+                // do not insert duplicate contact
             } else {
-                print("Contact inserted, id: " + String(insertedItem!["id"]))
+                // getContact
+            }
+     *  }
+     */
+    func contactExists(contactName: String, completionHandler: (status: String, exists: Bool) -> Void) {
+        let contactCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "user_id == %@", self.userID!), NSPredicate(format: "name = %@", contactName)])
+
+        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
+            if (error != nil) {
+                print("Error in retrieval", error!.description)
+                completionHandler(status: error!.description, exists: false)
+                return
+            } else if result != nil {
+                completionHandler(status: "Contact exists", exists: true)
+                return
+            } else {
+                completionHandler(status: "Contact does not exist", exists: false)
             }
         }
     }
     
     /**
-     *
+    * Inserts a contact into the database associated with the current user.
+    * 
+    * To avoid inserting duplicate contacts, use the contactExists function to check before inserting.
+    */
+    func insertContact(fullName: String, completionHandler: (newContactID: String?, success: Bool) -> Void) {
+        let contactObj = ["user_id": self.userID!, "name": fullName]
+    
+        self.contactsTable.insert(contactObj) { (insertedItem, error) in
+            if error != nil {
+                print("Error inserting contact: " + error!.description);
+                completionHandler(newContactID: nil, success: false)
+                return
+            } else {
+                print("Contact inserted, id: " + String(insertedItem!["id"]))
+                completionHandler(newContactID: String(insertedItem!["id"]), success: true)
+                return
+            }
+        }
+    }
+    
+    /*
+    * Given the full name of a contact associated with an event, this function inserts an event contact into the database.
+    */
+    func insertEventContact(fullName: String) {
+        var contact_id = ""
+        self.getContactID(fullName) { (contactID, success) in
+            if (success) {
+                contact_id = contactID
+            } else {
+                self.insertContact(fullName) { (newContactID, success) in
+                    if (success) {
+                        contact_id = newContactID!
+                    } else {
+                        // TODO: problem with azure, should probably throw an error
+                    }
+                }
+            }
+        }
+        let eventContactObj = ["event_id": self.curEventID!, "contact_id": contact_id]
+        eventContactsTable.insert(eventContactObj) {
+            (insertedItem, error) in
+            if error != nil {
+                print("Error in inserting an event" + error!.description)
+            } else {
+                print("Inserted event contact: ", String(insertedItem!["id"]))
+            }
+        }
+    }
+    
+    /**
+     * Given a contact name, this function retrieves the contact ID from the Azure database.
+     * If successful, success is set to true and the contactID is populated with the data.
+     * If the contact is not found, or there was a problem with Azure, success is set to false and the contactID is nil.
      */
-//    func getContactID(phoneNumber: String) {
+    func getContactID(contactName: String, completionHandler:(contactID: String, success: Bool) -> Void) {
+        let contactCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "user_id == %@", self.userID!), NSPredicate(format: "name = %@", contactName)])
+        
+        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
+            if (error != nil) {
+                print("Could not retrieve contactID", error!.description)
+                completionHandler(contactID: "", success: false)
+                return
+            } else if let items = result?.items {
+                if let item = items.first {
+                    if let contactID = item["id"] as? String {
+                        completionHandler(contactID: contactID, success: true)
+                        return
+                    }
+                }
+            }
+            completionHandler(contactID: "", success: false)
+        }
+    }
+//    func 
 //        let contactCheckPredicate = NSPredicate(format: "phone_number == [c] %@", phoneNumber)
 //        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
 //            if (error != nil) {
@@ -190,47 +264,51 @@ class AzureDatabase {
 //        }
 //        
 //    }
-    // needs testing
-    //    func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
-    //        var event = ""
-    //        if eventName != nil {
-    //            event = eventName!
-    //        }
-    //
-    //        let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
-    //
-    //        eventTable.insert(eventObj) {
-    //            (insertedItem, error) in
-    //            if error != nil {
-    //                print("Error in inserting an event" + error!.description)
-    //            } else {
-    //                print("Event inserted, id: " + String(insertedItem!["id"]))
-    //                self.curEventID = insertedItem!["id"]
-    //            }
-    //
-    //
-    //            let eventContactObj = ["event_id": self.curEventID, "contact_id": ]
-    //
-    //        }
-    //    }
+    
+    func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate, contactName: String?) {
+            var event = ""
+            if eventName != nil {
+                event = eventName!
+            }
+    
+            let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
+    
+            eventTable.insert(eventObj) {
+                (insertedItem, error) in
+                if error != nil {
+                    print("Error in inserting an event" + error!.description)
+                } else {
+                    print("Event inserted, id: " + String(insertedItem!["id"]))
+                    self.curEventID = String(insertedItem!["id"])
+                    if contactName != nil {
+                        self.insertEventContact(contactName!)
+                    } else {
+                        // no contact associated with event
+                        // do nothing for now
+                    }
+                }
+            }
+        }
     
     /**
     * The communication history table has the following columns: user_id, event_id, contact_id, and method.
     * The current event ID is stored as a variable, and is updated each time the user has a new event (whether it is pulled from
     * the calendar or a destination set by the user).
     */
-    //    func insertCommunication(contactID: String, method: String) {
-    //        let commObj = ["user_id": self.userID!, "event_id": self.curEventID, "contact_id": contactID, "method": method]
-    //
-    //        communicationHistoryTable.insert(commObj) {
-    //            (insertedItem, error) in
-    //            if  error != nil {
-    //                print("Error in inserting a communication" + error!.description)
-    //            } else {
-    //                print("Communication inserted, id: " + String(insertedItem!["id"]))
-    //            }
-    //        }
-    //    }
+    func insertCommunication(method: String) {
+        // TODO: should we check if self.userID / self.curEventID / self.contactID exist?
+        // the way we use the code, we will have initialized all variables
+        let commObj = ["user_id": self.userID!, "event_id": self.curEventID!, "contact_id": self.contactID!, "method": method]
+
+        communicationHistoryTable.insert(commObj) {
+            (insertedItem, error) in
+            if  error != nil {
+                print("Error in inserting a communication" + error!.description)
+            } else {
+                print("Communication inserted, id: " + String(insertedItem!["id"]))
+            }
+        }
+    }
     
     /**
     * This method inserts a new user into the Azure database table, storing his/her device identifier.
