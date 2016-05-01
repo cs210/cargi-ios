@@ -725,7 +725,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                             bounds = bounds.includingCoordinate(station.coordinates!)
                                             self.updateCamera(bounds)
                                             priceFound = true
-                                            self.mapView.select
                                             break
                                         }
                                         
