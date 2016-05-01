@@ -252,6 +252,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                 possibleContactArr.append(contact)
                             }
                             if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
+                                //should insert some check here with the database for frequently contacted people - so you have a better guess
+                                //maybe first name is better than matching last name
                                 self.contact = contact
                             }
                         }
