@@ -183,8 +183,8 @@
                                             <action selector="phoneButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CAH-T5-5ZI"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hR-U5-77R">
-                                        <rect key="frame" x="276" y="43" width="47" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hR-U5-77R">
+                                        <rect key="frame" x="99" y="43" width="402" height="24"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -200,18 +200,24 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="ZBc-OW-OoQ" firstAttribute="leading" secondItem="y5y-9a-hur" secondAttribute="leading" id="2XF-iV-VxG"/>
+                                    <constraint firstItem="4hR-U5-77R" firstAttribute="leading" secondItem="ZBc-OW-OoQ" secondAttribute="leading" id="5JE-Nb-vDQ"/>
                                     <constraint firstItem="4hR-U5-77R" firstAttribute="centerX" secondItem="y5y-9a-hur" secondAttribute="centerX" id="6W9-eO-Tbz"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="height" secondItem="ZBc-OW-OoQ" secondAttribute="height" id="Dvw-D8-vP7"/>
+                                    <constraint firstItem="4hR-U5-77R" firstAttribute="leading" secondItem="ZBc-OW-OoQ" secondAttribute="trailing" id="Jju-cv-My5"/>
                                     <constraint firstItem="4hR-U5-77R" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="Kqa-Z9-b6e"/>
                                     <constraint firstItem="ZBc-OW-OoQ" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="XcK-tB-WPL"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="width" secondItem="ZBc-OW-OoQ" secondAttribute="width" id="i5p-Rj-9lM"/>
                                     <constraint firstAttribute="trailing" secondItem="sVK-fw-bF5" secondAttribute="trailing" id="mt3-lR-w5K"/>
+                                    <constraint firstItem="sVK-fw-bF5" firstAttribute="leading" secondItem="4hR-U5-77R" secondAttribute="trailing" id="nXV-Gu-a6j"/>
                                     <constraint firstAttribute="height" constant="120" id="ocZ-G7-zaP"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="u28-ol-JsD"/>
+                                    <constraint firstItem="4hR-U5-77R" firstAttribute="trailing" secondItem="sVK-fw-bF5" secondAttribute="trailing" id="z6s-Cr-HS3"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="ocZ-G7-zaP"/>
+                                        <exclude reference="5JE-Nb-vDQ"/>
+                                        <exclude reference="z6s-Cr-HS3"/>
                                     </mask>
                                 </variation>
                             </view>
