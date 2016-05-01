@@ -206,6 +206,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             self.currentEvent = ev
+            print ("Printing the Next Event");
+            print(ev)
             var possibleContactArr: [String] = []
             var possibleContact = false;
             for contact in contacts.keys {
@@ -214,13 +216,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 let contactsArr = contact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                if ev.title.rangeOfString(contact) != nil {
-                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                        self.contact = contact
-                        possibleContact = true;
-                    }
-                }
-                if ev.title.rangeOfString(firstName) != nil {
+                if ev.title.rangeOfString(contact) != nil || ev.title.rangeOfString(firstName) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
                         possibleContact = true;
