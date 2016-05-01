@@ -209,9 +209,16 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
                 var eventTitle = ev.title.lowercaseString
                 var eventTitleArr = eventTitle.componentsSeparatedByString(" ")
-                if eventTitle.rangeOfString(lowerContact) != nil {
+                
+                if eventTitle.rangeOfString(lowerContact) != nil { //search for full name
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         possibleContact = true;
+                        let contactNumber = contactDirectory.getPhoneNumber(contact)
+                        if contactNumber?.count > 0 { //check that the contact actually has a number
+                            possibleContactArr.append(contact)
+                            self.contact = contact
+                        }
+
                     }
                 }
                 if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
@@ -239,7 +246,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         let contactNumber = contactDirectory.getPhoneNumber(contact)
                         if contactNumber?.count > 0 { //check that the contact actually has a number
                             possibleContactArr.append(contact)
-                            self.contact = contact
+                            if self.contact != nil {
+                                self.contact = contact
+                            }
                         }
                     }
                 }
