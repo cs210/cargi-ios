@@ -26,8 +26,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
-    var data: NSMutableData = NSMutableData()
-    
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     var destLabel: UILabel?
     var addrLabel: UILabel?
     @IBOutlet weak var eventLabel: UILabel!
@@ -39,12 +38,16 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet weak var musicButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var refreshButton: UIButton!
+    @IBOutlet weak var navigateButton: UIButton!
     
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactView: UIView!
     @IBOutlet var contactLabel: UILabel!
 
     @IBOutlet weak var voiceButton: UIButton!
+    
+    // MARK: Variables
     
     var locationManager = CLLocationManager()
     var gasFinder = GasFinder()
@@ -71,11 +74,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         didSet {
             contactLabel.text = contact
             if contact == nil {
-                callButton.enabled = false
-                textButton.enabled = false
+                contactView.hidden = true
             } else {
-                callButton.enabled = true
-                textButton.enabled = true
+                contactView.hidden = false
             }
         }
     }
@@ -92,10 +93,21 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     lazy var db = AzureDatabase()
 
+    // MARK: Constants
+    
+    let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
+    
+    
+    // MARK: Methods
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        contactView.hidden = true
+        refreshButton.contentEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        navigateButton.contentEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20)
         destMarker.icon = UIImage(named: "destination_icon")
         
         view.sendSubviewToBack(dashboardView)
@@ -188,15 +200,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         mapView.clear()
     }
     
-    func createStopWords() -> Array<String> {
-        return ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
-    }
-    
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
         let contacts = contactDirectory.getAllPhoneNumbers()
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
-        let stopWords = createStopWords()
 
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
@@ -210,10 +217,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 var contactsArr = lowerContact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                var eventTitle = ev.title.lowercaseString
-                var eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+                let eventTitle = ev.title.lowercaseString
+                let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
                 
-                if eventTitle.rangeOfString(lowerContact) != nil { //search for full name
+                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         possibleContact = true;
                         let contactNumber = contactDirectory.getPhoneNumber(contact)
@@ -269,12 +276,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     self.currentEvent = ev
                 }
             }
-        }
-        
-        if let _ = contact {
-            contactView.hidden = false
-        } else {
-            contactView.hidden = true
         }
         
         contactNumbers = contactDirectory.getPhoneNumber(contact)
@@ -702,6 +703,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
+        activityIndicator.startAnimating()
+        
         let geocoder = LocationGeocoder()
         geocoder.getPostalCode(originLocation) { (status, success) in
             print("Postal Code: \(status)")
@@ -762,6 +765,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                                 bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
                                                 self.updateCamera(bounds)
                                             }
+                                            // if the last cheap gas was found, stop animating activity indicator.
+                                            if i == numCheapGasStations - 1 { self.activityIndicator.stopAnimating() }
                                         }
                                     }
                                 }
