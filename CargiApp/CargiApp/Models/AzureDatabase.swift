@@ -13,6 +13,22 @@ import Foundation
  */
 class AzureDatabase {
     
+    // Singleton instance code - creds to http://anthon.io/how-to-share-data-between-view-controllers-in-swift/
+    // This way all view controllers can access one instance of this database object
+    class var sharedInstance: AzureDatabase {
+        struct Static {
+            static var instance: AzureDatabase?
+            static var token: dispatch_once_t = 0
+        }
+        
+        dispatch_once(&Static.token) {
+            Static.instance = AzureDatabase()
+        }
+        
+        return Static.instance!
+    }
+
+    
     var delegate: AppDelegate
     var client: MSClient
     var userTable: MSTable
@@ -116,7 +132,6 @@ class AzureDatabase {
             }
                 
         }
-        
     }
     
     /**
@@ -151,6 +166,51 @@ class AzureDatabase {
         }
     }
     
+    func checkEmailLogin(email: String, completionHandler: (status: String, success: Bool) -> Void) {
+        var emailCheckPredicate: NSCompoundPredicate
+        if self.userID != nil {
+            // TODO: need to ensure that the userID is always initialized beforehand... maybe need to do this on launch
+            emailCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "user_id == %@", self.userID!), NSPredicate(format: "email = %@", email)])
+        } else {
+            
+            // TODO: problematic if the user changes device and wants to log in on another device...
+            
+            let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+            emailCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "device_id == %@", deviceID), NSPredicate(format: "email = %@", email)])
+        }
+        
+        userTable.readWithPredicate(emailCheckPredicate) { (result, error) in
+            if (error != nil) {
+                print("Error in retrieval", error!.description)
+                completionHandler(status: error!.description, success: false)
+                return
+            } else if result != nil {
+                completionHandler(status: "Email is correct, matches user ID", success: true)
+                return
+            } else {
+                completionHandler(status: "Email is incorrect, does not match user ID", success: false)
+            }
+        }
+
+    }
+    
+    func emailExists(email: String, completionHandler: (status: String, exists: Bool) -> Void) {
+        let emailCheckPredicate = NSPredicate(format: "email = %@", email)
+        userTable.readWithPredicate(emailCheckPredicate) { (result, error) in
+            if (error != nil) {
+                print("Error in retrieval", error!.description)
+                completionHandler(status: error!.description, exists: false)
+                return
+            } else if result != nil {
+                completionHandler(status: "Email exists", exists: true)
+                return
+            } else {
+                completionHandler(status: "Email does not exist", exists: false)
+            }
+        }
+    }
+
+    
     /**
     * Inserts a contact into the database associated with the current user.
     * 
@@ -179,26 +239,39 @@ class AzureDatabase {
         var contact_id = ""
         self.getContactID(fullName) { (contactID, success) in
             if (success) {
+                print("found contact ID for", fullName)
                 contact_id = contactID
+                let eventContactObj = ["event_id": self.curEventID!, "contact_id": contact_id]
+                self.eventContactsTable.insert(eventContactObj) {
+                    (insertedItem, error) in
+                    if error != nil {
+                        print("Error in inserting an event" + error!.description)
+                    } else {
+                        print("Inserted event contact: ", String(insertedItem!["id"]))
+                    }
+                }
             } else {
+                // if no contact is found, then we need to insert the contact in first before we can
+                // insert it as an event contact
                 self.insertContact(fullName) { (newContactID, success) in
                     if (success) {
                         contact_id = newContactID!
+                        let eventContactObj = ["event_id": self.curEventID!, "contact_id": contact_id]
+                        self.eventContactsTable.insert(eventContactObj) {
+                            (insertedItem, error) in
+                            if error != nil {
+                                print("Error in inserting an event" + error!.description)
+                            } else {
+                                print("Inserted event contact: ", String(insertedItem!["id"]))
+                            }
+                        }
                     } else {
                         // TODO: problem with azure, should probably throw an error
                     }
                 }
             }
         }
-        let eventContactObj = ["event_id": self.curEventID!, "contact_id": contact_id]
-        eventContactsTable.insert(eventContactObj) {
-            (insertedItem, error) in
-            if error != nil {
-                print("Error in inserting an event" + error!.description)
-            } else {
-                print("Inserted event contact: ", String(insertedItem!["id"]))
-            }
-        }
+       
     }
     
     /**
@@ -225,55 +298,17 @@ class AzureDatabase {
             completionHandler(contactID: "", success: false)
         }
     }
-//    func 
-//        let contactCheckPredicate = NSPredicate(format: "phone_number == [c] %@", phoneNumber)
-//        contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
-//            if (error != nil) {
-//                print("Error in retrieval", error!.description)
-//                return
-//            } else if let items = result?.items {
-//                if let item = items.first {
-//                    if let contact = item["id"] as? String {
-//                        self.contactID = contact
-//                    }
-//                }
-//            }
-//            
-//            var contactName = self.contactDirectory.getContactName(phoneNumber);
-//            if let contact = contactName {
-//                var names = contact.characters.split { $0 == " " }.map(String.init)
-//                var firstName = ""
-//                var lastName = ""
-//                if let first = names.first {
-//                    firstName = first
-//                }
-//                if let last = names.last {
-//                    lastName = last
-//                }
-//                self.insertContact(firstName, lastName: lastName, phoneNumber: phoneNumber) { (status, success) in
-//                    if success {
-//                        print(status)
-//                        print("Just inserted user to database, user id: " + self.userID!)
-//                    } else {
-//                        // TODO: print some error code
-//                    }
-//                }
-//            } else {
-//                
-//            }
-//            
-//            
-//                       //            completionHandler(status: "No userID found, inserted user into database", success: false)
-//        }
-//        
-//    }
-    
+
+    /**
+    * Given the event details, this function stores the event in Azure. If no event name (user inputted destination in the search
+    * bar, then the eventName is set as "unknown".
+    * If there is a contact associated with the event, then the event contact table is also updated.
+    */
     func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate, contactName: String?) {
-            var event = ""
+            var event = "unknown"
             if eventName != nil {
                 event = eventName!
             }
-    
             let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
     
             eventTable.insert(eventObj) {
@@ -282,6 +317,7 @@ class AzureDatabase {
                     print("Error in inserting an event" + error!.description)
                 } else {
                     print("Event inserted, id: " + String(insertedItem!["id"]))
+                    print("event contact is ... ", contactName)
                     self.curEventID = String(insertedItem!["id"])
                     if contactName != nil {
                         self.insertEventContact(contactName!)

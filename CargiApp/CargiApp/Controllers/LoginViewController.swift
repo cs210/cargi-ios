@@ -11,7 +11,8 @@ import UIKit
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailTextField: UITextField!
-    
+    lazy var db = AzureDatabase.sharedInstance
+
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         super.viewWillAppear(animated)
@@ -44,6 +45,36 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func loginButtonClicked(sender: UIButton) {
         let email = emailTextField.text
+        if (email == nil) {
+            // TODO: some error message or red error text under the login name
+            // "PLEASE LOGIN?"
+            
+        } else {
+            let emailString = email!
+            if (emailString == "") { // TODO: check if email is a valid format, or valid email. X@Y.Z - external API?
+                // TODO: some error message or red error text under the login name
+                // "PLEASE INPUT A VALID EMAIL"
+                
+            } else {
+                db.emailExists(emailString) { (status, exists) in
+                    if (!exists) { // if email doesn't exist, user needs to sign up
+                        // TODO: some error message or red error text under the login name
+                        // "Looks like you don't have an account yet" ??
+                    } else {
+                        // email exists, but not sure if this actually is the right user
+                        // can call checkEmailLogin, which returns if the email is correct or not. (currently just matching the userID, which is based on deviceID)
+                        self.db.checkEmailLogin(emailString) { (status, correct) in
+                            if (correct) {
+                                // continue to the home screen
+                                
+                            } else {
+                                // print error message about incorrect email login
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /*

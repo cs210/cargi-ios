@@ -31,16 +31,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().idleTimerDisabled = true
         self.client = MSClient(
               applicationURLString:"https://cargi.azurewebsites.net"
-//            applicationURLString:"https://cargiios.azure-mobile.net/",
-//            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
         )
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
+        let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
         if launchedBefore {
             print("Not first launch.")
+            if loggedIn {
+                // TODO: direct to home screen
+            } else {
+                // TODO: direct to login page
+            }
         }
         else {
             print("First launch, setting NSUserDefault.")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
+            // direct to Tutorial Screen?
         }
         return true
     }
