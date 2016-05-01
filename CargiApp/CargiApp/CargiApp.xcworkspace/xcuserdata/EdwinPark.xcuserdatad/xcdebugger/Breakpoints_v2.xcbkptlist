@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "314"
             endingLineNumber = "314"
-            landmarkName = "openAppleMapsLocation(_:)"
+            landmarkName = "openGoogleMapsLocation(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

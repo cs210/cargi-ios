@@ -14,7 +14,7 @@ import EventKit
 import QuartzCore
 import SpeechKit
 
-class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -461,7 +461,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("drawmaps done")
         
         let bounds = GMSCoordinateBounds(path: path)
-        
+        updateCamera(bounds)
+    }
+    
+    private func updateCamera(bounds: GMSCoordinateBounds) {
         // Depending on whether the contact view is hidden or not, we have different bounds.
         var cameraUpdate: GMSCameraUpdate
         if contactView.hidden {
@@ -687,35 +690,137 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
-        //        azureRESTAPITest()
-        print("gas button activated");
-        guard let originLocation = locationManager.location?.coordinate else {
+        let numCheapGasStations = 2
+        let numNearbyGasStations = 2
+        
+        let visibleRegion = self.mapView.projection.visibleRegion()
+        var bounds = GMSCoordinateBounds(coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
+        
+        guard let originLocation = locationManager.location else {
             return
         }
         
-        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        print("origin: \(origin)")
-        gasFinder.getNearbyGas(origin) { (status: String, success: Bool) in
+        let geocoder = LocationGeocoder()
+        geocoder.getPostalCode(originLocation) { (status, success) in
+            print("Postal Code: \(status)")
             if success {
-                print(self.gasFinder.stationName)
-                print(self.gasFinder.coordinates)
-                if self.destLocation != nil {
-                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
-                } else {
-                    self.destLocation = self.gasFinder.address
-                    self.showRoute(showDestMarker: false)
+                guard let postalCode = geocoder.postalCode else { return }
+                print(postalCode)
+                
+                guard let originLocationCoordinates = self.locationManager.location?.coordinate else {
+                    return
                 }
-                let marker = GMSMarker(position: self.gasFinder.coordinates)
-                marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.title = self.gasFinder.stationName
-                marker.icon = UIImage(named: "gasmarker")
-                marker.snippet = self.gasFinder.address
-                marker.map = self.mapView
+                let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
+                
+                self.gasFinder.getNearbyGasStations(origin, count: numNearbyGasStations) { (status: String, success: Bool) in
+                    print("Gas Finder: \(status)")
+                    if success {
+                        let cheapGasFinder = CheapGasFinder()
+                        cheapGasFinder.getCheapGasByPostalCode(postalCode) { (status, success) in
+                            print("Cheap Gas Finder: \(status)")
+                            if success {
+                                for station in self.gasFinder.stations {
+                                    print(station)
+                                    let number = station.address?.componentsSeparatedByString(" ").first
+                                    var priceFound = false
+                                    for cheapStation in cheapGasFinder.stations {
+                                        if number! == cheapStation.number! {
+                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price)
+                                            bounds = bounds.includingCoordinate(station.coordinates!)
+                                            self.updateCamera(bounds)
+                                            priceFound = true
+                                            self.mapView.select
+                                            break
+                                        }
+                                        
+//                                        let locationGeocoder = LocationGeocoder()
+//                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
+//                                            if success {
+//                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
+//                                                marker.appearAnimation = kGMSMarkerAnimationPop
+//                                                marker.title = station.name
+//                                                marker.icon = UIImage(named: "gasmarker")
+//                                                marker.snippet = station.price
+//                                                marker.map = self.mapView
+//                                            }
+//                                        }
+                                    }
+                                    if !priceFound {
+                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address)
+                                        bounds = bounds.includingCoordinate(station.coordinates!)
+                                        self.updateCamera(bounds)
+                                    }
+                                }
+                                
+                                for i in 0..<numCheapGasStations {
+                                    if let cheapStation = cheapGasFinder.stations[safe: i] {
+                                        let locationGeocoder = LocationGeocoder()
+                                        locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
+                                            if success {
+                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price)
+                                                bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
+                                                self.updateCamera(bounds)
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                
+                            }
+                        }
+                    } else {
+                        print("Error: \(status)")
+                    }
+                }
+                
+                
+                
+                
+                
+                
             } else {
-                print("Error: \(status)")
+                print("FAIL")
+                return
             }
         }
+        
+//        guard let originLocationCoordinates = locationManager.location?.coordinate else {
+//            return
+//        }
+//
+//        let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
+//        print("origin: \(origin)")
+//        gasFinder.getNearbyGasStations(origin, count: 0) { (status: String, success: Bool) in
+//            if success {
+//                for station in self.gasFinder.stations {
+//                    let marker = GMSMarker(position: station.coordinates!)
+//                    marker.appearAnimation = kGMSMarkerAnimationPop
+//                    marker.title = station.name
+//                    marker.icon = UIImage(named: "gasmarker")
+//                    marker.snippet = station.address
+//                    marker.map = self.mapView
+//                }
+////                if self.destLocation != nil {
+//////                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
+////                } else {
+////                    self.destLocation = self.gasFinder.address
+//////                    self.showRoute(showDestMarker: false)
+////                }
+//            } else {
+//                print("Error: \(status)")
+//            }
+//        }
     }
+    
+    private func addMapMarker(position: CLLocationCoordinate2D, title: String?, snippet: String?) {
+        let marker = GMSMarker(position: position)
+        marker.appearAnimation = kGMSMarkerAnimationPop
+        marker.title = title
+        marker.icon = UIImage(named: "gasmarker")
+        marker.snippet = snippet
+        marker.map = self.mapView
+    }
+    
     
     /// Send Message Button clicked.
     @IBAction func messageButtonClicked(sender: UIButton?) {
@@ -808,5 +913,12 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
     func wasCancelled(viewController: GMSAutocompleteViewController) {
         print("Autocomplete was cancelled.", terminator: "")
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension CollectionType {
+    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
