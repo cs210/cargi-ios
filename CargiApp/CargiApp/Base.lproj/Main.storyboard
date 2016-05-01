@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -78,7 +78,7 @@
                                                     <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0tA-3s-2DO"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Event Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyH-yY-cEr">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SyH-yY-cEr">
                                                 <rect key="frame" x="30" y="0.0" width="99" height="22"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -429,16 +429,16 @@
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
                             </textField>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="pqY-by-aJy">
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="pqY-by-aJy">
                                 <rect key="frame" x="58" y="533" width="231" height="30"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ena-oI-Wey">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ena-oI-Wey">
                                         <rect key="frame" x="0.0" y="0.0" width="175" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <color key="textColor" red="0.69803921568627447" green="0.69803921568627447" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ga7-4Y-x0I">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ga7-4Y-x0I">
                                         <rect key="frame" x="179" y="0.0" width="52" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                         <state key="normal" title="Sign up.">
@@ -457,6 +457,7 @@
                                     <color key="titleColor" red="0.27843137254901962" green="0.70196078431372544" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="loginButtonClicked:" destination="2LG-iM-AMA" eventType="touchUpInside" id="Xhh-dm-Gvi"/>
                                     <segue destination="BYZ-38-t0r" kind="show" id="ffj-IK-wOg"/>
                                 </connections>
                             </button>
@@ -529,6 +530,7 @@
                                     <color key="titleColor" red="0.2784313725" green="0.70196078429999997" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="signupButtonClicked:" destination="Fmy-ub-3fu" eventType="touchUpInside" id="T6k-9D-OQf"/>
                                     <segue destination="BYZ-38-t0r" kind="show" id="wII-iU-Wh9"/>
                                 </connections>
                             </button>
@@ -576,6 +578,6 @@
         <image name="textbutton.png" width="110" height="75"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ffj-IK-wOg"/>
+        <segue reference="wII-iU-Wh9"/>
     </inferredMetricsTieBreakers>
 </document>

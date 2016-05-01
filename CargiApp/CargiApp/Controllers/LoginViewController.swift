@@ -42,6 +42,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    @IBAction func loginButtonClicked(sender: UIButton) {
+        let email = emailTextField.text
+    }
 
     /*
     // MARK: - Navigation

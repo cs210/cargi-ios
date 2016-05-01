@@ -37,6 +37,11 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
+    @IBAction func signupButtonClicked(sender: UIButton) {
+        let name = nameTextField.text
+        let email = emailTextField.text
+    }
+    
     /*
     // MARK: - Navigation
 
