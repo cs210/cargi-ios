@@ -251,7 +251,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                             if !possibleContactArr.contains(contact) {
                                 possibleContactArr.append(contact)
                             }
-                            if self.contact == nil {
+                            if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
                                 self.contact = contact
                             }
                         }
