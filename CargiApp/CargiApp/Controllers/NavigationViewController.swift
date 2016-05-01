@@ -244,8 +244,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     if (possibleContact) {
                         let contactNumber = contactDirectory.getPhoneNumber(contact)
                         if contactNumber?.count > 0 { //check that the contact actually has a number
-                            possibleContactArr.append(contact)
-                            if self.contact != nil {
+                            if !possibleContactArr.contains(contact) {
+                                possibleContactArr.append(contact)
+                            }
+                            if self.contact == nil {
                                 self.contact = contact
                             }
                         }
