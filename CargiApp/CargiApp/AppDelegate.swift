@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
         )
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
-        if launchedBefore  {
+        if launchedBefore {
             print("Not first launch.")
         }
         else {
