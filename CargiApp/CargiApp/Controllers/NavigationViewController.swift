@@ -202,6 +202,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let contacts = contactDirectory.getAllPhoneNumbers()
         print("contacts size: ", contacts.count)
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
+        var stopWords = ["the", "a", "by", "and", "or", "with"]
 
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
@@ -214,24 +215,41 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 possibleContact = false;
                 print(contact)
                 let contactsArr = contact.componentsSeparatedByString(" ")
+                print("size of contact: ", contactsArr.count)
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                if ev.title.rangeOfString(contact) != nil || ev.title.rangeOfString(firstName) != nil {
+                if ev.title.rangeOfString(contact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
                         possibleContact = true;
                     }
                 }
-                if (lastName != nil) {
-                    if ev.title.rangeOfString(lastName!) != nil {
+                if (contactsArr.count <= 3) {
+                    var notStopWord = true
+                    if stopWords.contains(firstName){
+                        notStopWord = false
+                    }
+                    if ev.title.rangeOfString(firstName) != nil && notStopWord {
                         if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                             self.contact = contact
                             possibleContact = true;
                         }
                     }
-                }
-                if (possibleContact) {
-                    possibleContactArr.append(contact)
+                    if (lastName != nil) {
+                        var notStopWordL = true
+                        if stopWords.contains(lastName!){
+                            notStopWordL = false
+                        }
+                        if ev.title.rangeOfString(lastName!) != nil && notStopWordL {
+                            if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                                self.contact = contact
+                                possibleContact = true;
+                            }
+                        }
+                    }
+                    if (possibleContact) {
+                        possibleContactArr.append(contact)
+                    }
                 }
             }
             print(possibleContactArr)
