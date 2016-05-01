@@ -90,7 +90,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     var distanceTasks = DistanceMatrixTasks()
     
-    
+    lazy var db = AzureDatabase()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -140,31 +141,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         mapView.settings.compassButton = true
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let client = delegate.client!
-        let item = ["text":"Awesome item"]
-        let itemTable = client.tableWithName("TodoItem")
-        itemTable.insert(item) {
-            (insertedItem, error) in
-            if error != nil{
-                print("Error" + error!.description);
+
+        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+
+        db.initializeUserID(deviceID) { (status, success) in
+            if (success) {
+                print("initialized user id:", self.db.userID!)
             } else {
-                print("Item inserted, id: " + String(insertedItem!["id"]))
+                print(status)
             }
         }
-
-//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-
-//        let db = AzureDatabase()
-//        db.initializeUserID(deviceID) { (status, success) in
-//            if (success) {
-//                print(db.userID)
-//                
-//            } else {
-//                print(status)
-//            }
-//            
-//        }
+        
+        
         
         resetData()
         syncData()
