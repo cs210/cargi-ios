@@ -74,7 +74,6 @@ class DirectionTasks {
         if let waypointsString = waypoints?.joinWithSeparator("|") {
             waypoint = "waypoints=\(waypointsString)"
         }
-        print(waypoint)
         
         // URL for making request to the Google Directions API.
         let requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&\(waypoint)&key=\(APIKey)"
