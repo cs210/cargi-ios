@@ -219,9 +219,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
                 var eventTitle = ev.title.lowercaseString
+                var eventTitleArr = eventTitle.componentsSeparatedByString(" ")
                 if eventTitle.rangeOfString(lowerContact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                        self.contact = contact
                         possibleContact = true;
                     }
                 }
@@ -230,9 +230,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     if stopWords.contains(firstName){
                         notStopWord = false
                     }
-                    if eventTitle.rangeOfString(firstName) != nil && notStopWord {
+                    if eventTitleArr.contains(firstName) && notStopWord {
                         if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                            self.contact = contact
                             possibleContact = true;
                         }
                     }
@@ -241,9 +240,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         if stopWords.contains(lastName!){
                             notStopWordL = false
                         }
-                        if eventTitle.rangeOfString(lastName!) != nil && notStopWordL {
+                        if eventTitleArr.contains(lastName!) && notStopWordL {
                             if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                                self.contact = contact
                                 possibleContact = true;
                             }
                         }
@@ -252,6 +250,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         let contactNumber = contactDirectory.getPhoneNumber(contact)
                         if contactNumber?.count > 0 { //check that the contact actually has a number
                             possibleContactArr.append(contact)
+                            self.contact = contact
                         }
                     }
                 }
