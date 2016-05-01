@@ -197,39 +197,40 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         mapView.clear()
     }
     
+    func createStopWords() -> Array<String> {
+        return ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
+    }
+    
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
         let contacts = contactDirectory.getAllPhoneNumbers()
-        print("contacts size: ", contacts.count)
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
-        var stopWords = ["the", "a", "by", "and", "or", "with"]
+        let stopWords = createStopWords()
 
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
             self.currentEvent = ev
-            print ("Printing the Next Event");
-            print(ev)
             var possibleContactArr: [String] = []
             var possibleContact = false;
             for contact in contacts.keys {
                 possibleContact = false;
-                print(contact)
-                let contactsArr = contact.componentsSeparatedByString(" ")
-                print("size of contact: ", contactsArr.count)
+                let lowerContact = contact.lowercaseString
+                var contactsArr = lowerContact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                if ev.title.rangeOfString(contact) != nil {
+                var eventTitle = ev.title.lowercaseString
+                if eventTitle.rangeOfString(lowerContact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         self.contact = contact
                         possibleContact = true;
                     }
                 }
-                if (contactsArr.count <= 3) {
+                if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
                     var notStopWord = true
                     if stopWords.contains(firstName){
                         notStopWord = false
                     }
-                    if ev.title.rangeOfString(firstName) != nil && notStopWord {
+                    if eventTitle.rangeOfString(firstName) != nil && notStopWord {
                         if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                             self.contact = contact
                             possibleContact = true;
@@ -240,7 +241,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         if stopWords.contains(lastName!){
                             notStopWordL = false
                         }
-                        if ev.title.rangeOfString(lastName!) != nil && notStopWordL {
+                        if eventTitle.rangeOfString(lastName!) != nil && notStopWordL {
                             if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                                 self.contact = contact
                                 possibleContact = true;
@@ -248,7 +249,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         }
                     }
                     if (possibleContact) {
-                        possibleContactArr.append(contact)
+                        let contactNumber = contactDirectory.getPhoneNumber(contact)
+                        if contactNumber?.count > 0 { //check that the contact actually has a number
+                            possibleContactArr.append(contact)
+                        }
                     }
                 }
             }
