@@ -68,11 +68,14 @@ class AzureDatabase {
                 if success {
                     print(status)
                     print("Just inserted user to database, user id: " + self.userID!)
+                    completionHandler(status: "Created new user and inserted into database", success: true)
+                    return
                 } else {
                     // TODO: print some error code
+                    completionHandler(status: "Failed to create new user", success: false)
+
                 }
             }
-            completionHandler(status: "No userID found, inserted user into database", success: true)
         }
     }
     
