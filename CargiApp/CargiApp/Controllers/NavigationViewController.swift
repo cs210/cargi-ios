@@ -197,6 +197,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 
         for ev in events {
             guard let _ = ev.location else { continue } // ignore event if it has no location info.
+            if (ev.allDay) { continue }
             self.currentEvent = ev
             var possibleContactArr: [String] = []
             var possibleContact = false;
