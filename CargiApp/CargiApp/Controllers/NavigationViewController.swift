@@ -212,14 +212,34 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             self.currentEvent = ev
             var possibleContactArr: [String] = []
             var possibleContact = false;
+            let eventTitle = ev.title.lowercaseString
+            let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+            
+            //find event attendees
+            let eventAttendees = ev.attendees
+            var attendeeNames: [String] = []
+            for participant in eventAttendees! {
+                var name = participant.name
+                name = name?.lowercaseString
+                attendeeNames.append(name!)
+            }
+            print("eventAttendees")
+            print(eventAttendees)
+            
+            
             for contact in contacts.keys {
                 possibleContact = false;
                 let lowerContact = contact.lowercaseString
                 var contactsArr = lowerContact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                var eventTitle = ev.title.lowercaseString
-                var eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+                
+                //Search through Attendees List for Contact
+                if attendeeNames.contains(lowerContact) {
+                    possibleContact = true;
+                }
+                
+                //Search through Event Title for Contact
                 if eventTitle.rangeOfString(lowerContact) != nil {
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
                         possibleContact = true;
