@@ -82,7 +82,7 @@
         <!--Navigation View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="NavigationViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainScreenVC" id="BYZ-38-t0r" customClass="NavigationViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -493,7 +493,7 @@
         <!--Tutorial View Controller-->
         <scene sceneID="eoM-m2-kLz">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="mWW-t2-dhj" customClass="TutorialViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="TutorialScreenVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="mWW-t2-dhj" customClass="TutorialViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a4F-hp-bIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-102" y="-444"/>
@@ -501,7 +501,7 @@
         <!--Login View Controller-->
         <scene sceneID="0K3-qa-dMj">
             <objects>
-                <viewController id="2LG-iM-AMA" customClass="LoginViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginScreenVC" id="2LG-iM-AMA" customClass="LoginViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mwW-4d-S6Z"/>
                         <viewControllerLayoutGuide type="bottom" id="o27-Xi-hyl"/>
