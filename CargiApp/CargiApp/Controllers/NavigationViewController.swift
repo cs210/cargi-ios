@@ -211,24 +211,25 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             self.currentEvent = ev
             var possibleContactArr: [String] = []
             var possibleContact = false;
+            let eventTitle = ev.title.lowercaseString
+            let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+            
             for contact in contacts.keys {
                 possibleContact = false;
                 let lowerContact = contact.lowercaseString
                 var contactsArr = lowerContact.componentsSeparatedByString(" ")
                 let firstName = contactsArr[0]
                 let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-                let eventTitle = ev.title.lowercaseString
-                let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+
                 
-                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name
+                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
                     if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                        possibleContact = true;
                         let contactNumber = contactDirectory.getPhoneNumber(contact)
-                        if contactNumber?.count > 0 { //check that the contact actually has a number
+                        if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
                             possibleContactArr.append(contact)
                             self.contact = contact
+                            break
                         }
-
                     }
                 }
                 if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
@@ -236,32 +237,24 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     if stopWords.contains(firstName){
                         notStopWord = false
                     }
-                    if eventTitleArr.contains(firstName) && notStopWord {
-                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                            possibleContact = true;
-                        }
-                    }
+                    var notStopWordL = true
                     if (lastName != nil) {
-                        var notStopWordL = true
                         if stopWords.contains(lastName!){
                             notStopWordL = false
                         }
-                        if eventTitleArr.contains(lastName!) && notStopWordL {
-                            if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                                possibleContact = true;
-                            }
-                        }
                     }
-                    if (possibleContact) {
-                        let contactNumber = contactDirectory.getPhoneNumber(contact)
-                        if contactNumber?.count > 0 { //check that the contact actually has a number
-                            if !possibleContactArr.contains(contact) {
+                    else { notStopWordL = false }
+                    
+                    if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
+                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                            let contactNumber = contactDirectory.getPhoneNumber(contact)
+                            if contactNumber?.count > 0 { //check that the contact actually has a number
                                 possibleContactArr.append(contact)
-                            }
-                            if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
-                                //should insert some check here with the database for frequently contacted people - so you have a better guess
-                                //maybe first name is better than matching last name
-                                self.contact = contact
+                                if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
+                                    //should insert some check here with the database for frequently contacted people - so you have a better guess
+                                    //maybe first name is better than matching last name
+                                    self.contact = contact
+                                }
                             }
                         }
                     }
