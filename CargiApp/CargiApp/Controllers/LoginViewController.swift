@@ -48,26 +48,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if (email == nil) {
             // TODO: some error message or red error text under the login name
             // "PLEASE LOGIN?"
-            
+            showAlertViewController(title: "Error", message: "Email is invalid.")
         } else {
             let emailString = email!
             if (!db.validateEmail(emailString)) {
                 // TODO: some error message or red error text under the login name, if we know it's an invalid email
                 // can also do nothing, unless we want a better UX (let users know they have a typo for instance)
+                showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
             } else {
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user needs to sign up
                         // TODO: some error message or red error text under the login name
                         // "Looks like you don't have an account yet" ??
+                        self.showAlertViewController(title: "Login Failed", message: "An account does not exist with this email.")
                     } else {
                         // email exists, but not sure if this actually is the right user
                         // can call checkEmailLogin, which returns if the email is correct or not. (currently just matching the userID, which is based on deviceID)
                         self.db.checkEmailLogin(emailString) { (status, correct) in
                             if (correct) {
                                 // continue to the home screen
-                                
+                                self.performSegueWithIdentifier("login", sender: nil)
                             } else {
                                 // print error message about incorrect email login
+                                self.showAlertViewController(title: "Login Failed", message: "Login information entered is not correct.")
                             }
                         }
                     }

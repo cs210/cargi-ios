@@ -213,8 +213,13 @@ class AzureDatabase {
                 completionHandler(status: error!.description, exists: false)
                 return
             } else if result != nil {
-                completionHandler(status: "Email exists", exists: true)
-                return
+                if let items = result?.items {
+                    if let _ = items.first {
+                        completionHandler(status: "Email exists", exists: true)
+                        return
+                    }
+                }
+                completionHandler(status: "Email does not exist", exists: false)
             } else {
                 completionHandler(status: "Email does not exist", exists: false)
             }
@@ -378,6 +383,25 @@ class AzureDatabase {
             }
         }
     }
+    
+    /*
+    * Creates new user with email & name, and initializes user ID
+    */
+    func createUser(deviceID: String, email: String, fullname: String, completionHandler: (status: String, success: Bool) -> Void) {
+        let user = ["device_id": deviceID, "name": fullname, "email": email]
+        userTable.insert(user) {
+            (insertedItem, error) in
+            if error != nil {
+                print("Error" + error!.description);
+                completionHandler(status: error!.description, success: false)
+            } else {
+                print("Item inserted, id: " + String(insertedItem!["id"]))
+                self.userID = String(insertedItem!["id"])
+                completionHandler(status: "User inserted into database", success: true)
+            }
+        }
+    }
+    
     
     /**
      * Function that populates the location_history table with some dummy data, to test out our machine learning backend code.

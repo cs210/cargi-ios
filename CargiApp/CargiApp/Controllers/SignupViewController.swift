@@ -54,11 +54,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user can use this email to sign up with
                         print("Email does not exist yet, signing up")
-                        self.db.updateUserData(nameString, email: emailString)
+                        self.db.createUser(UIDevice.currentDevice().identifierForVendor!.UUIDString, email: emailString, fullname: nameString) { (status, success) in
+                            
+                        }
                         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
                         
                         // TODO: REDIRECT TO HOME SCREEN
-                        self.showAlertViewController(title: "Success", message: "A new account has been created.")
+                        self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
+                            self.performSegueWithIdentifier("signup", sender: nil)
+                        }
                     } else {
                         // email exists
                         print("Account already exists with this email!")
@@ -72,26 +76,21 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             } else {
                 // TODO: some error message or red error text under the login name
                 // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
-                showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
+                showAlertViewController(title: "Error", message: "Please input a valid email or name.")
             }
         }
     }
     
-    func showAlertViewController(title title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
-        alert.addAction(alertAction)
-        presentViewController(alert, animated: true, completion: nil)
-    }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        segue.destinationViewController
     }
-    */
 
 }
+
+

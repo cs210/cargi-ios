@@ -29,7 +29,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     var destLabel: UILabel?
     var addrLabel: UILabel?
-    @IBOutlet weak var eventLabel: UILabel!
+    
     @IBOutlet weak var destinationView: UIView!
     
     @IBOutlet weak var callButton: UIButton!
@@ -40,6 +40,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var navigateButton: UIButton!
+    @IBOutlet weak var currentEventButton: UIButton!
     
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactView: UIView!
@@ -63,7 +64,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
         didSet {
-            eventLabel.text = currentEvent?.title
+            currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
         }
     }
     
@@ -104,6 +105,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         contactView.hidden = true
         refreshButton.contentEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
         navigateButton.contentEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20)
@@ -187,9 +189,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Reset Data
     func resetData() {
         self.contact = nil
-        self.eventLabel.text = nil
+//        self.eventLabel.text = nil
 //        self.destLabel.text = nil
 //        self.addrLabel.text = nil
+        self.currentEventButton.setTitle(nil, forState: .Normal)
         self.destLocation = nil
         self.destinationName = nil
         mapView.clear()
@@ -200,12 +203,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let contacts = contactDirectory.getAllPhoneNumbers()
         
         var possibleContactArr: [String] = []
-        var possibleContact = false
         let eventTitle = ev.title.lowercaseString
         let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
         
         for contact in contacts.keys {
-            possibleContact = false
             let lowerContact = contact.lowercaseString
             var contactsArr = lowerContact.componentsSeparatedByString(" ")
             let firstName = contactsArr[0]
@@ -721,13 +722,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
-    func showAlertViewController(title title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
-        alert.addAction(alertAction)
-        presentViewController(alert, animated: true, completion: nil)
-    }
-    
     
     // MARK: IBAction Methods
     
@@ -1012,5 +1006,21 @@ extension CollectionType {
     /// Returns the element at the specified index iff it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Generator.Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension UIViewController {
+    func showAlertViewController(title title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertViewControllerWithHandler(title title: String?, message: String?, handler: ((action: UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: handler)
+        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
     }
 }

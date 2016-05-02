@@ -43,9 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Not first launch.")
             if loggedIn {
                 // TODO: direct to home screen
+                print("you're logged in")
             } else {
                 // TODO: direct to login page
-                initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")
+                print("you're not logged in")
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("loginController")
             }
         }
         else {
