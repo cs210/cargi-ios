@@ -14,7 +14,7 @@ import EventKit
 import QuartzCore
 import SpeechKit
 
-class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -46,6 +46,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet var contactView: UIView!
     @IBOutlet var contactLabel: UILabel!
 
+    @IBOutlet weak var picker: UIPickerView!
+    var pickerData: [String] = [String]()
+    
     @IBOutlet weak var voiceButton: UIButton!
     
     // MARK: Variables
@@ -107,8 +110,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         // Do any additional setup after loading the view.
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         contactView.hidden = true
+        
+        self.picker.delegate = self
+        self.picker.dataSource = self
+        
         refreshButton.contentEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
         navigateButton.contentEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20)
+        
         destMarker.icon = UIImage(named: "destination_icon")
         
         view.sendSubviewToBack(dashboardView)
@@ -252,6 +260,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
         print(possibleContactArr)
+        self.pickerData = possibleContactArr
         
         contactNumbers = contactDirectory.getPhoneNumber(contact)
         db.insertEvent(dbEvent.name, latitude: dbEvent.latitude, longitude: dbEvent.longitude, dateTime: dbEvent.dateTime, contactName: self.contact)
@@ -723,6 +732,27 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     
+    
+    // MARK: UIPicker Delegate Methods
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selected = pickerData[row]
+        print(selected)
+    }
+    
+    
     // MARK: IBAction Methods
     
     /// Refresh Button Clicked
@@ -929,6 +959,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(appURL)
             UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
         }
+    }
+    
+    @IBAction func changeButtonClicked(sender: UIButton) {
+        self.view.addSubview(picker)
     }
     
     /// Opens the music app of preference, using deep-linking.

@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 // TODO: direct to login page
                 print("you're not logged in")
-                initialViewController = storyboard.instantiateViewControllerWithIdentifier("loginController")
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
             }
         }
         else {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -8,6 +8,7 @@
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
@@ -166,6 +167,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Djw-Nl-X5i">
+                                <rect key="frame" x="0.0" y="192" width="600" height="216"/>
+                            </pickerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fh9-vp-964" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
@@ -203,7 +207,8 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a8-Sj-Rst">
                                         <rect key="frame" x="8" y="0.0" width="528" height="40"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" image="calendar-icon.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -321,6 +326,16 @@
                                             <action selector="messageButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eKs-Ad-Nak"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Tw-XY-1Ke">
+                                        <rect key="frame" x="271" y="55" width="59" height="29"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                        <state key="normal" title="CHANGE">
+                                            <color key="titleColor" red="0.69803921570000005" green="0.69803921570000005" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changeButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wqP-Qd-3d5"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -332,11 +347,13 @@
                                     <constraint firstItem="4hR-U5-77R" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="Kqa-Z9-b6e"/>
                                     <constraint firstItem="ZBc-OW-OoQ" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="XcK-tB-WPL"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="width" secondItem="ZBc-OW-OoQ" secondAttribute="width" id="i5p-Rj-9lM"/>
+                                    <constraint firstItem="5Tw-XY-1Ke" firstAttribute="centerX" secondItem="y5y-9a-hur" secondAttribute="centerX" id="jUk-zc-Kzf"/>
                                     <constraint firstAttribute="trailing" secondItem="sVK-fw-bF5" secondAttribute="trailing" id="mt3-lR-w5K"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="leading" secondItem="4hR-U5-77R" secondAttribute="trailing" id="nXV-Gu-a6j"/>
                                     <constraint firstAttribute="height" constant="120" id="ocZ-G7-zaP"/>
                                     <constraint firstItem="sVK-fw-bF5" firstAttribute="centerY" secondItem="y5y-9a-hur" secondAttribute="centerY" id="u28-ol-JsD"/>
                                     <constraint firstItem="4hR-U5-77R" firstAttribute="trailing" secondItem="sVK-fw-bF5" secondAttribute="trailing" id="z6s-Cr-HS3"/>
+                                    <constraint firstItem="5Tw-XY-1Ke" firstAttribute="top" secondItem="4hR-U5-77R" secondAttribute="bottom" id="zKw-Pg-hRN"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -465,6 +482,7 @@
                         <outlet property="mapView" destination="Fh9-vp-964" id="U6v-1H-Rxc"/>
                         <outlet property="musicButton" destination="6G2-NS-cp7" id="ltY-XG-qqX"/>
                         <outlet property="navigateButton" destination="9uc-ug-Rq5" id="8Vw-b5-ctJ"/>
+                        <outlet property="picker" destination="Djw-Nl-X5i" id="CO3-ce-Itv"/>
                         <outlet property="refreshButton" destination="x8s-Be-dRK" id="91u-V4-AtN"/>
                         <outlet property="searchButton" destination="0Vg-cB-gXm" id="qdD-y9-bxQ"/>
                         <outlet property="settingsButton" destination="8z5-tD-rqd" id="AZB-Ut-wLe"/>
@@ -592,10 +610,10 @@
             </objects>
             <point key="canvasLocation" x="-930" y="-1072"/>
         </scene>
-        <!--loginController-->
+        <!--Login-->
         <scene sceneID="0K3-qa-dMj">
             <objects>
-                <viewController storyboardIdentifier="LoginScreenVC" title="loginController" id="2LG-iM-AMA" customClass="LoginViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginScreenVC" title="Login" id="2LG-iM-AMA" customClass="LoginViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mwW-4d-S6Z"/>
                         <viewControllerLayoutGuide type="bottom" id="o27-Xi-hyl"/>
@@ -678,13 +696,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wsD-bM-BSa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Dos-aU-dgY" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="666" y="-444"/>
         </scene>
-        <!--Signup View Controller-->
+        <!--Signup-->
         <scene sceneID="BtR-lV-c1N">
             <objects>
-                <viewController id="Fmy-ub-3fu" customClass="SignupViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Signup" id="Fmy-ub-3fu" customClass="SignupViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bkx-Gj-AXY"/>
                         <viewControllerLayoutGuide type="bottom" id="j4o-k7-zvs"/>
@@ -738,7 +757,7 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="2LG-iM-AMA" kind="show" id="X63-c2-1r4"/>
+                                            <segue destination="Dos-aU-dgY" kind="unwind" unwindAction="returnToLoginViewController:" id="2M7-1n-6if"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -794,7 +813,6 @@
         <image name="textbutton.png" width="110" height="75"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MyH-Ys-aGa"/>
-        <segue reference="X63-c2-1r4"/>
+        <segue reference="ew2-US-zHJ"/>
     </inferredMetricsTieBreakers>
 </document>
