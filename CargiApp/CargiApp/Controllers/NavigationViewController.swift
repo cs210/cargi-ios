@@ -200,12 +200,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let contacts = contactDirectory.getAllPhoneNumbers()
         
         var possibleContactArr: [String] = []
-        var possibleContact = false
         let eventTitle = ev.title.lowercaseString
         let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
         
         for contact in contacts.keys {
-            possibleContact = false
             let lowerContact = contact.lowercaseString
             var contactsArr = lowerContact.componentsSeparatedByString(" ")
             let firstName = contactsArr[0]
