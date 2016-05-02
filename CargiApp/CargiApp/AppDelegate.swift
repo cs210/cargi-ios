@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // TODO: direct to home screen
             } else {
                 // TODO: direct to login page
-                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")
             }
         }
         else {
