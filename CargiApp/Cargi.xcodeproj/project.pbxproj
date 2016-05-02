@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D8D9CE1E4323107188D46 /* libPods.a */; };
 		630A71711CD711E50045D8BF /* refreshbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71701CD711E50045D8BF /* refreshbutton@2x.png */; };
-		630A71731CD712780045D8BF /* screen1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71721CD712780045D8BF /* screen1@2x.png */; };
-		630A71771CD715AB0045D8BF /* screen2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71741CD715AB0045D8BF /* screen2@2x.png */; };
-		630A71781CD715AB0045D8BF /* screen3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71751CD715AB0045D8BF /* screen3@2x.png */; };
-		630A71791CD715AB0045D8BF /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71761CD715AB0045D8BF /* screen4@2x.png */; };
 		630A717D1CD747610045D8BF /* EventPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630A717C1CD747610045D8BF /* EventPickerViewController.swift */; };
+		630A71821CD757E00045D8BF /* screen1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A717E1CD757E00045D8BF /* screen1@2x.png */; };
+		630A71831CD757E00045D8BF /* screen2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A717F1CD757E00045D8BF /* screen2@2x.png */; };
+		630A71841CD757E00045D8BF /* screen3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71801CD757E00045D8BF /* screen3@2x.png */; };
+		630A71851CD757E00045D8BF /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71811CD757E00045D8BF /* screen4@2x.png */; };
 		630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */; };
 		636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E01CCBF7A0006D2936 /* callbutton@2x.png */; };
 		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
@@ -65,11 +65,11 @@
 /* Begin PBXFileReference section */
 		4058D7172640D24468A6E9E5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		630A71701CD711E50045D8BF /* refreshbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refreshbutton@2x.png"; sourceTree = "<group>"; };
-		630A71721CD712780045D8BF /* screen1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen1@2x.png"; sourceTree = "<group>"; };
-		630A71741CD715AB0045D8BF /* screen2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen2@2x.png"; sourceTree = "<group>"; };
-		630A71751CD715AB0045D8BF /* screen3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen3@2x.png"; sourceTree = "<group>"; };
-		630A71761CD715AB0045D8BF /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
 		630A717C1CD747610045D8BF /* EventPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventPickerViewController.swift; path = ../EventPickerViewController.swift; sourceTree = "<group>"; };
+		630A717E1CD757E00045D8BF /* screen1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen1@2x.png"; sourceTree = "<group>"; };
+		630A717F1CD757E00045D8BF /* screen2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen2@2x.png"; sourceTree = "<group>"; };
+		630A71801CD757E00045D8BF /* screen3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen3@2x.png"; sourceTree = "<group>"; };
+		630A71811CD757E00045D8BF /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
 		630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		636E32E01CCBF7A0006D2936 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
@@ -263,10 +263,10 @@
 			isa = PBXGroup;
 			children = (
 				74A3D8F31C91523D0053D816 /* launchimage@2x.png */,
-				630A71721CD712780045D8BF /* screen1@2x.png */,
-				630A71741CD715AB0045D8BF /* screen2@2x.png */,
-				630A71751CD715AB0045D8BF /* screen3@2x.png */,
-				630A71761CD715AB0045D8BF /* screen4@2x.png */,
+				630A717E1CD757E00045D8BF /* screen1@2x.png */,
+				630A717F1CD757E00045D8BF /* screen2@2x.png */,
+				630A71801CD757E00045D8BF /* screen3@2x.png */,
+				630A71811CD757E00045D8BF /* screen4@2x.png */,
 				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
 				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
 			);
@@ -335,7 +335,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				630A71781CD715AB0045D8BF /* screen3@2x.png in Resources */,
+				630A71841CD757E00045D8BF /* screen3@2x.png in Resources */,
 				630A71711CD711E50045D8BF /* refreshbutton@2x.png in Resources */,
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
 				636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */,
@@ -346,7 +346,7 @@
 				747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */,
 				74A3D8F01C9127020053D816 /* gas-button@2x.png in Resources */,
 				74A2E6091C7FCD6F00C468CC /* Podfile in Resources */,
-				630A71731CD712780045D8BF /* screen1@2x.png in Resources */,
+				630A71821CD757E00045D8BF /* screen1@2x.png in Resources */,
 				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
@@ -357,7 +357,7 @@
 				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
-				630A71771CD715AB0045D8BF /* screen2@2x.png in Resources */,
+				630A71831CD757E00045D8BF /* screen2@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
 				74A3D8F21C9127020053D816 /* text-button@2x.png in Resources */,
 				740354161CD5F95200155433 /* gasmarker@2x.png in Resources */,
@@ -366,7 +366,7 @@
 				74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */,
 				74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
-				630A71791CD715AB0045D8BF /* screen4@2x.png in Resources */,
+				630A71851CD757E00045D8BF /* screen4@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
