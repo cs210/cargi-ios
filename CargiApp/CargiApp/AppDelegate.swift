@@ -32,27 +32,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.client = MSClient(
               applicationURLString:"https://cargi.azurewebsites.net"
         )
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
         let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
+        
         if launchedBefore {
             print("Not first launch.")
             if loggedIn {
                 // TODO: direct to home screen
-                
             } else {
                 // TODO: direct to login page
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
             }
         }
         else {
             print("First launch, setting NSUserDefault.")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
+            
             // direct to Tutorial Screen?
+            initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")
         }
-        //return true
+        
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
         
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
         pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
+        
+        
+
+        
         
         return true
     }
