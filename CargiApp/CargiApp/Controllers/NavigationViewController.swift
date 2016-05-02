@@ -195,80 +195,137 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         mapView.clear()
     }
     
-    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
-    func syncData() {
+    private func suggestContact(event: EKEvent?, dbEvent: DBEvent) {
+        guard let ev = event else { return }
         let contacts = contactDirectory.getAllPhoneNumbers()
-        guard let events = eventDirectory.getAllCalendarEvents() else { return }
-
-        for ev in events {
-            guard let _ = ev.location else { continue } // ignore event if it has no location info.
-            if (ev.allDay) { continue }
-            self.currentEvent = ev
-            var possibleContactArr: [String] = []
-            var possibleContact = false;
-            let eventTitle = ev.title.lowercaseString
-            let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+        
+        var possibleContactArr: [String] = []
+        let eventTitle = ev.title.lowercaseString
+        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+        
+        for contact in contacts.keys {
+            let lowerContact = contact.lowercaseString
+            var contactsArr = lowerContact.componentsSeparatedByString(" ")
+            let firstName = contactsArr[0]
+            let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
             
-            for contact in contacts.keys {
-                possibleContact = false;
-                let lowerContact = contact.lowercaseString
-                var contactsArr = lowerContact.componentsSeparatedByString(" ")
-                let firstName = contactsArr[0]
-                let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-
-                
-                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
-                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                        let contactNumber = contactDirectory.getPhoneNumber(contact)
-                        if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
-                            possibleContactArr.append(contact)
-                            self.contact = contact
-                            break
-                        }
+            
+            if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
+                if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                    let contactNumber = contactDirectory.getPhoneNumber(contact)
+                    if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
+                        possibleContactArr.append(contact)
+                        self.contact = contact
+                        break
                     }
                 }
-                if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
-                    var notStopWord = true
-                    if stopWords.contains(firstName){
-                        notStopWord = false
+            }
+            if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
+                var notStopWord = true
+                if stopWords.contains(firstName){
+                    notStopWord = false
+                }
+                var notStopWordL = true
+                if (lastName != nil) {
+                    if stopWords.contains(lastName!){
+                        notStopWordL = false
                     }
-                    var notStopWordL = true
-                    if (lastName != nil) {
-                        if stopWords.contains(lastName!){
-                            notStopWordL = false
-                        }
-                    }
-                    else { notStopWordL = false }
-                    
-                    if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
-                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-                            let contactNumber = contactDirectory.getPhoneNumber(contact)
-                            if contactNumber?.count > 0 { //check that the contact actually has a number
-                                possibleContactArr.append(contact)
-                                if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
-                                    //should insert some check here with the database for frequently contacted people - so you have a better guess
-                                    //maybe first name is better than matching last name
-                                    self.contact = contact
-                                }
+                }
+                else { notStopWordL = false }
+                
+                if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
+                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                        let contactNumber = contactDirectory.getPhoneNumber(contact)
+                        if contactNumber?.count > 0 { //check that the contact actually has a number
+                            possibleContactArr.append(contact)
+                            if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
+                                //should insert some check here with the database for frequently contacted people - so you have a better guess
+                                //maybe first name is better than matching last name
+                                self.contact = contact
                             }
                         }
                     }
                 }
             }
-            print(possibleContactArr)
-            
-            if contact != nil { break }
         }
+        print(possibleContactArr)
         
-        if contact == nil {
-            for ev in events {
-                if !ev.allDay {
+        contactNumbers = contactDirectory.getPhoneNumber(contact)
+        db.insertEvent(dbEvent.name, latitude: dbEvent.latitude, longitude: dbEvent.longitude, dateTime: dbEvent.dateTime, contactName: self.contact)
+    }
+    
+    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
+    func syncData() {
+        self.currentEvent = nil
+        
+        guard let events = eventDirectory.getAllCalendarEvents() else { return }
+//        for ev in events {
+//            guard let _ = ev.location else { continue } // ignore event if it has no location info.
+//            if (ev.allDay) { continue }
+//            self.currentEvent = ev
+//            
+//            for contact in contacts.keys {
+//                possibleContact = false
+//                let lowerContact = contact.lowercaseString
+//                var contactsArr = lowerContact.componentsSeparatedByString(" ")
+//                let firstName = contactsArr[0]
+//                let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
+//
+//                
+//                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
+//                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+//                        let contactNumber = contactDirectory.getPhoneNumber(contact)
+//                        if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
+//                            possibleContactArr.append(contact)
+//                            self.contact = contact
+//                            break
+//                        }
+//                    }
+//                }
+//                if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
+//                    var notStopWord = true
+//                    if stopWords.contains(firstName){
+//                        notStopWord = false
+//                    }
+//                    var notStopWordL = true
+//                    if (lastName != nil) {
+//                        if stopWords.contains(lastName!){
+//                            notStopWordL = false
+//                        }
+//                    }
+//                    else { notStopWordL = false }
+//                    
+//                    if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
+//                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+//                            let contactNumber = contactDirectory.getPhoneNumber(contact)
+//                            if contactNumber?.count > 0 { //check that the contact actually has a number
+//                                possibleContactArr.append(contact)
+//                                if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
+//                                    //should insert some check here with the database for frequently contacted people - so you have a better guess
+//                                    //maybe first name is better than matching last name
+//                                    self.contact = contact
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            print(possibleContactArr)
+//            
+//            if contact != nil { break }
+//        }
+        
+        for ev in events {
+            if !ev.allDay {
+                if ev.location != nil {
                     self.currentEvent = ev
+                    break
+                }
+                if currentEvent == nil {
+                    currentEvent = ev
                 }
             }
         }
-        
-        contactNumbers = contactDirectory.getPhoneNumber(contact)
 
         guard let ev = currentEvent else { return }
         print(ev.eventIdentifier)
@@ -308,11 +365,27 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         let latitudeNum = NSNumber(double: destCoordinates.latitude)
         let longitudeNum = NSNumber(double: destCoordinates.longitude)
-
-        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime, contactName: self.contact)
+        
+        let dbEvent = DBEvent(name: ev.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
+        
+        suggestContact(ev, dbEvent: dbEvent)
         //        db.insertEvent()
         //        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
 
+    }
+    
+    struct DBEvent {
+        var name: String?
+        var latitude: NSNumber
+        var longitude: NSNumber
+        var dateTime: NSDate
+        
+        init(name: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
+            self.name = name
+            self.latitude = latitude
+            self.longitude = longitude
+            self.dateTime = dateTime
+        }
     }
 
     /**
@@ -913,7 +986,6 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
 //        self.destLabel.text = place.name
         self.searchButton.setTitle(place.name, forState: .Normal)
 //        self.addrLabel.text = place.formattedAddress
-        self.eventLabel.text = nil
         self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
 //        let marker = GMSMarker(position: place.coordinate)
