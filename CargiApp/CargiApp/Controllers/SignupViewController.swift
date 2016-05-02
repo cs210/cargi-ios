@@ -13,6 +13,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     
+    lazy var db = AzureDatabase.sharedInstance
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.nameTextField.delegate = self
@@ -40,6 +42,36 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     @IBAction func signupButtonClicked(sender: UIButton) {
         let name = nameTextField.text
         let email = emailTextField.text
+        
+        if (email == nil || name == nil) {
+            // TODO: some error message or red error text under the login name
+            // "PLEASE ENTER A NAME OR EMAIL" // can also make this more fine-grained, and display specific error messages
+            
+        } else {
+            let emailString = email!
+            let nameString = name!
+            if (db.validateEmail(emailString) && nameString != "") {
+                db.emailExists(emailString) { (status, exists) in
+                    if (!exists) { // if email doesn't exist, user can use this email to sign up with
+                        print("Email does not exist yet, signing up")
+                        self.db.updateUserData(nameString, email: emailString)
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
+                        
+                        // TODO: REDIRECT TO HOME SCREEN
+                    } else {
+                        // email exists
+                        print("Account already exists with this email!")
+                        // potentially dangerous -> people will just sign in with other people's emails.
+                        // they can just check if the email exists or not, and go back to the login page.
+                        
+                        // TODO: there should be some kind of button that redirects user back to login page, they might have forgotten that they already signed up before (?)
+                    }
+                }
+            } else {
+                // TODO: some error message or red error text under the login name
+                // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
+            }
+        }
     }
     
     /*

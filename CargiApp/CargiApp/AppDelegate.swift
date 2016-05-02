@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     var window: UIWindow?
-
+    lazy var db = AzureDatabase.sharedInstance
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -31,17 +31,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().idleTimerDisabled = true
         self.client = MSClient(
               applicationURLString:"https://cargi.azurewebsites.net"
-//            applicationURLString:"https://cargiios.azure-mobile.net/",
-//            applicationKey:"SNDLhWctCnFyhWjJMQDAjlMRiDoDJC17"
         )
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
+        let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
+        
         if launchedBefore {
             print("Not first launch.")
+            if loggedIn {
+                // TODO: direct to home screen
+            } else {
+                // TODO: direct to login page
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+            }
         }
         else {
             print("First launch, setting NSUserDefault.")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
+            
+            // direct to Tutorial Screen?
+            initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")
         }
+        
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
+        
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
+        pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
+        
+        
+
+        
+        
         return true
     }
     
