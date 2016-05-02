@@ -194,6 +194,17 @@ class AzureDatabase {
 
     }
     
+
+    /**
+    * Checks using regex whether an email is validly formatted.
+    * Valid: "abc@mywebsite.gov.uk", "xyz@STANFORD.edu"
+    * Invalid: "@blah.blah", xyz@", "lwker34@23klazxc"
+    */
+    func validateEmail(candidate: String) -> Bool {
+        let regExp = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        return NSPredicate(format:"SELF MATCHES %@", regExp).evaluateWithObject(candidate)
+    }
+    
     func emailExists(email: String, completionHandler: (status: String, exists: Bool) -> Void) {
         let emailCheckPredicate = NSPredicate(format: "email = %@", email)
         userTable.readWithPredicate(emailCheckPredicate) { (result, error) in
@@ -209,7 +220,6 @@ class AzureDatabase {
             }
         }
     }
-
     
     /**
     * Inserts a contact into the database associated with the current user.

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     var window: UIWindow?
-
+    lazy var db = AzureDatabase.sharedInstance
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Not first launch.")
             if loggedIn {
                 // TODO: direct to home screen
+                
             } else {
                 // TODO: direct to login page
             }

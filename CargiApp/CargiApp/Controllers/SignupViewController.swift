@@ -50,14 +50,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         } else {
             let emailString = email!
             let nameString = name!
-            if (emailString == "" || nameString == "") { // TODO: check if email is a valid format, or valid email. X@Y.Z - external API?
-                // TODO: some error message or red error text under the login name
-                // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
-                
-            } else {
+            if (db.validateEmail(emailString) && nameString != "") {
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user can use this email to sign up with
-                        
                         print("Email does not exist yet, signing up")
                         self.db.updateUserData(nameString, email: emailString)
                         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
@@ -72,6 +67,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                         // TODO: there should be some kind of button that redirects user back to login page, they might have forgotten that they already signed up before (?)
                     }
                 }
+            } else {
+                // TODO: some error message or red error text under the login name
+                // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
             }
         }
     }

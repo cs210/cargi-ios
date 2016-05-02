@@ -51,10 +51,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
         } else {
             let emailString = email!
-            if (emailString == "") { // TODO: check if email is a valid format, or valid email. X@Y.Z - external API?
-                // TODO: some error message or red error text under the login name
-                // "PLEASE INPUT A VALID EMAIL"
-                
+            if (!db.validateEmail(emailString)) {
+                // TODO: some error message or red error text under the login name, if we know it's an invalid email
+                // can also do nothing, unless we want a better UX (let users know they have a typo for instance)
             } else {
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user needs to sign up
