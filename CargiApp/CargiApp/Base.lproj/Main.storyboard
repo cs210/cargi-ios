@@ -22,6 +22,7 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -36,12 +37,23 @@
                     <view key="view" contentMode="scaleToFill" id="zg9-cc-OMm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen1.png" translatesAutoresizingMaskIntoConstraints="NO" id="jCe-b8-rrW">
+                                <rect key="frame" x="0.0" y="-233.5" width="600" height="1067"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="0.2467763969" green="1" blue="0.22984959069999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="jCe-b8-rrW" firstAttribute="width" secondItem="zg9-cc-OMm" secondAttribute="width" id="LoU-aK-Wsz"/>
+                            <constraint firstItem="jCe-b8-rrW" firstAttribute="height" secondItem="zg9-cc-OMm" secondAttribute="width" multiplier="1.778" id="W0c-UA-5l7"/>
+                            <constraint firstItem="jCe-b8-rrW" firstAttribute="centerY" secondItem="zg9-cc-OMm" secondAttribute="centerY" id="eG6-X0-gn0"/>
+                            <constraint firstItem="jCe-b8-rrW" firstAttribute="centerX" secondItem="zg9-cc-OMm" secondAttribute="centerX" id="oi9-cA-RQ1"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xcf-c6-b6Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-276" y="311"/>
+            <point key="canvasLocation" x="-1220" y="-393"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="dmf-Lm-Sfh">
@@ -54,12 +66,23 @@
                     <view key="view" contentMode="scaleToFill" id="tWC-ey-LGQ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen2.png" translatesAutoresizingMaskIntoConstraints="NO" id="rVR-G3-Fel">
+                                <rect key="frame" x="0.0" y="-233.5" width="600" height="1067"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="0.39439550309999999" green="0.65068536749999994" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="rVR-G3-Fel" firstAttribute="width" secondItem="tWC-ey-LGQ" secondAttribute="width" id="Iu1-ye-WT3"/>
+                            <constraint firstItem="rVR-G3-Fel" firstAttribute="centerY" secondItem="tWC-ey-LGQ" secondAttribute="centerY" id="JBQ-cl-79j"/>
+                            <constraint firstItem="rVR-G3-Fel" firstAttribute="height" secondItem="tWC-ey-LGQ" secondAttribute="width" multiplier="1.778" id="jeU-6X-fZI"/>
+                            <constraint firstItem="rVR-G3-Fel" firstAttribute="centerX" secondItem="tWC-ey-LGQ" secondAttribute="centerX" id="n78-1K-elU"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4JG-rk-aly" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-268" y="1003"/>
+            <point key="canvasLocation" x="-580" y="-393"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Ve2-dU-TRf">
@@ -72,12 +95,62 @@
                     <view key="view" contentMode="scaleToFill" id="kvQ-UR-WjS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen3.png" translatesAutoresizingMaskIntoConstraints="NO" id="pza-DT-Qc3">
+                                <rect key="frame" x="0.0" y="-233.5" width="600" height="1067"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="0.31107219827586208" blue="0.36376616379310345" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="pza-DT-Qc3" firstAttribute="centerX" secondItem="kvQ-UR-WjS" secondAttribute="centerX" id="0b1-df-ux0"/>
+                            <constraint firstItem="pza-DT-Qc3" firstAttribute="width" secondItem="kvQ-UR-WjS" secondAttribute="width" id="Pck-op-E5K"/>
+                            <constraint firstItem="pza-DT-Qc3" firstAttribute="height" secondItem="kvQ-UR-WjS" secondAttribute="width" multiplier="1.778" id="XpS-KR-cIy"/>
+                            <constraint firstItem="pza-DT-Qc3" firstAttribute="centerY" secondItem="kvQ-UR-WjS" secondAttribute="centerY" id="b19-ZS-srH"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Poo-KN-gGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-256" y="1717"/>
+            <point key="canvasLocation" x="-1220" y="281"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="wCa-qs-NGm">
+            <objects>
+                <viewController storyboardIdentifier="TutorialFour" id="0m1-ZZ-Oql" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eUu-7g-vIP"/>
+                        <viewControllerLayoutGuide type="bottom" id="Wwh-Kt-INq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="X5Q-I3-aKF">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen4.png" translatesAutoresizingMaskIntoConstraints="NO" id="zCa-Gn-1ig">
+                                <rect key="frame" x="0.0" y="-233.5" width="600" height="1067"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PcB-uK-q0y">
+                                <rect key="frame" x="264" y="542" width="73" height="33"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                <state key="normal" title="I'm ready!"/>
+                                <connections>
+                                    <segue destination="2LG-iM-AMA" kind="show" id="eOD-A9-KeW"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zCa-Gn-1ig" firstAttribute="height" secondItem="X5Q-I3-aKF" secondAttribute="width" multiplier="1.778" id="370-ik-uzm"/>
+                            <constraint firstItem="PcB-uK-q0y" firstAttribute="centerX" secondItem="X5Q-I3-aKF" secondAttribute="centerX" id="5Dk-J2-hCA"/>
+                            <constraint firstItem="Wwh-Kt-INq" firstAttribute="top" secondItem="PcB-uK-q0y" secondAttribute="bottom" constant="25" id="6Zp-iS-tW4"/>
+                            <constraint firstItem="zCa-Gn-1ig" firstAttribute="width" secondItem="X5Q-I3-aKF" secondAttribute="width" id="gJb-Ks-2LV"/>
+                            <constraint firstItem="zCa-Gn-1ig" firstAttribute="centerX" secondItem="X5Q-I3-aKF" secondAttribute="centerX" id="nqM-KB-pkq"/>
+                            <constraint firstItem="zCa-Gn-1ig" firstAttribute="centerY" secondItem="X5Q-I3-aKF" secondAttribute="centerY" id="w7c-Bo-db6"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zed-Rf-VG1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-570" y="281"/>
         </scene>
         <!--Navigation View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -496,7 +569,7 @@
                 <pageViewController storyboardIdentifier="TutorialScreenVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="mWW-t2-dhj" customClass="TutorialViewController" customModule="Cargi" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a4F-hp-bIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-102" y="-444"/>
+            <point key="canvasLocation" x="-930" y="-1072"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="0K3-qa-dMj">
@@ -668,6 +741,10 @@
         <image name="navigate_button.png" width="20" height="20"/>
         <image name="radiobutton-unselected.png" width="18" height="18"/>
         <image name="refreshbutton.png" width="20" height="20"/>
+        <image name="screen1.png" width="375" height="667"/>
+        <image name="screen2.png" width="375" height="667"/>
+        <image name="screen3.png" width="375" height="667"/>
+        <image name="screen4.png" width="375" height="667"/>
         <image name="search.png" width="24" height="24"/>
         <image name="settingsbutton.png" width="33" height="34"/>
         <image name="textbutton.png" width="110" height="75"/>

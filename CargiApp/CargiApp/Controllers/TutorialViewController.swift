@@ -33,7 +33,8 @@ class TutorialViewController: UIPageViewController {
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newColoredViewController("One"),
                 self.newColoredViewController("Two"),
-                self.newColoredViewController("Three")]
+                self.newColoredViewController("Three"),
+                self.newColoredViewController("Four")]
     }()
     
     private func newColoredViewController(color: String) -> UIViewController {
