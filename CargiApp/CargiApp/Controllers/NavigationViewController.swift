@@ -427,8 +427,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 }
                 self.drawRoute()
             } else {
-                self.showAlertViewController(title: "Error", message: "Can't find a way there.")
                 print(status)
+                if status != "Origin is nil" && status != "Destination is nil" {
+                    self.showAlertViewController(title: "Error", message: "Can't find a way there.")
+                }
             }
         }
     }
@@ -500,29 +502,35 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Opens up a message view with a preformatted message that shows destination and ETA.
     func sendETAMessage(phoneNumbers: [String]?) {
         guard let numbers = phoneNumbers else { return }
-        guard let _ = destLocation else { return }
+        
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
             let firstName = self.contact?.componentsSeparatedByString(" ").first
             print(contact)
             print(firstName)
-            distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: destCoordinates.latitude, dest2: destCoordinates.longitude) { (status, success) in
-                print(status)
-                if success {
-                    let duration = self.distanceTasks.durationInTrafficText
-                    if let dest = self.destinationName {
-                        controller.body = "Hi \(firstName!), I will arrive at \(dest) in \(duration)."
+            
+            if destLocation == nil {
+                controller.body = ""
+            } else {
+                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: destCoordinates.latitude, dest2: destCoordinates.longitude) { (status, success) in
+                    print(status)
+                    if success {
+                        let duration = self.distanceTasks.durationInTrafficText
+                        if let dest = self.destinationName {
+                            controller.body = "Hi \(firstName!), I will arrive at \(dest) in \(duration)."
+                        } else {
+                            controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                        }
+                        print(controller.body)
                     } else {
-                        controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                        self.showAlertViewController(title: "Error", message: "No ETA found.")
                     }
-                    print(controller.body)
-                } else {
-                    self.showAlertViewController(title: "Error", message: "No ETA found.")
                 }
             }
+            
             print(phoneNumbers)
-            controller.recipients = [numbers[0]] // Send only to the primary number
+            controller.recipients = [numbers.first!] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
             print("presenting view controller")
