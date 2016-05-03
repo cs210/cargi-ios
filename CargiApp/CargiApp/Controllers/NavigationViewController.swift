@@ -1035,6 +1035,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
+    
+    
+    
+    // MARK: Storyboard
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+                case "pickEvent":
+                if let eventsTableViewController = segue.destinationViewController as? EventPickerViewController {
+                    eventsTableViewController.currentEventID = currentEvent?.eventIdentifier
+                }
+                default: break
+            }
+            
+        }
+    }
 
 }
 
