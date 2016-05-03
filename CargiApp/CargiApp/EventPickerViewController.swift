@@ -42,7 +42,9 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         
         cell.textLabel?.text = events[indexPath.row].title
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
+        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle // 12/25/14
+        dateFormatter.timeStyle = .ShortStyle // 7:00 AM
+        
         cell.detailTextLabel?.text = dateFormatter.stringFromDate(events[indexPath.row].startDate)
         
         for event in events {

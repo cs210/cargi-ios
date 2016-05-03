@@ -44,7 +44,9 @@ class AzureDatabase {
     var contactID: String?
     var eventContactID: String?
     var curEventID: String?
-    
+    var backgroundTaskIdentifier: UIBackgroundTaskIdentifier =
+    UIBackgroundTaskInvalid
+
     
     init() {
         delegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -141,7 +143,7 @@ class AzureDatabase {
         
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
             if (error != nil) {
-                print("Error in retrieval", error!.description)
+                print("Error in retrieval - server error", error!.description)
                 completionHandler(status: error!.description, success: false)
                 return
             } else if let items = result?.items {
@@ -197,15 +199,73 @@ class AzureDatabase {
         }
     }
     
-//    func logStartTime(completionHandler: (id: String, success: Bool) -> Void) {
-//        let startTime = NSDate()
-//        let logObj = ["start_datetime": startTime]
-//        logTable.insert(logObj) { (inse)
-//            print("Contact inserted, id: " + String(insertedItem!["id"]))
-//            completionHandler(newContactID: String(insertedItem!["id"]), success: true)
-//            
-//        }
-//    }
+    func logUsage(startTime: NSDate?) {
+        print("logging usage" )
+        var startDateTime: NSDate
+        if (startTime == nil) {
+            if self.backgroundTaskIdentifier != UIBackgroundTaskInvalid{
+                UIApplication.sharedApplication().endBackgroundTask(
+                    self.backgroundTaskIdentifier)
+                self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
+            }
+            return
+        } else {
+            startDateTime = startTime!
+        }
+        let endTime = NSDate()
+        let elapsedTime = endTime.timeIntervalSinceDate(startDateTime)
+        
+        var userID: String
+        if self.userID != nil {
+            userID = self.userID!
+        } else {
+            userID = "unknown"
+        }
+        let logObj = ["user_id": userID, "start_datetime": startDateTime, "end_datetime": endTime, "duration": elapsedTime]
+        
+        logTable.insert(logObj) { (insertedItem, error) in
+            if error != nil {
+                print("Error inserting log: " + error!.description)
+            } else {
+                print("Usage logged, id: " + String(insertedItem!["id"]))
+            }
+            if self.backgroundTaskIdentifier != UIBackgroundTaskInvalid{
+                UIApplication.sharedApplication().endBackgroundTask(
+                    self.backgroundTaskIdentifier)
+                self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
+            }
+        }
+    }
+    
+    func logStartTime(completionHandler: (id: String, success: Bool) -> Void) {
+        print("logging start time")
+        let startTime = NSDate()
+        let logObj = ["start_datetime": startTime]
+        logTable.insert(logObj) { (insertedItem, error) in
+            if error != nil {
+                print("Error inserting start time: " + error!.description)
+                completionHandler(id:"", success: false)
+                return
+            } else {
+                print("Start time logged, id: " + String(insertedItem!["id"]))
+                completionHandler(id: String(insertedItem!["id"]), success: true)
+                return
+            }
+        }
+    }
+    
+    func logEndTime(logID: String) {
+        print("logging end time for", logID)
+        let endTime = NSDate()
+        let item = ["id": logID, "end_datetime": endTime]
+        logTable.update(item) { (result, error) in
+            if error != nil {
+                print("error updating log data: " + error!.description)
+            } else {
+                print("updated log data", result);
+            }
+        }
+    }
     /**
      * contactExists
      *
@@ -248,7 +308,7 @@ class AzureDatabase {
             emailCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "device_id == %@", deviceID), NSPredicate(format: "email = %@", email)])
         }
         
-        let emailCheckOnlyPredicate = NSPredicate(format: "email = %@", email)
+        let emailCheckOnlyPredicate = NSPredicate(format: "email == %@", email)
         userTable.readWithPredicate(emailCheckOnlyPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)

@@ -74,7 +74,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         self.performSegueWithIdentifier("login", sender: nil)
 
                                     } else {
-                                        self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
+//                                        self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
+                                        self.showAlertViewController(title: "Server Error", message: status)
+
                                     }
                                 }
                                 
