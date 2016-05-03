@@ -13,25 +13,18 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var tableView: UITableView!
     
-    var eventDirectory = EventDirectory()
-    var events = [EKEvent] ()
+    var events: [EKEvent] = EventDirectory().getAllCalendarEvents()!
     
-    var currentEventID: String?
+    var currentEventID: String? = "hello"
     
     lazy var db = AzureDatabase.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadOptions()
 
         // Do any additional setup after loading the view.
     }
     
-    func loadOptions() {
-        events = eventDirectory.getAllCalendarEvents()!
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -52,7 +45,15 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         dateFormatter.dateFormat = "dd-MM-yyyy"
         cell.detailTextLabel?.text = dateFormatter.stringFromDate(events[indexPath.row].startDate)
         
-        if (events[indexPath.row].eventIdentifier == currentEventID) {
+        for event in events {
+            print("event: \(event.eventIdentifier)")
+            print("calendar: \(event.calendarItemIdentifier)")
+        }
+        
+        print(currentEventID)
+        print(events[indexPath.row].calendarItemIdentifier)
+        
+        if (events[indexPath.row].title == currentEventID) {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
             self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
         } else {
@@ -116,6 +117,19 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
      }
+     
      */
+     
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if  segue.identifier == "eventPicked",
+                let destination = segue.destinationViewController as? NavigationViewController,
+                newEventCell = tableView.cellForRowAtIndexPath(tableView.indexPathForSelectedRow!)
+        {
+            let newEventID = newEventCell.textLabel?.text
+            destination.newEventID = newEventID;
+            destination.eventChanged = true;
+
+        }
+     }
     
 }

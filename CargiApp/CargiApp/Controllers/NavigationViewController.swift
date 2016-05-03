@@ -118,6 +118,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
+    var newEventID: String?
+    var eventChanged: Bool = false
+    
     // MARK: Constants
     
     let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
@@ -204,6 +207,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        }
         self.resetData()
         self.syncData()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        if eventChanged {
+            guard let events = eventDirectory.getAllCalendarEvents() else { return }
+            for ev in events {
+                if ev.title == newEventID {
+                    syncEvent(ev)
+                    eventChanged = false
+                    return
+                }
+            }
+        }
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -296,12 +312,45 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         db.insertEvent(currentEvent?.title, latitude: ev.latitude, longitude: ev.longitude, dateTime: ev.dateTime, contactName: self.contact)
     }
     
+    func syncEvent(newEvent: EKEvent?) {
+        currentEvent = newEvent
+        guard let ev = currentEvent else { return }
+        
+        dest.address = ev.location
+        if let checkIfEmpty = ev.location {
+            if checkIfEmpty.isEmpty {
+                dest.address = nil
+            }
+        }
+        
+        dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
+        
+        if let loc = ev.location {
+            let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
+            if locArr.count > 1 {
+                searchButton.setTitle(locArr.first, forState: .Normal)
+                //                destLabel.text = locArr.first
+                //                addrLabel.text = locArr[1]
+            } else {
+                searchButton.setTitle(locArr.first, forState: .Normal)
+                //                destLabel.text = locArr.first
+                //                addrLabel.text = nil
+            }
+            dest.name = locArr.first
+        }
+        print("showroute")
+        showRoute(showDestMarker: true)
+        
+        dbEvent = createDBEventForCurrentEvent()
+        suggestContact(ev)
+    }
+    
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
     func syncData() {
         self.currentEvent = nil
+        dest = Location()
         
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
-        dest = Location()
         for ev in events {
             if !ev.allDay {
                 if ev.location != nil {
@@ -313,36 +362,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 }
             }
         }
-
-        guard let ev = currentEvent else { return }
-        
-        dest.address = ev.location
-        if let checkIfEmpty = ev.location {
-            if checkIfEmpty.isEmpty {
-                dest.address = nil
-            }
-        }
-        
-        dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
-
-        if let loc = ev.location {
-            let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
-            if locArr.count > 1 {
-                searchButton.setTitle(locArr.first, forState: .Normal)
-//                destLabel.text = locArr.first
-//                addrLabel.text = locArr[1]
-            } else {
-                searchButton.setTitle(locArr.first, forState: .Normal)
-//                destLabel.text = locArr.first
-//                addrLabel.text = nil
-            }
-            dest.name = locArr.first
-        }
-        print("showroute")
-        showRoute(showDestMarker: true)
-        
-        dbEvent = createDBEventForCurrentEvent()
-        suggestContact(ev)
+        syncEvent(currentEvent)
     }
 
     
@@ -386,13 +406,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
      Open Google Maps showing the route to the given coordinates with a waypoint.
      */
     func openGoogleMapsLocationWaypoints(waypoint: CLLocationCoordinate2D) {
-        guard let originLocation = locationManager.location?.coordinate else {
-            syncRouteSuccess = false
-            return
-        }
-        let destination = destCoordinates
-        
-        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=\(originLocation.latitude),\(originLocation.longitude)&daddr=\(destination.latitude),\(destination.longitude)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+//        guard let originLocation = locationManager.location?.coordinate else {
+//            syncRouteSuccess = false
+//            return
+//        }
+//        let destination = destCoordinates
+//        
+//        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=\(originLocation.latitude),\(originLocation.longitude)&daddr=\(destination.latitude),\(destination.longitude)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
     }
     
     
@@ -1069,7 +1089,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             switch identifier {
                 case "pickEvent":
                 if let eventsTableViewController = segue.destinationViewController as? EventPickerViewController {
-                    eventsTableViewController.currentEventID = currentEvent?.eventIdentifier
+                    print("printing from nvc")
+                    print("event: \(currentEvent?.eventIdentifier)")
+                    print("event: \(currentEvent?.calendarItemIdentifier)")
+                    eventsTableViewController.currentEventID = currentEvent?.title
                 }
                 default: break
             }

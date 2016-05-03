@@ -221,7 +221,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RMW-Yb-AKt"/>
+                                            <segue destination="w1r-H1-z5P" kind="show" identifier="pickEvent" id="qK4-BJ-Kh2"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8s-Be-dRK">
@@ -627,6 +627,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="eventPicked" id="gIG-xW-lP7"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -865,6 +868,6 @@
         <image name="textbutton.png" width="110" height="75"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ew2-US-zHJ"/>
+        <segue reference="gIG-xW-lP7"/>
     </inferredMetricsTieBreakers>
 </document>
