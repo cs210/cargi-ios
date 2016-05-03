@@ -55,13 +55,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                     if (!exists) { // if email doesn't exist, user can use this email to sign up with
                         print("Email does not exist yet, signing up")
                         self.db.createUser(UIDevice.currentDevice().identifierForVendor!.UUIDString, email: emailString, fullname: nameString) { (status, success) in
-                            
-                        }
-                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
-                        
-                        // TODO: REDIRECT TO HOME SCREEN
-                        self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
-                            self.performSegueWithIdentifier("signup", sender: nil)
+                            if (success) {
+                                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
+                                
+                                self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
+                                    self.performSegueWithIdentifier("signup", sender: nil)
+                                }
+                            } else {
+                                self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
+                            }
                         }
                     } else {
                         // email exists

@@ -180,24 +180,25 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
 
-        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-
-        db.initializeUserID(deviceID) { (status, success) in
-            if (success) {
-                print("initialized user id:", self.db.userID!)
-                // need to wait until userID is successfully initialized before we can reset and sync the data, to ensure
-                // that calls to the database are successful
-                self.resetData()
-                self.syncData()
-            } else {
-                print(status)
-                // TODO: if unable to initialize userID, need to perhaps set db.userID to be a dummy string, so that
-                // none of the database inserts will crash (if userID is nil)
-                self.resetData()
-                self.syncData()
-            }
-        }
-        
+//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+//
+//        db.initializeUserID(deviceID) { (status, success) in
+//            if (success) {
+//                print("initialized user id:", self.db.userID!)
+//                // need to wait until userID is successfully initialized before we can reset and sync the data, to ensure
+//                // that calls to the database are successful
+//                self.resetData()
+//                self.syncData()
+//            } else {
+//                print(status)
+//                // TODO: if unable to initialize userID, need to perhaps set db.userID to be a dummy string, so that
+//                // none of the database inserts will crash (if userID is nil)
+//                self.resetData()
+//                self.syncData()
+//            }
+//        }
+        self.resetData()
+        self.syncData()
     }
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -284,6 +285,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     private func updateContact(contact: String?) {
         self.contact = contact
         contactNumbers = contactDirectory.getPhoneNumber(contact)
+        
         guard let ev = dbEvent else { return }
         db.insertEvent(currentEvent?.title, latitude: ev.latitude, longitude: ev.longitude, dateTime: ev.dateTime, contactName: self.contact)
     }
@@ -973,12 +975,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Send Message Button clicked.
     @IBAction func messageButtonClicked(sender: UIButton?) {
         print("message button activated")
+        db.insertCommunication("text")
         self.sendETAMessage(self.contactNumbers)
     }
     
     /// Starts a phone call using the phone number associated with current event.
     @IBAction func phoneButtonClicked(sender: UIButton?) {
         print("phone button activated")
+        db.insertCommunication("call")
         self.callPhone(contactNumbers)
     }
     
