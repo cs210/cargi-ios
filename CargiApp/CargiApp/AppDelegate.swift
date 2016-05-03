@@ -25,40 +25,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+        var initialViewController = storyboard.instantiateViewControllerWithIdentifier("LaunchScreenVC")
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
         let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
         let db = AzureDatabase.sharedInstance
 
         if launchedBefore {
             print("Not first launch.")
-//            if loggedIn {
-//                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-//                db.initializeUserID(deviceID) { (status, success) in
-//                    if success {
-//                        print("userID initialized: ", db.userID)
-//                        //
-//                    }
-//                }
-//                print("you're logged in")
-//                // TODO: direct to home screen
-//
-//            } else {
-//                // TODO: direct to login page
-//                print("you're not logged in")
-//                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
-//            }
-            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+            if loggedIn {
+                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+                db.initializeUserID(deviceID) { (status, success) in
+                    if success {
+                        print("userID initialized: ", db.userID)
+                        //
+                        self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                    }
+                }
+                print("you're logged in")
+                // TODO: direct to home screen
 
-        }
-        else {
+            } else {
+                // TODO: direct to login page
+                print("you're not logged in")
+                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+                self.window?.rootViewController = initialViewController
+            }
+        } else {
             print("First launch, setting NSUserDefault.")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
             
             // direct to Tutorial Screen?
             initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")
         }
-        
         self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()
         
