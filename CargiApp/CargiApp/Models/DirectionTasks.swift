@@ -100,7 +100,6 @@ class DirectionTasks {
                 completionHandler(status: "Parsing JSON failed.", success: false)
                 return
             }
-            print(dict.description)
             
             let status = dict["status"] as! String
             if status == "OK" {

@@ -41,6 +41,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var navigateButton: UIButton!
     @IBOutlet weak var currentEventButton: UIButton!
+    @IBOutlet weak var changeContactButton: UIButton!
     
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactView: UIView!
@@ -62,7 +63,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var destLocation: String?
     var destinationName: String?
     var destCoordinates = CLLocationCoordinate2D()
-    
     
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
@@ -96,6 +96,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var distanceTasks = DistanceMatrixTasks()
     
     lazy var db = AzureDatabase.sharedInstance
+    
+    var dbEvent: DBEvent?
+    
+    struct DBEvent {
+        var name: String?
+        var latitude: NSNumber
+        var longitude: NSNumber
+        var dateTime: NSDate
+        
+        init(name: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
+            self.name = name
+            self.latitude = latitude
+            self.longitude = longitude
+            self.dateTime = dateTime
+        }
+    }
+    
     // MARK: Constants
     
     let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
@@ -110,12 +127,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         // Do any additional setup after loading the view.
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         contactView.hidden = true
+        self.mapView.delegate = self
         
         self.picker.delegate = self
         self.picker.dataSource = self
-        
-        refreshButton.contentEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
-        navigateButton.contentEdgeInsets = UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20)
+        self.picker.hidden = true
+        self.view.bringSubviewToFront(self.picker)
         
         destMarker.icon = UIImage(named: "destination_icon")
         
@@ -207,7 +224,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         mapView.clear()
     }
     
-    private func suggestContact(event: EKEvent?, dbEvent: DBEvent) {
+    private func suggestContact(event: EKEvent?) {
         guard let ev = event else { return }
         let contacts = contactDirectory.getAllPhoneNumbers()
         
@@ -262,10 +279,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         print(possibleContactArr)
         self.pickerData = possibleContactArr
-        
+        updateContact(contact)
+    }
+    
+    private func updateContact(contact: String?) {
+        self.contact = contact
         contactNumbers = contactDirectory.getPhoneNumber(contact)
         
-        db.insertEvent(dbEvent.name, latitude: dbEvent.latitude, longitude: dbEvent.longitude, dateTime: dbEvent.dateTime, contactName: self.contact)
+        guard let ev = dbEvent else { return }
+        db.insertEvent(currentEvent?.title, latitude: ev.latitude, longitude: ev.longitude, dateTime: ev.dateTime, contactName: self.contact)
     }
     
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
@@ -380,27 +402,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let latitudeNum = NSNumber(double: destCoordinates.latitude)
         let longitudeNum = NSNumber(double: destCoordinates.longitude)
         
-        let dbEvent = DBEvent(name: ev.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
+        self.dbEvent = DBEvent(name: ev.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
         
-        suggestContact(ev, dbEvent: dbEvent)
+        suggestContact(ev)
         //        db.insertEvent()
         //        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
 
     }
     
-    struct DBEvent {
-        var name: String?
-        var latitude: NSNumber
-        var longitude: NSNumber
-        var dateTime: NSDate
-        
-        init(name: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
-            self.name = name
-            self.latitude = latitude
-            self.longitude = longitude
-            self.dateTime = dateTime
-        }
-    }
 
     /**
         Open Google Maps showing the route to the given coordinates.
@@ -735,23 +744,45 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     
-    // MARK: UIPicker Delegate Methods
+    // MARK: UIPickerVoew Delegate Methods
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        print("Picker Data: " + pickerData.count.description)
         return pickerData.count
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        print(pickerData[row])
+        print("PICKER DATA: \(pickerData.description)")
         return pickerData[row]
     }
     
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        var label: UILabel
+        if view == nil {
+            label = UILabel()
+            label.textColor = UIColor.blackColor()
+            label.textAlignment = .Center
+        } else {
+            label = view as! UILabel
+        }
+        label.font = UIFont(name: "Lato", size: 20.0)
+        label.text = pickerData[row]
+        return label
+        
+    }
+    
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selected = pickerData[row]
-        print(selected)
+        let selectedContact = pickerData[row]
+        print(selectedContact)
+        updateContact(selectedContact)
+        picker.hidden = true
+        contactLabel.hidden = false
+        changeContactButton.hidden = false
     }
     
     
@@ -966,7 +997,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func changeButtonClicked(sender: UIButton) {
-        self.view.addSubview(picker)
+        picker.hidden = false
+        contactLabel.hidden = true
+        changeContactButton.hidden = true
+        picker.reloadAllComponents()
     }
     
     /// Opens the music app of preference, using deep-linking.
