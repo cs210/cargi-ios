@@ -1139,6 +1139,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        if identifier == "pickEvent" {
+            
+            if EKEventStore.authorizationStatusForEntityType(EKEntityType.Event) == EKAuthorizationStatus.Authorized {
+                return true
+            } else {
+                showAlertViewControllerWithHandler(title: "Error", message: "Cargi needs access to your calendar in order to make your driving experience even better.", handler: { (action) in
+                    EKEventStore().requestAccessToEntityType(.Event) { (success, error) in
+                        
+                    }
+                })
+                return false
+            }
+        }
+        return false
+    }
+    
     @IBAction func eventSelectedChanged(segue: UIStoryboardSegue) {
         
     }

@@ -126,8 +126,9 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
      }
      
      */
-     
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "eventPicked" {
             print("HI")
             if let destinationController = segue.destinationViewController as? NavigationViewController {
@@ -136,6 +137,6 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
                 destinationController.syncEvent(event)
             }
         }
-     }
+    }
     
 }
