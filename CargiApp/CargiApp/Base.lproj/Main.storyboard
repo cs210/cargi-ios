@@ -26,6 +26,9 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -221,7 +224,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TCZ-0A-xWw"/>
+                                            <segue destination="w1r-H1-z5P" kind="show" identifier="pickEvent" id="UDc-mW-p2e"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8s-Be-dRK">
@@ -598,11 +601,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UFR-ri-JBD">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose an event." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h7o-Lt-YQc">
+                                        <rect key="frame" x="235.5" y="19" width="129" height="21"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" red="0.42745098039215684" green="0.70588235294117641" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="h7o-Lt-YQc" firstAttribute="centerY" secondItem="UFR-ri-JBD" secondAttribute="centerY" id="JH4-Wq-1uH"/>
+                                    <constraint firstItem="h7o-Lt-YQc" firstAttribute="centerY" secondItem="UFR-ri-JBD" secondAttribute="centerY" id="PcK-EA-fVI"/>
+                                    <constraint firstItem="h7o-Lt-YQc" firstAttribute="centerX" secondItem="UFR-ri-JBD" secondAttribute="centerX" id="Q3e-Rk-fnf"/>
+                                    <constraint firstItem="h7o-Lt-YQc" firstAttribute="centerX" secondItem="UFR-ri-JBD" secondAttribute="centerX" id="fGa-sS-Nt6"/>
                                     <constraint firstAttribute="height" constant="60" id="rFP-pJ-3oh"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="PcK-EA-fVI"/>
+                                        <exclude reference="Q3e-Rk-fnf"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="c8N-w3-ZwW">
                                 <rect key="frame" x="0.0" y="92" width="600" height="508"/>
@@ -619,21 +640,21 @@
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bPo-rT-mUM">
                                                     <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hjH-RD-gId">
-                                                    <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
+                                                    <rect key="frame" x="15" y="25.5" width="37.5" height="13.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="11"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" identifier="eventPicked" id="gIG-xW-lP7"/>
+                                            <segue destination="2UF-mF-Z5E" kind="unwind" identifier="eventPicked" unwindAction="eventSelectedChanged:" id="KaE-Rz-9WX"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -642,12 +663,22 @@
                                     <outlet property="delegate" destination="w1r-H1-z5P" id="JFU-vY-Rh8"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wpz-uw-ds3">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
+                                <color key="backgroundColor" red="0.42745098040000001" green="0.70588235290000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="esk-uP-scg"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="UFR-ri-JBD" firstAttribute="top" secondItem="h21-OS-XVH" secondAttribute="bottom" constant="-20" id="2cy-HV-NFS"/>
+                            <constraint firstItem="wpz-uw-ds3" firstAttribute="top" secondItem="4b9-sw-Kqa" secondAttribute="top" id="0dh-mH-h7c"/>
+                            <constraint firstItem="UFR-ri-JBD" firstAttribute="top" secondItem="h21-OS-XVH" secondAttribute="bottom" id="2cy-HV-NFS"/>
                             <constraint firstItem="c8N-w3-ZwW" firstAttribute="width" secondItem="4b9-sw-Kqa" secondAttribute="width" id="BKF-SO-khH"/>
+                            <constraint firstAttribute="trailing" secondItem="wpz-uw-ds3" secondAttribute="trailing" id="NYU-Uf-7U4"/>
                             <constraint firstItem="cKW-Oz-Dv4" firstAttribute="top" secondItem="c8N-w3-ZwW" secondAttribute="bottom" id="WlC-2Z-H5c"/>
+                            <constraint firstItem="wpz-uw-ds3" firstAttribute="leading" secondItem="4b9-sw-Kqa" secondAttribute="leading" id="bAo-aD-WRa"/>
                             <constraint firstItem="c8N-w3-ZwW" firstAttribute="top" secondItem="h21-OS-XVH" secondAttribute="bottom" constant="72" id="epG-BO-eXh"/>
                             <constraint firstItem="UFR-ri-JBD" firstAttribute="centerX" secondItem="4b9-sw-Kqa" secondAttribute="centerX" id="iRC-3P-hBk"/>
                             <constraint firstItem="UFR-ri-JBD" firstAttribute="width" secondItem="4b9-sw-Kqa" secondAttribute="width" id="n06-hY-eof"/>
@@ -924,7 +955,7 @@
         <image name="textbutton.png" width="110" height="75"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MyH-Ys-aGa"/>
         <segue reference="3lO-8O-DOT"/>
+        <segue reference="MyH-Ys-aGa"/>
     </inferredMetricsTieBreakers>
 </document>

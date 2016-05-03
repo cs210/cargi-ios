@@ -17,6 +17,8 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     var currentEventID: String?
     
+    var currentEvent: EKEvent?
+    
     lazy var db = AzureDatabase.sharedInstance
 
     override func viewDidLoad() {
@@ -71,6 +73,7 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        currentEvent = events[indexPath.row]
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
@@ -125,14 +128,13 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
      */
      
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if  segue.identifier == "eventPicked",
-                let destination = segue.destinationViewController as? NavigationViewController,
-                newEventCell = tableView.cellForRowAtIndexPath(tableView.indexPathForSelectedRow!)
-        {
-            let newEventID = newEventCell.textLabel?.text
-            destination.newEventID = newEventID;
-            destination.eventChanged = true;
-
+        if segue.identifier == "eventPicked" {
+            print("HI")
+            if let destinationController = segue.destinationViewController as? NavigationViewController {
+                events = EventDirectory().getAllCalendarEvents()!
+                let event = events[tableView.indexPathForSelectedRow!.row]
+                destinationController.syncEvent(event)
+            }
         }
      }
     
