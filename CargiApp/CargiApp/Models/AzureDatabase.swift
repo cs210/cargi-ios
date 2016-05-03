@@ -56,7 +56,7 @@ class AzureDatabase {
         logTable = client.tableWithName("log")
         locationHistoryTable = client.tableWithName("location_history")
         communicationHistoryTable = client.tableWithName("communication_history")
-        actionLogTable = client.tableWithName("action_log")
+        actionLogTable = client.tableWithName("actions_taken")
     }
     
     /**
@@ -170,6 +170,15 @@ class AzureDatabase {
         }
     }
     
+//    func logStartTime(completionHandler: (id: String, success: Bool) -> Void) {
+//        let startTime = NSDate()
+//        let logObj = ["start_datetime": startTime]
+//        logTable.insert(logObj) { (inse)
+//            print("Contact inserted, id: " + String(insertedItem!["id"]))
+//            completionHandler(newContactID: String(insertedItem!["id"]), success: true)
+//            
+//        }
+//    }
     /**
      * contactExists
      *
@@ -453,9 +462,24 @@ class AzureDatabase {
     // Log actions taken by user to analyze user behavior & engagement
     // possible actions: "text", "call", "gas", "music", "search", "navigate", "refresh", "
     func insertAction(actionTaken: String) {
-        let commObj = ["user_id": self.userID!, "action": actionTaken]
         
-        actionLogTable.insert(commObj) {
+        let actionObj = ["user_id": self.userID!, "action": actionTaken]
+        
+        actionLogTable.insert(actionObj) {
+            (insertedItem, error) in
+            if  error != nil {
+                print("Error in inserting an action" + error!.description)
+            } else {
+                print("Action inserted, id: " + String(insertedItem!["id"]))
+            }
+        }
+    }
+    
+    func logNavigated() {
+        
+        let actionObj = ["user_id": self.userID!, "navigated": "true"]
+        
+        logTable.insert(actionObj) {
             (insertedItem, error) in
             if  error != nil {
                 print("Error in inserting an action" + error!.description)
