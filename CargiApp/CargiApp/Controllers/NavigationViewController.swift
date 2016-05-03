@@ -52,6 +52,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     @IBOutlet weak var voiceButton: UIButton!
     
+    struct Location {
+        var name: String?
+        var address: String?
+        var coordinates: CLLocationCoordinate2D?
+    }
+    
     // MARK: Variables
     
     var locationManager = CLLocationManager()
@@ -60,9 +66,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
     
-    var destLocation: String?
-    var destinationName: String?
-    var destCoordinates = CLLocationCoordinate2D()
+    var dest = Location()
     
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
@@ -217,9 +221,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        self.eventLabel.text = nil
 //        self.destLabel.text = nil
 //        self.addrLabel.text = nil
-        self.currentEventButton.setTitle(nil, forState: .Normal)
-        self.destLocation = nil
-        self.destinationName = nil
+        
+        currentEventButton.setTitle(nil, forState: .Normal)
+        searchButton.setTitle(nil, forState: .Normal)
+        dest = Location()
         mapView.clear()
     }
     
@@ -293,62 +298,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.currentEvent = nil
         
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
-//        for ev in events {
-//            guard let _ = ev.location else { continue } // ignore event if it has no location info.
-//            if (ev.allDay) { continue }
-//            self.currentEvent = ev
-//            
-//            for contact in contacts.keys {
-//                possibleContact = false
-//                let lowerContact = contact.lowercaseString
-//                var contactsArr = lowerContact.componentsSeparatedByString(" ")
-//                let firstName = contactsArr[0]
-//                let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-//
-//                
-//                if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
-//                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-//                        let contactNumber = contactDirectory.getPhoneNumber(contact)
-//                        if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
-//                            possibleContactArr.append(contact)
-//                            self.contact = contact
-//                            break
-//                        }
-//                    }
-//                }
-//                if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
-//                    var notStopWord = true
-//                    if stopWords.contains(firstName){
-//                        notStopWord = false
-//                    }
-//                    var notStopWordL = true
-//                    if (lastName != nil) {
-//                        if stopWords.contains(lastName!){
-//                            notStopWordL = false
-//                        }
-//                    }
-//                    else { notStopWordL = false }
-//                    
-//                    if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
-//                        if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
-//                            let contactNumber = contactDirectory.getPhoneNumber(contact)
-//                            if contactNumber?.count > 0 { //check that the contact actually has a number
-//                                possibleContactArr.append(contact)
-//                                if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
-//                                    //should insert some check here with the database for frequently contacted people - so you have a better guess
-//                                    //maybe first name is better than matching last name
-//                                    self.contact = contact
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            print(possibleContactArr)
-//            
-//            if contact != nil { break }
-//        }
-        
+        dest = Location()
         for ev in events {
             if !ev.allDay {
                 if ev.location != nil {
@@ -362,52 +312,54 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
 
         guard let ev = currentEvent else { return }
-        print(ev.eventIdentifier)
         
-        destLocation = ev.location
+        dest.address = ev.location
         if let checkIfEmpty = ev.location {
             if checkIfEmpty.isEmpty {
-                destLocation = nil
+                dest.address = nil
             }
         }
         
-        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
-            destCoordinates = coordinate
-        }
+        dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
 
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
-//                destLabel.text = locArr.first
                 searchButton.setTitle(locArr.first, forState: .Normal)
+//                destLabel.text = locArr.first
 //                addrLabel.text = locArr[1]
             } else {
+                searchButton.setTitle(locArr.first, forState: .Normal)
 //                destLabel.text = locArr.first
 //                addrLabel.text = nil
-                searchButton.setTitle(locArr.first, forState: .Normal)
             }
-            destinationName = locArr.first
+            dest.name = locArr.first
         }
         print("showroute")
         showRoute(showDestMarker: true)
         
+        dbEvent = createDBEventForCurrentEvent()
+        suggestContact(ev)
+    }
+
+    
+    private func createDBEventForCurrentEvent() -> DBEvent {
         var eventDateTime: NSDate
-        if currentEvent != nil {
-            eventDateTime = currentEvent!.startDate
+        if let ev = currentEvent {
+            eventDateTime = ev.startDate
         } else {
             eventDateTime = NSDate()
         }
-        let latitudeNum = NSNumber(double: destCoordinates.latitude)
-        let longitudeNum = NSNumber(double: destCoordinates.longitude)
         
-        self.dbEvent = DBEvent(name: ev.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
+        var latitudeNum: NSNumber = 0
+        var longitudeNum: NSNumber = 0
+        if let coordinate = dest.coordinates {
+            latitudeNum = NSNumber(double: coordinate.latitude)
+            longitudeNum = NSNumber(double: coordinate.longitude)
+        }
         
-        suggestContact(ev)
-        //        db.insertEvent()
-        //        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
-
+        return DBEvent(name: currentEvent?.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
     }
-    
 
     /**
         Open Google Maps showing the route to the given coordinates.
@@ -455,11 +407,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        guard let ev = currentEvent else { return }
 //        let queries = ev.location!.componentsSeparatedByString("\n")
 //        print(queries)
-        guard let dest = destLocation else {
+        guard let destAddress = dest.address else {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
         }
-        let query = dest.componentsSeparatedByString("\n").joinWithSeparator(" ")
+        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
         print(query)
         let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
         
@@ -510,7 +462,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
 
-        self.directionTasks.getDirections(origin, dest: destLocation, waypoints: waypoints) { (status, success) in
+        self.directionTasks.getDirections(origin, dest: dest.address, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
@@ -604,15 +556,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(contact)
             print(firstName)
             
-            if destLocation == nil {
+            if dest.address == nil {
                 controller.body = ""
             } else {
-                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: destCoordinates.latitude, dest2: destCoordinates.longitude) { (status, success) in
+                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: dest.coordinates!.latitude, dest2: dest.coordinates!.longitude) { (status, success) in
                     print(status)
                     if success {
                         let duration = self.distanceTasks.durationInTrafficText
-                        if let dest = self.destinationName {
-                            controller.body = "Hi \(firstName!), I will arrive at \(dest) in \(duration)."
+                        if let destination = self.dest.name {
+                            controller.body = "Hi \(firstName!), I will arrive at \(destination) in \(duration)."
                         } else {
                             controller.body = "Hi \(firstName!), I will arrive in \(duration)."
                         }
@@ -797,7 +749,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         if let _ = currentEvent {
             openMaps()
         } else {
-            syncData()
+            if dest.name == nil && dest.address == nil {
+                syncData()
+            }
             openMaps()
         }
     }
@@ -920,12 +874,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                         print("Error: \(status)")
                     }
                 }
-                
-                
-                
-                
-                
-                
             } else {
                 print("FAIL")
                 return
@@ -993,10 +941,16 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func changeButtonClicked(sender: UIButton) {
+        picker.reloadAllComponents()
+        
+        if let contactName = contact {
+            if let row = pickerData.indexOf(contactName) {
+                picker.selectRow(row, inComponent: 0, animated: false)
+            }
+        }
         picker.hidden = false
         contactLabel.hidden = true
         changeContactButton.hidden = true
-        picker.reloadAllComponents()
     }
     
     /// Opens the music app of preference, using deep-linking.
@@ -1044,9 +998,9 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         print("Place attributions: \(place.attributions)")
         print("Place coordinates: \(place.coordinate)")
         self.dismissViewControllerAnimated(true, completion: nil)
-        self.destLocation = place.formattedAddress
-        self.destinationName = place.name
-        self.destCoordinates = place.coordinate
+        dest.address = place.formattedAddress
+        dest.name = place.name
+        dest.coordinates = place.coordinate
 //        self.destLabel.text = place.name
         self.searchButton.setTitle(place.name, forState: .Normal)
 //        self.addrLabel.text = place.formattedAddress
