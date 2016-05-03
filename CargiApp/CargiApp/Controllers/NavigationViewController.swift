@@ -26,10 +26,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     var destLabel: UILabel?
     var addrLabel: UILabel?
     
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var destinationView: UIView!
     
     @IBOutlet weak var callButton: UIButton!
@@ -140,6 +141,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.picker.delegate = self
         self.picker.dataSource = self
         self.picker.hidden = true
+        
+        self.view.bringSubviewToFront(self.activityIndicatorView)
         self.view.bringSubviewToFront(self.picker)
         
         destMarker.icon = UIImage(named: "destination_icon")
@@ -240,6 +243,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        self.destLabel.text = nil
 //        self.addrLabel.text = nil
 //        waypointCoordinates = nil
+        gasMarker = nil
         currentEventButton.setTitle(nil, forState: .Normal)
         searchButton.setTitle(nil, forState: .Normal)
         dest = Location()
@@ -406,8 +410,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
      Open Google Maps showing the route to the given coordinates with a waypoint.
      */
     func openGoogleMapsLocationWaypoints(address: String, waypoint: CLLocationCoordinate2D) {
-        print("comgooglemaps://?saddr=&daddr=\(address)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
-        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&mrad=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+        print("comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
     }
     
     
@@ -457,6 +461,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
             self.openGoogleMapsLocationAddress(address)
+            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
         } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
             self.openAppleMapsLocationAddress(address)
         }
@@ -502,16 +507,30 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-
-        self.directionTasks.getDirections(origin, dest: dest.address, waypoints: waypoints) { (status, success) in
+        
+        var destination: String?
+        if dest.address != nil {
+            destination = dest.address
+        } else {
+            destination = waypoints.first
+        }
+        
+        self.directionTasks.getDirections(origin, dest: destination, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
             if success {
                 print("success")
+                if !waypoints.isEmpty {
+                    if let gm = self.gasMarker {
+                        gm.map = self.mapView
+                    }
+                }
+                
                 if showDestMarker {
                     self.configureMap()
                 }
+                
                 self.drawRoute()
             } else {
                 print(status)
@@ -524,15 +543,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
     func showRoute(showDestMarker showDestMarker: Bool) {
-        showRouteWithWaypoints(waypoints: nil, showDestMarker: showDestMarker)
+        showRouteWithWaypoints(waypoints: [], showDestMarker: showDestMarker)
     }
     
     /// Shows a pin at the destination on the map.
     private func configureMap() {
-        if let gm = gasMarker {
-            gm.map = mapView
-        }
-        
         destMarker.position = directionTasks.destCoordinate
         destMarker.map = mapView
         print(destMarker.position)
@@ -561,17 +576,22 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("drawmaps done")
         
         let bounds = GMSCoordinateBounds(path: path)
-        updateCamera(bounds)
+        updateCamera(bounds, shouldAddEdgeInsets: true)
     }
     
-    private func updateCamera(bounds: GMSCoordinateBounds) {
+    private func updateCamera(bounds: GMSCoordinateBounds, shouldAddEdgeInsets: Bool) {
         // Depending on whether the contact view is hidden or not, we have different bounds.
         var cameraUpdate: GMSCameraUpdate
-        if contactView.hidden {
-            cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 110.0, right: 20.0))
+        if shouldAddEdgeInsets {
+            if contactView.hidden {
+                cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 110.0, right: 20.0))
+            } else {
+                cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 230.0, right: 20.0))
+            }
         } else {
-            cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 230.0, right: 20.0))
+            cameraUpdate = GMSCameraUpdate.fitBounds(bounds)
         }
+        
         mapView.moveCamera(cameraUpdate)
     }
     
@@ -740,19 +760,22 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // MARK: GMSMapViewDelegate Methods
     
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
-        print("was tapped")
+        gasMarker = marker
+        let showDestMarker = (dest.address != nil) || (dest.name != nil)
+        
         if let userData = marker.userData as? [String:String] {
             if let placeID = userData["place_id"] {
-                self.showRouteWithWaypoints(waypoints: ["place_id:\(placeID)"], showDestMarker: true)
+                self.showRouteWithWaypoints(waypoints: ["place_id:\(placeID)"], showDestMarker: showDestMarker)
                 return
             }
         }
+        
         print(marker.position)
         let lat = String(marker.position.latitude)
         let long = String(marker.position.longitude)
         let coord = lat + "," + long
-        gasMarker = marker
-        self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: true)
+        
+        self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: showDestMarker)
     }
     
     
@@ -765,13 +788,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        print("Picker Data: " + pickerData.count.description)
         return pickerData.count
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        print(pickerData[row])
-        print("PICKER DATA: \(pickerData.description)")
         return pickerData[row]
     }
     
@@ -857,8 +877,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
         db.insertAction("gas")
-        let numCheapGasStations = 2
-        let numNearbyGasStations = 2
+        let numCheapGasStations = 3
+        let numNearbyGasStations = 3
         
         let visibleRegion = self.mapView.projection.visibleRegion()
         var bounds = GMSCoordinateBounds(coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
@@ -867,7 +887,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
-        activityIndicator.startAnimating()
+        activityIndicatorView.startAnimating()
         
         let geocoder = LocationGeocoder()
         geocoder.getPostalCode(originLocation) { (status, success) in
@@ -892,14 +912,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                     print(station)
                                     let number = station.address?.componentsSeparatedByString(" ").first
                                     var priceFound = false
-                                    let userData: [String:String] = ["place_id":station.placeID!]
+                                    let userData: [String:String] = ["place_id" : station.placeID!,
+                                                                     "address"  : station.address!]
                                     
                                     for cheapStation in cheapGasFinder.stations {
                                         if number! == cheapStation.number! {
                                             // Getting location info from Google, so should include place_id.
-                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData)
+                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
                                             bounds = bounds.includingCoordinate(station.coordinates!)
-                                            self.updateCamera(bounds)
                                             priceFound = true
                                             break
                                         }
@@ -917,24 +937,25 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //                                        }
                                     }
                                     if !priceFound {
-                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData)
+                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
                                         bounds = bounds.includingCoordinate(station.coordinates!)
-                                        self.updateCamera(bounds)
-                                        
                                     }
                                 }
                                 
                                 for i in 0..<numCheapGasStations {
                                     if let cheapStation = cheapGasFinder.stations[safe: i] {
+                                        let userData: [String:String] = ["address"  : cheapStation.address!]
                                         let locationGeocoder = LocationGeocoder()
                                         locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
                                             if success {
-                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: nil)
+                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
                                                 bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
-                                                self.updateCamera(bounds)
                                             }
                                             // if the last cheap gas was found, stop animating activity indicator.
-                                            if i == numCheapGasStations - 1 { self.activityIndicator.stopAnimating() }
+                                            if i == numCheapGasStations - 1 {
+                                                self.activityIndicatorView.stopAnimating()
+                                                self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                            }
                                         }
                                     }
                                 }
@@ -980,11 +1001,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        }
     }
     
-    private func addMapMarker(position: CLLocationCoordinate2D, title: String?, snippet: String?, userData: AnyObject?) {
+    private func addMapMarker(position: CLLocationCoordinate2D, title: String?, snippet: String?, userData: AnyObject?, cheap: Bool) {
         let marker = GMSMarker(position: position)
         marker.appearAnimation = kGMSMarkerAnimationPop
         marker.title = title
-        marker.icon = UIImage(named: "gasmarker")
+        if cheap {
+            // green
+            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 71/256, green: 179/256, blue: 91/256, alpha: 1.0))
+        } else {
+            // blue
+//            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
+            
+        }
+        // marker.icon = UIImage(named: "gasmarker")
         marker.snippet = snippet
         marker.userData = userData
         marker.map = self.mapView
@@ -1067,6 +1096,26 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
     
+    /// Settings Button clicked
+    @IBAction func settingsButtonClicked(sender: UIButton) {
+        let alert = UIAlertController(title: "Settings", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "loggedIn") // set as logged in
+            self.mapView.removeObserver(self, forKeyPath: "myLocation")
+            
+//            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {
+//                self.performSegueWithIdentifier("logoutToLogin", sender: nil)
+//            } else {
+            self.performSegueWithIdentifier("logout", sender: nil)
+//            }
+        }
+        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
     
     
     // MARK: Storyboard
@@ -1105,6 +1154,7 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
 //        self.destLabel.text = place.name
         self.searchButton.setTitle(place.name, forState: .Normal)
 //        self.addrLabel.text = place.formattedAddress
+        gasMarker = nil
         self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
 //        let marker = GMSMarker(position: place.coordinate)
