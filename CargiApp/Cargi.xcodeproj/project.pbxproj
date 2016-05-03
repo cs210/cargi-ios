@@ -13,7 +13,6 @@
 		630A71821CD757E00045D8BF /* screen1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A717E1CD757E00045D8BF /* screen1@2x.png */; };
 		630A71831CD757E00045D8BF /* screen2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A717F1CD757E00045D8BF /* screen2@2x.png */; };
 		630A71841CD757E00045D8BF /* screen3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71801CD757E00045D8BF /* screen3@2x.png */; };
-		630A71851CD757E00045D8BF /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71811CD757E00045D8BF /* screen4@2x.png */; };
 		630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */; };
 		636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E01CCBF7A0006D2936 /* callbutton@2x.png */; };
 		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
@@ -21,6 +20,7 @@
 		636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E41CCC0039006D2936 /* textbutton@2x.png */; };
 		6381DC651CD6C06F000CB520 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6381DC641CD6C06F000CB520 /* TutorialViewController.swift */; };
 		63C6587B1CD8606600F9C6C5 /* EventPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6587A1CD8606600F9C6C5 /* EventPickerTableViewCell.swift */; };
+		63C6587D1CD8794A00F9C6C5 /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -70,7 +70,6 @@
 		630A717E1CD757E00045D8BF /* screen1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen1@2x.png"; sourceTree = "<group>"; };
 		630A717F1CD757E00045D8BF /* screen2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen2@2x.png"; sourceTree = "<group>"; };
 		630A71801CD757E00045D8BF /* screen3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen3@2x.png"; sourceTree = "<group>"; };
-		630A71811CD757E00045D8BF /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
 		630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		636E32E01CCBF7A0006D2936 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
@@ -78,6 +77,7 @@
 		636E32E41CCC0039006D2936 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
 		6381DC641CD6C06F000CB520 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		63C6587A1CD8606600F9C6C5 /* EventPickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPickerTableViewCell.swift; sourceTree = "<group>"; };
+		63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -268,8 +268,8 @@
 				74A3D8F31C91523D0053D816 /* launchimage@2x.png */,
 				630A717E1CD757E00045D8BF /* screen1@2x.png */,
 				630A717F1CD757E00045D8BF /* screen2@2x.png */,
+				63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */,
 				630A71801CD757E00045D8BF /* screen3@2x.png */,
-				630A71811CD757E00045D8BF /* screen4@2x.png */,
 				74131C461C7FD83A00CBB5F4 /* cargi-padding.png */,
 				747425B51C7FE642006D5F75 /* cargi-square (1).png */,
 			);
@@ -369,7 +369,7 @@
 				74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */,
 				74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
-				630A71851CD757E00045D8BF /* screen4@2x.png in Resources */,
+				63C6587D1CD8794A00F9C6C5 /* screen4@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

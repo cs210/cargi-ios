@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2LG-iM-AMA">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -221,7 +221,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="w1r-H1-z5P" kind="showDetail" action="showViewController:sender:" id="ruZ-5S-xQo"/>
+                                            <segue destination="w1r-H1-z5P" kind="show" identifier="pickEvent" id="qK4-BJ-Kh2"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8s-Be-dRK">
@@ -627,6 +627,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="eventPicked" id="gIG-xW-lP7"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -847,11 +850,55 @@
             </objects>
             <point key="canvasLocation" x="1370" y="-444"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="kG5-re-FON">
+            <objects>
+                <viewController storyboardIdentifier="LaunchScreenVC" id="vHu-Ob-JQj" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0dv-eC-4Us"/>
+                        <viewControllerLayoutGuide type="bottom" id="Mb5-6F-f4F"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oRz-m5-mME">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchimage.png" translatesAutoresizingMaskIntoConstraints="NO" id="c91-fw-K0V">
+                                <rect key="frame" x="80" y="207.5" width="440" height="185"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="c91-fw-K0V" secondAttribute="height" multiplier="88:47" id="F36-gV-Piz"/>
+                                    <constraint firstAttribute="width" secondItem="c91-fw-K0V" secondAttribute="height" multiplier="107:45" id="LtD-zw-ccl"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="F36-gV-Piz"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="c91-fw-K0V" firstAttribute="centerY" secondItem="oRz-m5-mME" secondAttribute="centerY" id="8Mn-6k-1PS"/>
+                            <constraint firstItem="c91-fw-K0V" firstAttribute="leading" secondItem="oRz-m5-mME" secondAttribute="leadingMargin" constant="60" id="LES-ms-imm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="c91-fw-K0V" secondAttribute="trailing" constant="60" id="LwU-6W-gAZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="c91-fw-K0V" secondAttribute="trailing" constant="60" id="YWR-MP-Sla"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="YWR-MP-Sla"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TcV-v7-4YO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="63" y="-1163"/>
+        </scene>
     </scenes>
     <resources>
         <image name="calendar-icon.png" width="18" height="20"/>
         <image name="callbutton.png" width="108" height="75"/>
         <image name="gasbutton.png" width="35" height="38"/>
+        <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
         <image name="navigate_button.png" width="20" height="20"/>
         <image name="radiobutton-unselected.png" width="18" height="18"/>
@@ -865,6 +912,6 @@
         <image name="textbutton.png" width="110" height="75"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ew2-US-zHJ"/>
+        <segue reference="MyH-Ys-aGa"/>
     </inferredMetricsTieBreakers>
 </document>
