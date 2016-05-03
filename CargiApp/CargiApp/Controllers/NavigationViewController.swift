@@ -1026,6 +1026,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         changeContactButton.hidden = true
     }
     
+    
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
     @IBAction func musicButtonClicked(sender: UIButton?) {
