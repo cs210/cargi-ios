@@ -26,10 +26,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     var destLabel: UILabel?
     var addrLabel: UILabel?
     
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var destinationView: UIView!
     
     @IBOutlet weak var callButton: UIButton!
@@ -140,6 +141,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.picker.delegate = self
         self.picker.dataSource = self
         self.picker.hidden = true
+        
+        self.view.bringSubviewToFront(self.activityIndicatorView)
         self.view.bringSubviewToFront(self.picker)
         
         destMarker.icon = UIImage(named: "destination_icon")
@@ -240,6 +243,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        self.destLabel.text = nil
 //        self.addrLabel.text = nil
 //        waypointCoordinates = nil
+        gasMarker = nil
         currentEventButton.setTitle(nil, forState: .Normal)
         searchButton.setTitle(nil, forState: .Normal)
         dest = Location()
@@ -406,8 +410,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
      Open Google Maps showing the route to the given coordinates with a waypoint.
      */
     func openGoogleMapsLocationWaypoints(address: String, waypoint: CLLocationCoordinate2D) {
-        print("comgooglemaps://?saddr=&daddr=\(address)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
-        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&mrad=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+        print("comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
     }
     
     
@@ -457,6 +461,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
             self.openGoogleMapsLocationAddress(address)
+            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
         } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
             self.openAppleMapsLocationAddress(address)
         }
@@ -863,7 +868,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
-        activityIndicator.startAnimating()
+        activityIndicatorView.startAnimating()
         
         let geocoder = LocationGeocoder()
         geocoder.getPostalCode(originLocation) { (status, success) in
@@ -930,7 +935,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                                 self.updateCamera(bounds)
                                             }
                                             // if the last cheap gas was found, stop animating activity indicator.
-                                            if i == numCheapGasStations - 1 { self.activityIndicator.stopAnimating() }
+                                            if i == numCheapGasStations - 1 { self.activityIndicatorView.stopAnimating() }
                                         }
                                     }
                                 }
@@ -1058,6 +1063,26 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.presentViewController(autocompleteController, animated: true, completion: nil)
     }
     
+    /// Settings Button clicked
+    @IBAction func settingsButtonClicked(sender: UIButton) {
+        let alert = UIAlertController(title: "Settings", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "loggedIn") // set as logged in
+            self.mapView.removeObserver(self, forKeyPath: "myLocation")
+            
+            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {
+                self.performSegueWithIdentifier("logoutToLogin", sender: nil)
+            } else {
+                self.performSegueWithIdentifier("logout", sender: nil)
+            }
+        }
+        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
     
     
     // MARK: Storyboard

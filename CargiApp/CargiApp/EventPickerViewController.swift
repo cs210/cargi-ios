@@ -13,16 +13,18 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var tableView: UITableView!
     
-    var events: [EKEvent] = EventDirectory().getAllCalendarEvents()!
+    var events: [EKEvent] = []
     
-    var currentEventID: String? = "hello"
+    var currentEventID: String?
     
     lazy var db = AzureDatabase.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        events = EventDirectory().getAllCalendarEvents()!
+        tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
