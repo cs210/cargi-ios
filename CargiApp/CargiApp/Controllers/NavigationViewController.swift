@@ -386,13 +386,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
      Open Google Maps showing the route to the given coordinates with a waypoint.
      */
     func openGoogleMapsLocationWaypoints(waypoint: CLLocationCoordinate2D) {
-        guard let originLocation = locationManager.location?.coordinate else {
-            syncRouteSuccess = false
-            return
-        }
-        let destination = destCoordinates
+        guard let destination = dest.coordinates else { return }
         
-        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=\(originLocation.latitude),\(originLocation.longitude)&daddr=\(destination.latitude),\(destination.longitude)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(destination.latitude),\(destination.longitude)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
     }
     
     
@@ -427,7 +423,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        let queries = ev.location!.componentsSeparatedByString("\n")
 //        print(queries)
         
-        if ((waypointCoordinates) != nil) {
+        if waypointCoordinates != nil {
             openGoogleMapsLocationWaypoints(waypointCoordinates!)
             return
         }
@@ -736,7 +732,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: true)
 //        openGoogleMapsLocationWaypoints(marker.position)
         waypointCoordinates = marker.position
-        return false
+        return true
     }
     
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
