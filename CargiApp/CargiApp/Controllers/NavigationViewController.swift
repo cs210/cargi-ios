@@ -809,12 +809,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
+        db.insertAction("refresh")
         resetData()
         syncData()
     }
     
     /// Navigate Button clicked.
     @IBAction func navigateButtonClicked(sender: UIButton) {
+//        db.logNavigated()
+        db.insertAction("navigate")
         if let _ = currentEvent {
             openMaps()
         } else {
@@ -858,6 +861,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
+        db.insertAction("gas")
         let numCheapGasStations = 2
         let numNearbyGasStations = 2
         
@@ -994,20 +998,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Send Message Button clicked.
     @IBAction func messageButtonClicked(sender: UIButton?) {
+        db.insertAction("message")
         print("message button activated")
-        db.insertCommunication("text")
+        db.insertCommunication("message")
         self.sendETAMessage(self.contactNumbers)
     }
     
     /// Starts a phone call using the phone number associated with current event.
     @IBAction func phoneButtonClicked(sender: UIButton?) {
         print("phone button activated")
-        db.insertCommunication("call")
+        db.insertAction("phone")
+        db.insertCommunication("phone")
         self.callPhone(contactNumbers)
     }
     
     /// Opens the Apple Calendar app, using deep-linking.
     @IBAction func eventButtonClicked(sender: UIButton) {
+        db.insertAction("calendar")
         let appName: String = "calshow"
         let appURL: String = "\(appName):"
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!) {
@@ -1018,7 +1025,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     @IBAction func changeButtonClicked(sender: UIButton) {
         picker.reloadAllComponents()
-        
+        db.insertAction("pick_contact")
         if let contactName = contact {
             if let row = pickerData.indexOf(contactName) {
                 picker.selectRow(row, inComponent: 0, animated: false)
@@ -1033,6 +1040,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
     @IBAction func musicButtonClicked(sender: UIButton?) {
+        db.insertAction("music")
         print("music button activated")
         let appName: String = "spotify"
         
@@ -1055,6 +1063,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Search Button clicked
     @IBAction func searchButtonClicked(sender: UIButton) {
+        db.insertAction("search")
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         let visibleRegion = self.mapView.projection.visibleRegion()
