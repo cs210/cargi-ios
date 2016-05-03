@@ -1101,7 +1101,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let alert = UIAlertController(title: "Settings", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
-            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "loggedIn") // set as logged in
+            let prefs = NSUserDefaults.standardUserDefaults()
+            prefs.setBool(false, forKey: "loggedIn") // set as logged in
+            prefs.setValue("", forKey: "userEmail")
+
             self.mapView.removeObserver(self, forKeyPath: "myLocation")
             
 //            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {

@@ -56,8 +56,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                         print("Email does not exist yet, signing up")
                         self.db.createUser(UIDevice.currentDevice().identifierForVendor!.UUIDString, email: emailString, fullname: nameString) { (status, success) in
                             if (success) {
-                                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn")
-                                
+                                let prefs = NSUserDefaults.standardUserDefaults()
+                                prefs.setBool(true, forKey: "loggedIn")
+                                prefs.setValue(emailString, forKey: "userEmail")
                                 self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
                                     self.performSegueWithIdentifier("signup", sender: nil)
                                 }

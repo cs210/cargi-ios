@@ -26,16 +26,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let prefs = NSUserDefaults.standardUserDefaults()
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         var initialViewController = storyboard.instantiateViewControllerWithIdentifier("LaunchScreenVC")
-        let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("notFirstLaunchV2.0")
-        let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
-
+        let launchedBefore = prefs.boolForKey("notFirstLaunchV2.0")
+        let loggedIn = prefs.boolForKey("loggedIn")
+        
         if launchedBefore {
             print("Not first launch.")
             if loggedIn {
-                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-                db.initializeUserIDWithDeviceID(deviceID) { (status, success) in
+//                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+                let emailString = prefs.stringForKey("userEmail")!
+
+//                print("deviceID:", deviceID)
+                db.initializeUserIDWithEmail(emailString) { (status, success) in
                     if success {
                         print("userID initialized: ", self.db.userID)
                         //

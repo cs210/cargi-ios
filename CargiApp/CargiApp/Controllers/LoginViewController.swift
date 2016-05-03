@@ -73,7 +73,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 self.db.initializeUserIDWithEmail(emailString) { (status, success) in
                                     if (success) {
                                         print("initialized user ID:", self.db.userID!)
-                                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn") // set as logged in
+                                        let prefs = NSUserDefaults.standardUserDefaults()
+                                        prefs.setBool(true, forKey: "loggedIn") // set as logged in
+                                        prefs.setValue(emailString, forKey: "userEmail")
+
                                         self.activityIndicatorView.stopAnimating()
                                         self.performSegueWithIdentifier("login", sender: nil)
 
