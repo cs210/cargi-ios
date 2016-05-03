@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         var initialViewController = storyboard.instantiateViewControllerWithIdentifier("LaunchScreenVC")
-        let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("launchedBefore")
+        let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey("notFirstLaunchV2.0")
         let loggedIn = NSUserDefaults.standardUserDefaults().boolForKey("loggedIn")
 
         if launchedBefore {
@@ -53,7 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         } else {
             print("First launch, setting NSUserDefault.")
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "launchedBefore")
             
             // direct to Tutorial Screen?
             initialViewController = storyboard.instantiateViewControllerWithIdentifier("TutorialScreenVC")

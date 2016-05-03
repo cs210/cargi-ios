@@ -57,6 +57,7 @@
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */; };
 		86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */; };
+		B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
@@ -118,6 +119,7 @@
 		86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = CargiApp/Frameworks/SpeechKit.framework; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastTutorialViewController.swift; sourceTree = "<group>"; };
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B39CE0A41CB20709001EB723 /* AzureDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureDatabase.swift; sourceTree = "<group>"; };
 		BE201F251CC4D2BA00A691B5 /* GasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasFinder.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
+				B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */,
 				740354111CD5D13500155433 /* SignupViewController.swift */,
 				7403540F1CD5D12500155433 /* LoginViewController.swift */,
 				63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */,
@@ -311,7 +314,7 @@
 				TargetAttributes = {
 					74A2E5F21C7FCBC800C468CC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 44NW45N853;
+						DevelopmentTeam = 766R9FB7WR;
 					};
 				};
 			};
@@ -425,6 +428,7 @@
 				747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */,
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
 				63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */,
+				B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */,
 				740354121CD5D13500155433 /* SignupViewController.swift in Sources */,
 				63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */,
 				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
@@ -558,7 +562,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi2;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
@@ -583,7 +587,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi2;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
