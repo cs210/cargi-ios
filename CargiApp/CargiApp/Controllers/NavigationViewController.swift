@@ -66,7 +66,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
     
-    var waypointCoordinates = CLLocationCoordinate2D?()
+    var gasMarker: GMSMarker?
     var dest = Location()
     
     var manager: CBCentralManager! // Bluetooth Manager
@@ -223,7 +223,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        self.eventLabel.text = nil
 //        self.destLabel.text = nil
 //        self.addrLabel.text = nil
-        waypointCoordinates = nil
+//        waypointCoordinates = nil
         currentEventButton.setTitle(nil, forState: .Normal)
         searchButton.setTitle(nil, forState: .Normal)
         dest = Location()
@@ -303,6 +303,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         guard let events = eventDirectory.getAllCalendarEvents() else { return }
         dest = Location()
         for ev in events {
+            print("CALENDAR ITEM: \(ev.calendarItemIdentifier)")
+            print("EVENT ID: \(ev.eventIdentifier)")
             if !ev.allDay {
                 if ev.location != nil {
                     self.currentEvent = ev
@@ -385,10 +387,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /**
      Open Google Maps showing the route to the given coordinates with a waypoint.
      */
-    func openGoogleMapsLocationWaypoints(waypoint: CLLocationCoordinate2D) {
-        guard let destination = dest.coordinates else { return }
-        
-        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(destination.latitude),\(destination.longitude)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+    func openGoogleMapsLocationWaypoints(address: String, waypoint: CLLocationCoordinate2D) {
+        print("comgooglemaps://?saddr=&daddr=\(address)&via=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&mrad=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
     }
     
     
@@ -423,10 +424,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //        let queries = ev.location!.componentsSeparatedByString("\n")
 //        print(queries)
         
-        if waypointCoordinates != nil {
-            openGoogleMapsLocationWaypoints(waypointCoordinates!)
-            return
-        }
+//        if waypointCoordinates != nil {
+//            openGoogleMapsLocationWaypoints(waypointCoordinates!)
+//            return
+//        }
 
         guard let destAddress = dest.address else {
             showAlertViewController(title: "Error", message: "No destination specified.")
@@ -474,7 +475,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
         mapView.clear()
-        waypointCoordinates = nil
+//        waypointCoordinates = nil
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
@@ -510,6 +511,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Shows a pin at the destination on the map.
     private func configureMap() {
+        if let gm = gasMarker {
+            gm.map = mapView
+        }
+        
         destMarker.position = directionTasks.destCoordinate
         destMarker.map = mapView
         print(destMarker.position)
@@ -716,25 +721,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // MARK: GMSMapViewDelegate Methods
     
-    //show route to marker if it is clicked
-    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
-        print("was tapped")
-        if let userData = marker.userData as? [String:String] {
-            if let placeID = userData["place_id"] {
-                self.showRouteWithWaypoints(waypoints: ["place_id:\(placeID)"], showDestMarker: true)
-                return true
-            }
-        }
-        print(marker.position)
-        let lat = String(marker.position.latitude)
-        let long = String(marker.position.longitude)
-        let coord = lat + "," + long
-        self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: true)
-//        openGoogleMapsLocationWaypoints(marker.position)
-        waypointCoordinates = marker.position
-        return true
-    }
-    
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
         print("was tapped")
         if let userData = marker.userData as? [String:String] {
@@ -747,10 +733,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let lat = String(marker.position.latitude)
         let long = String(marker.position.longitude)
         let coord = lat + "," + long
+        gasMarker = marker
         self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: true)
-        //        openGoogleMapsLocationWaypoints(marker.position)
-        waypointCoordinates = marker.position
-        return
     }
     
     
