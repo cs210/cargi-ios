@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Not first launch.")
             if loggedIn {
                 let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-                db.initializeUserID(deviceID) { (status, success) in
+                db.initializeUserIDWithDeviceID(deviceID) { (status, success) in
                     if success {
                         print("userID initialized: ", db.userID)
                         //

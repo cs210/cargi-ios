@@ -102,7 +102,7 @@ class AzureDatabase {
         }
     }
     /**
-     * initializeUserID
+     * initializeUserIDWithDeviceID
      *
      * Given the device identifier string of the user's phone, this method looks up the userID associated
      * with this particular device and initializes the userID of this database object for the current user.
@@ -110,7 +110,7 @@ class AzureDatabase {
      * Example usage of device ID:
      * let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
      **/
-    func initializeUserID(deviceID: String, completionHandler: (status: String, success: Bool) -> Void)  {
+    func initializeUserIDWithDeviceID(deviceID: String, completionHandler: (status: String, success: Bool) -> Void)  {
         let userCheckPredicate = NSPredicate(format: "device_id == [c] %@", deviceID)
         
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
@@ -130,6 +130,33 @@ class AzureDatabase {
             completionHandler(status: "No user found", success: false)
         }
     }
+    /**
+     * initializeUserIDWithEmail
+     *
+     * Given the email of a user, this method looks up the userID associated
+     * with this particular email and initializes the userID of this database object for the current user.
+     **/
+    func initializeUserIDWithEmail(email: String, completionHandler: (status: String, success: Bool) -> Void)  {
+        let userCheckPredicate = NSPredicate(format: "email == [c] %@", email)
+        
+        userTable.readWithPredicate(userCheckPredicate) { (result, error) in
+            if (error != nil) {
+                print("Error in retrieval", error!.description)
+                completionHandler(status: error!.description, success: false)
+                return
+            } else if let items = result?.items {
+                if let item = items.first {
+                    if let userID = item["id"] as? String {
+                        self.userID = userID
+                        completionHandler(status: "success", success: true)
+                        return
+                    }
+                }
+            }
+            completionHandler(status: "No user found", success: false)
+        }
+    }
+
     
     /**
      * Given the user's name and email, this function updates the user's email address in the Azure database.
@@ -221,7 +248,8 @@ class AzureDatabase {
             emailCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "device_id == %@", deviceID), NSPredicate(format: "email = %@", email)])
         }
         
-        userTable.readWithPredicate(emailCheckPredicate) { (result, error) in
+        let emailCheckOnlyPredicate = NSPredicate(format: "email = %@", email)
+        userTable.readWithPredicate(emailCheckOnlyPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)
                 completionHandler(status: error!.description, success: false)

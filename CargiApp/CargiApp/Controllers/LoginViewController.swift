@@ -67,7 +67,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         self.db.checkEmailLogin(emailString) { (status, correct) in
                             if (correct) {
                                 //TODO: continue to the home screen
-                                self.db.initializeUserID(UIDevice.currentDevice().identifierForVendor!.UUIDString) { (status, success) in
+                                self.db.initializeUserIDWithEmail(emailString) { (status, success) in
                                     if (success) {
                                         print("initialized user ID:", self.db.userID!)
                                         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn") // set as logged in
