@@ -66,8 +66,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         // can call checkEmailLogin, which returns if the email is correct or not. (currently just matching the userID, which is based on deviceID)
                         self.db.checkEmailLogin(emailString) { (status, correct) in
                             if (correct) {
-                                // continue to the home screen
-                                self.performSegueWithIdentifier("login", sender: nil)
+                                //TODO: continue to the home screen
+                                self.db.initializeUserID(UIDevice.currentDevice().identifierForVendor!.UUIDString) { (status, success) in
+                                    if (success) {
+                                        print("initialized user ID:", self.db.userID!)
+                                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "loggedIn") // set as logged in
+                                        self.performSegueWithIdentifier("login", sender: nil)
+
+                                    } else {
+                                        self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
+                                    }
+                                }
+                                
                             } else {
                                 // print error message about incorrect email login
                                 self.showAlertViewController(title: "Login Failed", message: "Login information entered is not correct.")
