@@ -15,6 +15,10 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     var eventDirectory = EventDirectory()
     var events = [EKEvent] ()
+    
+    var currentEventID: String?
+    
+    lazy var db = AzureDatabase.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,8 +52,25 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         dateFormatter.dateFormat = "dd-MM-yyyy"
         cell.detailTextLabel?.text = dateFormatter.stringFromDate(events[indexPath.row].startDate)
         
+        if (events[indexPath.row].eventIdentifier == currentEventID) {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryType.None
+        }
+        
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
+        cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
+        cell.accessoryType = UITableViewCellAccessoryType.None
     }
     
     /*

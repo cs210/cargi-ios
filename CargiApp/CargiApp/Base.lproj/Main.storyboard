@@ -221,7 +221,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="w1r-H1-z5P" kind="showDetail" action="showViewController:sender:" id="ruZ-5S-xQo"/>
+                                            <action selector="eventButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RMW-Yb-AKt"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8s-Be-dRK">
