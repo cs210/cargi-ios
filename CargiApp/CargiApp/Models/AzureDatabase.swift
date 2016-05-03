@@ -38,9 +38,11 @@ class AzureDatabase {
     var logTable: MSTable
     var locationHistoryTable: MSTable
     var communicationHistoryTable: MSTable
+    var actionLogTable: MSTable
     var userID: String?
     var contactDirectory = ContactDirectory()
     var contactID: String?
+    var eventContactID: String?
     var curEventID: String?
     
     
@@ -54,6 +56,7 @@ class AzureDatabase {
         logTable = client.tableWithName("log")
         locationHistoryTable = client.tableWithName("location_history")
         communicationHistoryTable = client.tableWithName("communication_history")
+        actionLogTable = client.tableWithName("action_log")
     }
     
     /**
@@ -294,7 +297,10 @@ class AzureDatabase {
                     if error != nil {
                         print("Error in inserting an event" + error!.description)
                     } else {
+                        let x = String(insertedItem!["id"])
+                        
                         print("Inserted event contact: ", String(insertedItem!["id"]))
+                        self.eventContactID = x
                     }
                 }
             } else {
@@ -313,6 +319,7 @@ class AzureDatabase {
                                 print("Error in inserting an event" + error!.description)
                             } else {
                                 print("Inserted event contact: ", String(insertedItem!["id"]))
+                                self.eventContactID = String(insertedItem!["id"])
                             }
                         }
                     } else {
@@ -324,16 +331,17 @@ class AzureDatabase {
        
     }
     
-    /** 
+    /**
     * Update event contact
     *
 //    */
-    func updateEventContact(fullName: String, email: String) {
-        self.getContactID(fullName) { (contactID, success) in
+    func updateEventContact(fullName: String?) {
+        if (fullName == nil) { return } // cannot update a nonexisting contact
+        self.getContactID(fullName!) { (contactID, success) in
             if (success) {
                 print("found contact ID for", fullName)
                 self.contactID = contactID
-                let eventContactObj = ["event_id": self.curEventID!, "contact_id": self.contactID!]
+                let eventContactObj = ["id": self.eventContactID!, "event_id": self.curEventID!, "contact_id": self.contactID!]
                 self.eventContactsTable.update(eventContactObj) {
                     (result, error) in
                     if error != nil {
@@ -345,10 +353,10 @@ class AzureDatabase {
             } else {
                 // if no contact is found, then we need to insert the contact in first before we can
                 // insert it as an event contact
-                self.insertContact(fullName) { (newContactID, success) in
+                self.insertContact(fullName!) { (newContactID, success) in
                     if (success) {
                         self.contactID = newContactID!
-                        let eventContactObj = ["event_id": self.curEventID!, "contact_id": self.contactID!]
+                        let eventContactObj = ["id": self.eventContactID!, "event_id": self.curEventID!, "contact_id": self.contactID!]
                         self.eventContactsTable.update(eventContactObj) {
                             (result, error) in
                             if error != nil {
@@ -438,6 +446,21 @@ class AzureDatabase {
                 print("Error in inserting a communication" + error!.description)
             } else {
                 print("Communication inserted, id: " + String(insertedItem!["id"]))
+            }
+        }
+    }
+    
+    // Log actions taken by user to analyze user behavior & engagement
+    // possible actions: "text", "call", "gas", "music", "search", "navigate", "refresh", "
+    func insertAction(actionTaken: String) {
+        let commObj = ["user_id": self.userID!, "action": actionTaken]
+        
+        actionLogTable.insert(commObj) {
+            (insertedItem, error) in
+            if  error != nil {
+                print("Error in inserting an action" + error!.description)
+            } else {
+                print("Action inserted, id: " + String(insertedItem!["id"]))
             }
         }
     }

@@ -32,22 +32,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if launchedBefore {
             print("Not first launch.")
-            if loggedIn {
-                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-                db.initializeUserID(deviceID) { (status, success) in
-                    if success {
-                        print("userID initialized: ", db.userID)
-                        //
-                    }
-                }
-                print("you're logged in")
-                // TODO: direct to home screen
+//            if loggedIn {
+//                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
+//                db.initializeUserID(deviceID) { (status, success) in
+//                    if success {
+//                        print("userID initialized: ", db.userID)
+//                        //
+//                    }
+//                }
+//                print("you're logged in")
+//                // TODO: direct to home screen
+//
+//            } else {
+//                // TODO: direct to login page
+//                print("you're not logged in")
+//                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+//            }
+            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
 
-            } else {
-                // TODO: direct to login page
-                print("you're not logged in")
-                initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
-            }
         }
         else {
             print("First launch, setting NSUserDefault.")

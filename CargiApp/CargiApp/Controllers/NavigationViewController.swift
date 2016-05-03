@@ -997,6 +997,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func changeButtonClicked(sender: UIButton) {
+//        db.insertAction("pick_contact")
         picker.hidden = false
         contactLabel.hidden = true
         changeContactButton.hidden = true
