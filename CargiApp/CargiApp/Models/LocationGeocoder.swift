@@ -19,6 +19,7 @@ class LocationGeocoder {
     
     var address: String?
     var coordinate: CLLocationCoordinate2D?
+    var postalCode: String?
     
     func getCoordinates(address: String, completionHandler: ((status: String, success: Bool) -> Void)) {
         self.address = address
@@ -36,6 +37,30 @@ class LocationGeocoder {
             
             self.coordinate = location.coordinate
             completionHandler(status: "OK", success: true)
+        }
+    }
+    
+    func getPostalCode(location: CLLocation, completionHandler: ((status: String, success: Bool) -> Void)) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            if let err = error {
+                completionHandler(status: String(err), success: false)
+                return
+            }
+            
+            guard let pms = placemarks else {
+                completionHandler(status: "No placemarks found", success: false)
+                return
+            }
+            
+            for pm in pms {
+                if let zipCode = pm.postalCode {
+                    self.postalCode = zipCode
+                    completionHandler(status: "OK", success: true)
+                    return
+                }
+            }
+            completionHandler(status: "No ZIP Code found", success: false)
         }
     }
 }

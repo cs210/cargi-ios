@@ -14,7 +14,7 @@ import EventKit
 import QuartzCore
 import SpeechKit
 
-class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -26,19 +26,40 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
-    var data: NSMutableData = NSMutableData()
     
-    @IBOutlet weak var destLabel: UILabel!
-    @IBOutlet weak var addrLabel: UILabel!
-    @IBOutlet weak var eventLabel: UILabel!
+    var destLabel: UILabel?
+    var addrLabel: UILabel?
+    
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var destinationView: UIView!
     
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var textButton: UIButton!
     @IBOutlet weak var gasButton: UIButton!
     @IBOutlet weak var musicButton: UIButton!
+    @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var refreshButton: UIButton!
+    @IBOutlet weak var navigateButton: UIButton!
+    @IBOutlet weak var currentEventButton: UIButton!
+    @IBOutlet weak var changeContactButton: UIButton!
+    
     @IBOutlet var dashboardView: UIView!
+    @IBOutlet var contactView: UIView!
     @IBOutlet var contactLabel: UILabel!
+
+    @IBOutlet weak var picker: UIPickerView!
+    var pickerData: [String] = [String]()
+    
+    @IBOutlet weak var voiceButton: UIButton!
+    
+    struct Location {
+        var name: String?
+        var address: String?
+        var coordinates: CLLocationCoordinate2D?
+    }
+    
+    // MARK: Variables
     
     var locationManager = CLLocationManager()
     var gasFinder = GasFinder()
@@ -46,15 +67,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     let defaultLatitude: CLLocationDegrees = 37.426
     let defaultLongitude: CLLocationDegrees = -122.172
     
-    var destLocation: String?
-    var destinationName: String?
-    var destCoordinates = CLLocationCoordinate2D()
-    
+    var gasMarker: GMSMarker?
+    var dest = Location()
     
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
         didSet {
-            eventLabel.text = currentEvent?.title
+            currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
         }
     }
     
@@ -65,11 +84,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         didSet {
             contactLabel.text = contact
             if contact == nil {
-                callButton.enabled = false
-                textButton.enabled = false
+                contactView.hidden = true
             } else {
-                callButton.enabled = true
-                textButton.enabled = true
+                contactView.hidden = false
             }
         }
     }
@@ -84,11 +101,47 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     var distanceTasks = DistanceMatrixTasks()
     
+    lazy var db = AzureDatabase.sharedInstance
+    
+    var dbEvent: DBEvent?
+    
+    struct DBEvent {
+        var name: String?
+        var latitude: NSNumber
+        var longitude: NSNumber
+        var dateTime: NSDate
+        
+        init(name: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
+            self.name = name
+            self.latitude = latitude
+            self.longitude = longitude
+            self.dateTime = dateTime
+        }
+    }
+    
+    // MARK: Constants
+    
+    let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
+    
+    
+    // MARK: Methods
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        contactView.hidden = true
+        self.mapView.delegate = self
+        
+        self.picker.delegate = self
+        self.picker.dataSource = self
+        self.picker.hidden = true
+        
+        self.view.bringSubviewToFront(self.activityIndicatorView)
+        self.view.bringSubviewToFront(self.picker)
+        
         destMarker.icon = UIImage(named: "destination_icon")
         
         view.sendSubviewToBack(dashboardView)
@@ -101,20 +154,30 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
         
         // Design of Buttons
-        callButton.layer.shadowOffset = CGSizeMake(0, 3)
+        callButton.layer.shadowOffset = CGSizeMake(3, 3)
         callButton.layer.shadowColor = UIColor.blackColor().CGColor
         callButton.layer.shadowRadius = 2
         callButton.layer.shadowOpacity = 0.27
         
-        textButton.layer.shadowOffset = CGSizeMake(0, 3)
+        textButton.layer.shadowOffset = CGSizeMake(-3, 3)
         textButton.layer.shadowColor = UIColor.blackColor().CGColor
         textButton.layer.shadowRadius = 2
         textButton.layer.shadowOpacity = 0.27
         
-        destinationView.layer.shadowOffset = CGSizeMake(0, -1)
+//        contactView.layer.shadowOffset = CGSizeMake(0, -1)
+//        contactView.layer.shadowColor = UIColor.blackColor().CGColor
+//        contactView.layer.shadowRadius = 1.5
+//        contactView.layer.shadowOpacity = 0.7
+
+        contactView.layer.shadowOffset = CGSizeMake(0, -1)
+        contactView.layer.shadowColor = UIColor.blackColor().CGColor
+        contactView.layer.shadowRadius = 1.5
+        contactView.layer.shadowOpacity = 0.27
+        
+        destinationView.layer.shadowOffset = CGSizeMake(0, 3)
         destinationView.layer.shadowColor = UIColor.blackColor().CGColor
         destinationView.layer.shadowRadius = 1.5
-        destinationView.layer.shadowOpacity = 0.7
+        destinationView.layer.shadowOpacity = 0.27
         
         // Observer for changes in myLocation of google's map view
         mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
@@ -125,27 +188,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
 
-        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-
-        let db = AzureDatabase()
-        print("deviceID: " + deviceID)
-        db.initializeUserID(deviceID) { (status, success) in
-            if (success) {
-                print(db.userID)
-                
-            } else {
-                print(status)
-            }
-            
-        }
-        
-        resetData()
-        syncData()
-//        let latitudeNum = NSNumber(double: destCoordinates.latitude)
-//        let longitudeNum = NSNumber(double: destCoordinates.longitude)
-//        
-//        db.insertEvent(eventLabel.text, latitude: latitudeNum, longitude: longitudeNum, dateTime: NSDate())
+        self.resetData()
+        self.syncData()
     }
+    
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -161,69 +207,160 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Reset Data
     func resetData() {
         self.contact = nil
-        self.eventLabel.text = nil
-        self.destLabel.text = nil
-        self.addrLabel.text = nil
-        self.destLocation = nil
-        self.destinationName = nil
+//        self.eventLabel.text = nil
+//        self.destLabel.text = nil
+//        self.addrLabel.text = nil
+//        waypointCoordinates = nil
+        gasMarker = nil
+        currentEventButton.setTitle(nil, forState: .Normal)
+        searchButton.setTitle(nil, forState: .Normal)
+        dest = Location()
         mapView.clear()
     }
     
-    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
-    func syncData() {
+    private func suggestContact(event: EKEvent?) {
+        guard let ev = event else { return }
         let contacts = contactDirectory.getAllPhoneNumbers()
-        guard let events = eventDirectory.getAllCalendarEvents() else { return }
         
-        for ev in events {
-            guard let _ = ev.location else { continue } // ignore event if it has no location info.
-            self.currentEvent = ev
-            for contact in contacts.keys {
-                if ev.title.rangeOfString(contact) != nil {
-                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+        var possibleContactArr: [String] = []
+        let eventTitle = ev.title.lowercaseString
+        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+        
+        for contact in contacts.keys {
+            let lowerContact = contact.lowercaseString
+            var contactsArr = lowerContact.componentsSeparatedByString(" ")
+            let firstName = contactsArr[0]
+            let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
+            
+            
+            if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
+                if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                    let contactNumber = contactDirectory.getPhoneNumber(contact)
+                    if contactNumber?.count > 0 { //check that the contact actually has a number -- and add it directly
+                        possibleContactArr.append(contact)
                         self.contact = contact
                         break
                     }
                 }
             }
-            if contact != nil { break }
-        }
-        
-        if contact == nil {
-            for ev in events {
-                if !ev.allDay {
-                    self.currentEvent = ev
+            if (contactsArr.count <= 3) { //contact name can't have more than 3 parts
+                var notStopWord = true
+                if stopWords.contains(firstName){
+                    notStopWord = false
+                }
+                var notStopWordL = true
+                if (lastName != nil) {
+                    if stopWords.contains(lastName!){
+                        notStopWordL = false
+                    }
+                }
+                else { notStopWordL = false }
+                
+                if (eventTitleArr.contains(firstName) && notStopWord) || (eventTitleArr.contains(lastName!) && notStopWordL) {
+                    if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {
+                        let contactNumber = contactDirectory.getPhoneNumber(contact)
+                        if contactNumber?.count > 0 { //check that the contact actually has a number
+                            possibleContactArr.append(contact)
+                            if self.contact == nil { //only add to "best guess" contact if you don't have a "best guess" already
+                                //should insert some check here with the database for frequently contacted people - so you have a better guess
+                                //maybe first name is better than matching last name
+                                self.contact = contact
+                            }
+                        }
+                    }
                 }
             }
         }
-        
+        print(possibleContactArr)
+        self.pickerData = possibleContactArr
+        updateContact(contact)
+    }
+    
+    private func updateContact(contact: String?) {
+        self.contact = contact
         contactNumbers = contactDirectory.getPhoneNumber(contact)
-
-        guard let ev = currentEvent else { return }
-        print(ev.eventIdentifier)
         
-        destLocation = ev.location
+        guard let ev = dbEvent else { return }
+        db.insertEvent(currentEvent?.title, latitude: ev.latitude, longitude: ev.longitude, dateTime: ev.dateTime, contactName: self.contact)
+    }
+    
+    func syncEvent(newEvent: EKEvent?) {
+        self.contact = nil
+        dest = Location()
+        currentEvent = newEvent
+        print(newEvent)
+        guard let ev = currentEvent else { return }
+        currentEventButton.setTitle(ev.title, forState: .Normal)
+        dest.address = ev.location
         if let checkIfEmpty = ev.location {
             if checkIfEmpty.isEmpty {
-                destLocation = nil
+                dest.address = nil
             }
         }
-        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
-            destCoordinates = coordinate
-        }
+        
+        dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
+        
+//       code below originally in master
+//        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
+//            destCoordinates = coordinate
+//        }
 
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
-                destLabel.text = locArr.first
-                addrLabel.text = locArr[1]
+                searchButton.setTitle(locArr.first, forState: .Normal)
+                //                destLabel.text = locArr.first
+                //                addrLabel.text = locArr[1]
             } else {
-                destLabel.text = locArr.first
-                addrLabel.text = nil
+                searchButton.setTitle(locArr.first, forState: .Normal)
+                //                destLabel.text = locArr.first
+                //                addrLabel.text = nil
             }
-            destinationName = locArr.first
+            dest.name = locArr.first
         }
         print("showroute")
         showRoute(showDestMarker: true)
+        
+        dbEvent = createDBEventForCurrentEvent()
+        suggestContact(ev)
+    }
+    
+    /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
+    func syncData() {
+        self.currentEvent = nil
+        
+        guard let events = eventDirectory.getAllCalendarEvents() else { return }
+        for ev in events {
+            if !ev.allDay {
+                if ev.location != nil {
+                    self.currentEvent = ev
+                    break
+                }
+                if currentEvent == nil {
+                    currentEvent = ev
+                }
+            }
+        }
+        syncEvent(currentEvent)
+    }
+
+    
+    private func createDBEventForCurrentEvent() -> DBEvent {
+        var eventDateTime: NSDate
+        if let ev = currentEvent {
+            eventDateTime = ev.startDate
+        } else {
+            eventDateTime = NSDate()
+        }
+        
+        var latitudeNum: NSNumber = 0
+        var longitudeNum: NSNumber = 0
+        if let coordinate = dest.coordinates {
+            latitudeNum = NSNumber(double: coordinate.latitude)
+            longitudeNum = NSNumber(double: coordinate.longitude)
+        }
+        
+        return DBEvent(name: currentEvent?.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
     }
 
     /**
@@ -243,6 +380,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         guard let url = NSURL(string: path) else { return }
         UIApplication.sharedApplication().openURL(url)
     }
+    
+    /**
+     Open Google Maps showing the route to the given coordinates with a waypoint.
+     */
+    func openGoogleMapsLocationWaypoints(address: String, waypoint: CLLocationCoordinate2D) {
+        print("comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")
+        UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(address)&waypoints=\(waypoint.latitude),\(waypoint.longitude)&directionsmode=driving")!)
+    }
+    
     
     /**
         Open Apple Maps showing the route to the given coordinates.
@@ -268,20 +414,29 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /**
         Open Maps, given the current event's location.
      */
+//    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
     func openMaps() {
+
 //        guard let ev = currentEvent else { return }
 //        let queries = ev.location!.componentsSeparatedByString("\n")
 //        print(queries)
-        guard let dest = destLocation else {
+        
+//        if waypointCoordinates != nil {
+//            openGoogleMapsLocationWaypoints(waypointCoordinates!)
+//            return
+//        }
+
+        guard let destAddress = dest.address else {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
         }
-        let query = dest.componentsSeparatedByString("\n").joinWithSeparator(" ")
+        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
         print(query)
         let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
         
         if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
             self.openGoogleMapsLocationAddress(address)
+            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
         } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
             self.openAppleMapsLocationAddress(address)
         }
@@ -318,6 +473,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
         mapView.clear()
+//        waypointCoordinates = nil
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
@@ -326,27 +482,56 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-
-        self.directionTasks.getDirections(origin, dest: destLocation, waypoints: waypoints) { (status, success) in
+        
+        var destination: String?
+        if dest.address != nil {
+            destination = dest.address
+        } else {
+            destination = waypoints.first
+        }
+        
+        self.directionTasks.getDirections(origin, dest: destination, waypoints: waypoints) { (status, success) in
             print("got directions")
             self.destMarker.map = nil
             self.syncRouteSuccess = success
             if success {
                 print("success")
+                if !waypoints.isEmpty {
+                    if let gm = self.gasMarker {
+                        gm.map = self.mapView
+                    }
+                }
+                
                 if showDestMarker {
                     self.configureMap()
                 }
+                
                 self.drawRoute()
             } else {
-                self.showAlertViewController(title: "Error", message: "Can't find a way there.")
                 print(status)
+                if let backupDest = waypoints.first {
+                    self.directionTasks.getDirections(origin, dest: backupDest, waypoints: waypoints) { (status, success) in
+                        if success {
+                            if let gm = self.gasMarker {
+                                gm.map = self.mapView
+                            }
+                            self.drawRoute()
+                        } else {
+                            self.showAlertViewController(title: "Error", message: "Can't find a way there.")
+                        }
+                    }
+                } else {
+                    if status != "Origin is nil" && status != "Destination is nil" {
+                        self.showAlertViewController(title: "Error", message: "Can't find a way there.")
+                    }
+                }
             }
         }
     }
     
     /// Update the Google Maps view with the synced route, depending on whether we've successfully received the response from Google Directions API.
     func showRoute(showDestMarker showDestMarker: Bool) {
-        showRouteWithWaypoints(waypoints: nil, showDestMarker: showDestMarker)
+        showRouteWithWaypoints(waypoints: [], showDestMarker: showDestMarker)
     }
     
     /// Shows a pin at the destination on the map.
@@ -379,7 +564,22 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("drawmaps done")
         
         let bounds = GMSCoordinateBounds(path: path)
-        let cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 165.0, right: 20.0))
+        updateCamera(bounds, shouldAddEdgeInsets: true)
+    }
+    
+    private func updateCamera(bounds: GMSCoordinateBounds, shouldAddEdgeInsets: Bool) {
+        // Depending on whether the contact view is hidden or not, we have different bounds.
+        var cameraUpdate: GMSCameraUpdate
+        if shouldAddEdgeInsets {
+            if contactView.hidden {
+                cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 110.0, right: 20.0))
+            } else {
+                cameraUpdate = GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: UIEdgeInsets(top: 165.0, left: 20.0, bottom: 230.0, right: 20.0))
+            }
+        } else {
+            cameraUpdate = GMSCameraUpdate.fitBounds(bounds)
+        }
+        
         mapView.moveCamera(cameraUpdate)
     }
     
@@ -401,29 +601,35 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Opens up a message view with a preformatted message that shows destination and ETA.
     func sendETAMessage(phoneNumbers: [String]?) {
         guard let numbers = phoneNumbers else { return }
-        guard let _ = destLocation else { return }
+        
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
             let firstName = self.contact?.componentsSeparatedByString(" ").first
             print(contact)
             print(firstName)
-            distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: destCoordinates.latitude, dest2: destCoordinates.longitude) { (status, success) in
-                print(status)
-                if success {
-                    let duration = self.distanceTasks.durationInTrafficText
-                    if let dest = self.destinationName {
-                        controller.body = "Hi \(firstName!), I will arrive at \(dest) in \(duration)."
+            
+            if dest.address == nil {
+                controller.body = ""
+            } else {
+                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: dest.coordinates!.latitude, dest2: dest.coordinates!.longitude) { (status, success) in
+                    print(status)
+                    if success {
+                        let duration = self.distanceTasks.durationInTrafficText
+                        if let destination = self.dest.name {
+                            controller.body = "Hi \(firstName!), I will arrive at \(destination) in \(duration)."
+                        } else {
+                            controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                        }
+                        print(controller.body)
                     } else {
-                        controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                        self.showAlertViewController(title: "Error", message: "No ETA found.")
                     }
-                    print(controller.body)
-                } else {
-                    self.showAlertViewController(title: "Error", message: "No ETA found.")
                 }
             }
+            
             print(phoneNumbers)
-            controller.recipients = [numbers[0]] // Send only to the primary number
+            controller.recipients = [numbers.first!] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
             print("presenting view controller")
@@ -431,7 +637,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
-    func gasBtn() {
+    //Temporary Azure REST API Test
+    func azureRESTAPITest() {
         let stringURL = "https://cargiios.azure-mobile.net/api/calculator/add?a=1&b=5"
         print(stringURL)
         guard let url = NSURL(string: stringURL) else { return }
@@ -538,11 +745,66 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
-    func showAlertViewController(title title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
-        alert.addAction(alertAction)
-        presentViewController(alert, animated: true, completion: nil)
+    // MARK: GMSMapViewDelegate Methods
+    
+    func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
+        gasMarker = marker
+        let showDestMarker = (dest.address != nil) || (dest.name != nil)
+        
+        if let userData = marker.userData as? [String:String] {
+            if let placeID = userData["place_id"] {
+                self.showRouteWithWaypoints(waypoints: ["place_id:\(placeID)"], showDestMarker: showDestMarker)
+                return
+            }
+        }
+        
+        print(marker.position)
+        let lat = String(marker.position.latitude)
+        let long = String(marker.position.longitude)
+        let coord = lat + "," + long
+        
+        self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: showDestMarker)
+    }
+    
+    
+    
+    
+    // MARK: UIPickerVoew Delegate Methods
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        var label: UILabel
+        if view == nil {
+            label = UILabel()
+            label.textColor = UIColor.blackColor()
+            label.textAlignment = .Center
+        } else {
+            label = view as! UILabel
+        }
+        label.font = UIFont(name: "Lato", size: 20.0)
+        label.text = pickerData[row]
+        return label
+        
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedContact = pickerData[row]
+        print(selectedContact)
+        updateContact(selectedContact)
+        picker.hidden = true
+        contactLabel.hidden = false
+        changeContactButton.hidden = false
     }
     
     
@@ -550,63 +812,221 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
+        db.insertAction("refresh")
         resetData()
         syncData()
     }
     
     /// Navigate Button clicked.
     @IBAction func navigateButtonClicked(sender: UIButton) {
+//        db.logNavigated()
+        db.insertAction("navigate")
         if let _ = currentEvent {
             openMaps()
         } else {
-            syncData()
+            if dest.name == nil && dest.address == nil {
+                syncData()
+            }
             openMaps()
         }
     }
+
+    //Start session for voice capture/recognition
+    @IBAction func voiceButtonClicked(sender: AnyObject) {
+        print("listening for voice command");
+        voiceButton.setTitle("Listening...", forState: .Normal)
+        let url = "nmsps://NMDPTRIAL_team_cargi_co20160418020749@sslsandbox.nmdp.nuancemobility.net:443"
+        let token = "6ff1671b87d0259dc04a734edbf2ab4894184242e68c4cf3fac45545c7c10e37b376523a4677d706c14a549c3cffe5d0182713feb35ff2ad2447f2eb090122bc"
+        let session = SKSession(URL: NSURL(string: url), appToken: token)
+        session.recognizeWithType(SKTransactionSpeechTypeDictation,
+                                  detection: .Short,
+                                  language: "eng-USA",
+                                  delegate: self)
+    }
     
-    
+    //find the best result and start gas action if it matches
+    func transaction(transaction: SKTransaction!, didReceiveRecognition recognition: SKRecognition!) {
+        print("Result of Speech Recognition: " + recognition.text)
+        if (recognition.text.lowercaseString.rangeOfString("gas") != nil) {
+            gasButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("music") != nil) {
+            musicButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("call") != nil) {
+            phoneButtonClicked(nil)
+        }
+        if (recognition.text.lowercaseString.rangeOfString("text") != nil) {
+            messageButtonClicked(nil)
+        }
+        voiceButton.setTitle("Listen", forState: .Normal)
+    }
+
     /// Gas Button clicked
-    @IBAction func gasButtonClicked(sender: UIButton) {
-//        gasBtn()
-        guard let originLocation = locationManager.location?.coordinate else {
+    @IBAction func gasButtonClicked(sender: UIButton?) {
+        db.insertAction("gas")
+        let numCheapGasStations = 5
+        let numNearbyGasStations = 3
+        
+        let visibleRegion = self.mapView.projection.visibleRegion()
+        var bounds = GMSCoordinateBounds(coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
+        
+        guard let originLocation = locationManager.location else {
             return
         }
         
-        let origin = "\(originLocation.latitude),\(originLocation.longitude)"
-        print("origin: \(origin)")
-        gasFinder.getNearbyGas(origin) { (status: String, success: Bool) in
+        activityIndicatorView.startAnimating()
+        
+        let geocoder = LocationGeocoder()
+        geocoder.getPostalCode(originLocation) { (status, success) in
+            print("Postal Code: \(status)")
             if success {
-                print(self.gasFinder.stationName)
-                print(self.gasFinder.coordinates)
-                if self.destLocation != nil {
-                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
-                } else {
-                    self.destLocation = self.gasFinder.address
-                    self.showRoute(showDestMarker: false)
+                guard let postalCode = geocoder.postalCode else { return }
+                print(postalCode)
+                
+                guard let originLocationCoordinates = self.locationManager.location?.coordinate else {
+                    return
                 }
-                let marker = GMSMarker(position: self.gasFinder.coordinates)
-                marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.title = self.gasFinder.stationName
-                marker.snippet = self.gasFinder.address
-                marker.map = self.mapView
+                let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
+                
+                self.gasFinder.getNearbyGasStations(origin, count: numNearbyGasStations) { (status: String, success: Bool) in
+                    print("Gas Finder: \(status)")
+                    if success {
+                        let cheapGasFinder = CheapGasFinder()
+                        cheapGasFinder.getCheapGasByPostalCode(postalCode) { (status, success) in
+                            print("Cheap Gas Finder: \(status)")
+                            if success {
+                                for station in self.gasFinder.stations {
+                                    print(station)
+                                    let number = station.address?.componentsSeparatedByString(" ").first
+                                    var priceFound = false
+                                    let userData: [String:String] = ["place_id" : station.placeID!,
+                                                                     "address"  : station.address!]
+                                    
+                                    for cheapStation in cheapGasFinder.stations {
+                                        if number! == cheapStation.number! {
+                                            // Getting location info from Google, so should include place_id.
+                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
+                                            bounds = bounds.includingCoordinate(station.coordinates!)
+                                            priceFound = true
+                                            break
+                                        }
+                                        
+//                                        let locationGeocoder = LocationGeocoder()
+//                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
+//                                            if success {
+//                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
+//                                                marker.appearAnimation = kGMSMarkerAnimationPop
+//                                                marker.title = station.name
+//                                                marker.icon = UIImage(named: "gasmarker")
+//                                                marker.snippet = station.price
+//                                                marker.map = self.mapView
+//                                            }
+//                                        }
+                                    }
+                                    if !priceFound {
+                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
+                                        bounds = bounds.includingCoordinate(station.coordinates!)
+                                    }
+                                }
+                                
+                                for i in 0..<numCheapGasStations {
+                                    if let cheapStation = cheapGasFinder.stations[safe: i] {
+                                        let userData: [String:String] = ["address"  : cheapStation.address!]
+                                        let locationGeocoder = LocationGeocoder()
+                                        locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
+                                            if success {
+                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+                                                bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
+                                            }
+                                            // if the last cheap gas was found, stop animating activity indicator.
+                                            if i == numCheapGasStations - 1 {
+                                                self.activityIndicatorView.stopAnimating()
+                                                self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                
+                            }
+                        }
+                    } else {
+                        print("Error: \(status)")
+                    }
+                }
             } else {
-                print("Error: \(status)")
+                print("FAIL")
+                return
             }
         }
+        
+//        guard let originLocationCoordinates = locationManager.location?.coordinate else {
+//            return
+//        }
+//
+//        let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
+//        print("origin: \(origin)")
+//        gasFinder.getNearbyGasStations(origin, count: 0) { (status: String, success: Bool) in
+//            if success {
+//                for station in self.gasFinder.stations {
+//                    let marker = GMSMarker(position: station.coordinates!)
+//                    marker.appearAnimation = kGMSMarkerAnimationPop
+//                    marker.title = station.name
+//                    marker.icon = UIImage(named: "gasmarker")
+//                    marker.snippet = station.address
+//                    marker.map = self.mapView
+//                }
+////                if self.destLocation != nil {
+//////                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
+////                } else {
+////                    self.destLocation = self.gasFinder.address
+//////                    self.showRoute(showDestMarker: false)
+////                }
+//            } else {
+//                print("Error: \(status)")
+//            }
+//        }
     }
     
+    private func addMapMarker(position: CLLocationCoordinate2D, title: String?, snippet: String?, userData: AnyObject?, cheap: Bool) {
+        let marker = GMSMarker(position: position)
+        marker.appearAnimation = kGMSMarkerAnimationPop
+        marker.title = title
+        if cheap {
+            // green
+            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 71/256, green: 179/256, blue: 91/256, alpha: 1.0))
+        } else {
+            // blue
+//            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
+            
+        }
+        // marker.icon = UIImage(named: "gasmarker")
+        marker.snippet = snippet
+        marker.userData = userData
+        marker.map = self.mapView
+    }
+    
+    
     /// Send Message Button clicked.
-    @IBAction func messageButtonClicked(sender: UIButton) {
+    @IBAction func messageButtonClicked(sender: UIButton?) {
+        db.insertAction("message")
+        print("message button activated")
+        db.insertCommunication("message")
         self.sendETAMessage(self.contactNumbers)
     }
     
     /// Starts a phone call using the phone number associated with current event.
-    @IBAction func phoneButtonClicked(sender: UIButton) {
+    @IBAction func phoneButtonClicked(sender: UIButton?) {
+        print("phone button activated")
+        db.insertAction("phone")
+        db.insertCommunication("phone")
         self.callPhone(contactNumbers)
     }
     
     /// Opens the Apple Calendar app, using deep-linking.
     @IBAction func eventButtonClicked(sender: UIButton) {
+        db.insertAction("calendar")
         let appName: String = "calshow"
         let appURL: String = "\(appName):"
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!) {
@@ -615,9 +1035,25 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
+    @IBAction func changeButtonClicked(sender: UIButton) {
+        picker.reloadAllComponents()
+        db.insertAction("pick_contact")
+        if let contactName = contact {
+            if let row = pickerData.indexOf(contactName) {
+                picker.selectRow(row, inComponent: 0, animated: false)
+            }
+        }
+        picker.hidden = false
+        contactLabel.hidden = true
+        changeContactButton.hidden = true
+    }
+    
+    
     /// Opens the music app of preference, using deep-linking.
     // Music app options: Spotify (default) and Apple Music
-    @IBAction func musicButtonClicked(sender: UIButton) {
+    @IBAction func musicButtonClicked(sender: UIButton?) {
+        db.insertAction("music")
+        print("music button activated")
         let appName: String = "spotify"
         
         let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
@@ -636,14 +1072,80 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     
+    
     /// Search Button clicked
     @IBAction func searchButtonClicked(sender: UIButton) {
+        db.insertAction("search")
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         let visibleRegion = self.mapView.projection.visibleRegion()
         autocompleteController.autocompleteBounds = GMSCoordinateBounds(
             coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
         self.presentViewController(autocompleteController, animated: true, completion: nil)
+    }
+    
+    /// Settings Button clicked
+    @IBAction func settingsButtonClicked(sender: UIButton) {
+        let alert = UIAlertController(title: "Settings", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
+            let prefs = NSUserDefaults.standardUserDefaults()
+            prefs.setBool(false, forKey: "loggedIn") // set as logged in
+            prefs.setValue("", forKey: "userEmail")
+
+            self.mapView.removeObserver(self, forKeyPath: "myLocation")
+            
+//            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {
+//                self.performSegueWithIdentifier("logoutToLogin", sender: nil)
+//            } else {
+            self.performSegueWithIdentifier("logout", sender: nil)
+//            }
+        }
+        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
+    // MARK: Storyboard
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+                case "pickEvent":
+                if let eventsTableViewController = segue.destinationViewController as? EventPickerViewController {
+                    print("printing from nvc")
+                    print("event: \(currentEvent?.eventIdentifier)")
+                    print("event: \(currentEvent?.calendarItemIdentifier)")
+                    eventsTableViewController.currentEventID = currentEvent?.title
+                }
+                default: break
+            }
+            
+        }
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        if identifier == "pickEvent" {
+            
+            if EKEventStore.authorizationStatusForEntityType(EKEntityType.Event) == EKAuthorizationStatus.Authorized {
+                return true
+            } else {
+                showAlertViewControllerWithHandler(title: "Error", message: "Cargi needs access to your calendar in order to make your driving experience even better.", handler: { (action) in
+                    EKEventStore().requestAccessToEntityType(.Event) { (success, error) in
+                        
+                    }
+                })
+                return false
+            }
+        }
+        return false
+    }
+    
+    @IBAction func eventSelectedChanged(segue: UIStoryboardSegue) {
+        
     }
 
 }
@@ -658,12 +1160,13 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         print("Place attributions: \(place.attributions)")
         print("Place coordinates: \(place.coordinate)")
         self.dismissViewControllerAnimated(true, completion: nil)
-        self.destLocation = place.formattedAddress
-        self.destinationName = place.name
-        self.destCoordinates = place.coordinate
-        self.destLabel.text = place.name
-        self.addrLabel.text = place.formattedAddress
-        self.eventLabel.text = nil
+        dest.address = place.formattedAddress
+        dest.name = place.name
+        dest.coordinates = place.coordinate
+//        self.destLabel.text = place.name
+        self.searchButton.setTitle(place.name, forState: .Normal)
+//        self.addrLabel.text = place.formattedAddress
+        gasMarker = nil
         self.showRoute(showDestMarker: true)
 //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
 //        let marker = GMSMarker(position: place.coordinate)
@@ -681,5 +1184,28 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
     func wasCancelled(viewController: GMSAutocompleteViewController) {
         print("Autocomplete was cancelled.", terminator: "")
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension CollectionType {
+    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension UIViewController {
+    func showAlertViewController(title title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertViewControllerWithHandler(title title: String?, message: String?, handler: ((action: UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: handler)
+        alert.addAction(alertAction)
+        presentViewController(alert, animated: true, completion: nil)
     }
 }

@@ -52,7 +52,7 @@ class SettingsTableViewController: UITableViewController {
         if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://music.apple.com/")!)) {
             options[1] += ["Apple Music"]
         }
-        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "soundloud://app")!)) {
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "soundcloud://app")!)) {
             options[1] += ["SoundCloud"]
         }
         

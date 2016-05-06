@@ -74,4 +74,18 @@ class ContactDirectory {
         guard let name = contactName else { return nil }
         return contacts[name]
     }
+    
+    func getContactName(numberToFind: String) -> String? {
+        for (contact, numbers) in contacts {
+            var phoneNumber = ""
+            if let phone = numbers.first {
+                phoneNumber = phone
+            }
+            
+            if (phoneNumber == numberToFind) {
+                return contact
+            }
+        }
+        return nil;
+    }
 }

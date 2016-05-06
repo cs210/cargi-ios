@@ -75,9 +75,9 @@ class EventDirectory {
      */
     private func parseCalendar(calendar: EKCalendar) -> [EKEvent] {
         // Look at all events 30 minutes prior to the current time
-        let startDate = NSDate().dateByAddingTimeInterval(-30*60)
+        let startDate = NSDate().dateByAddingTimeInterval(-1.5*60*60)
         // Look at all events within 2 hours after the current time.
-        let endDate = NSDate().dateByAddingTimeInterval(2*60*60)
+        let endDate = NSDate().dateByAddingTimeInterval(24*60*60)
         return parseCalendar(calendar, startDate: startDate, endDate: endDate)
     }
     

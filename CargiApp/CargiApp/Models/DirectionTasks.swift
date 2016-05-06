@@ -37,22 +37,22 @@ class DirectionTasks {
     
     // Used for calculating distance and time for the route, but not implemented yet.
     /*
-    var totalDistanceMeters: UInt = 0
-    var totalDistanceString: String!
-    var totalTimeSeconds: UInt = 0
-    var totalTimeString: String!
-    */
+     var totalDistanceMeters: UInt = 0
+     var totalDistanceString: String!
+     var totalTimeSeconds: UInt = 0
+     var totalTimeString: String!
+     */
     
     /**
-        Gets the direction from origin to destination and populates the instance variables defined above.
-        
-        - Origin/Destination should be properly formatted using either:
-            1) formatted address,
-            2) coordinates (latitude & longitude) separated by comma.
-        - Waypoints (optional) are required points that the route must go through.
-        - Completion Handler will be called once the response is successfully received, so that ViewControllers can properly update the views.
-    
-        Note: travelMode will be driving by default.
+     Gets the direction from origin to destination and populates the instance variables defined above.
+     
+     - Origin/Destination should be properly formatted using either:
+     1) formatted address,
+     2) coordinates (latitude & longitude) separated by comma.
+     - Waypoints (optional) are required points that the route must go through.
+     - Completion Handler will be called once the response is successfully received, so that ViewControllers can properly update the views.
+     
+     Note: travelMode will be driving by default.
      */
     func getDirections(origin: String?, dest: String?, waypoints: [String]?, completionHandler: ((status: String, success: Bool) -> Void)) {
         print("origin")
@@ -74,7 +74,6 @@ class DirectionTasks {
         if let waypointsString = waypoints?.joinWithSeparator("|") {
             waypoint = "waypoints=\(waypointsString)"
         }
-        print(waypoint)
         
         // URL for making request to the Google Directions API.
         let requestURL: String = "\(baseURL)origin=\(originLocation)&destination=\(destLocation)&\(waypoint)&key=\(APIKey)"
@@ -101,7 +100,6 @@ class DirectionTasks {
                 completionHandler(status: "Parsing JSON failed.", success: false)
                 return
             }
-            print(dict.description)
             
             let status = dict["status"] as! String
             if status == "OK" {
@@ -134,4 +132,3 @@ class DirectionTasks {
     }
     
 }
-
