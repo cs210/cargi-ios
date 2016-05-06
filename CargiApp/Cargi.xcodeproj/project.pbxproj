@@ -135,6 +135,7 @@
 				86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */,
 				86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */,
 				407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */,
+				B3FEAB1E1CC741D3002E6B0B /* MicrosoftAzureMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

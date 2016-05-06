@@ -188,23 +188,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
 
-//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-//
-//        db.initializeUserID(deviceID) { (status, success) in
-//            if (success) {
-//                print("initialized user id:", self.db.userID!)
-//                // need to wait until userID is successfully initialized before we can reset and sync the data, to ensure
-//                // that calls to the database are successful
-//                self.resetData()
-//                self.syncData()
-//            } else {
-//                print(status)
-//                // TODO: if unable to initialize userID, need to perhaps set db.userID to be a dummy string, so that
-//                // none of the database inserts will crash (if userID is nil)
-//                self.resetData()
-//                self.syncData()
-//            }
-//        }
         self.resetData()
         self.syncData()
     }
@@ -317,6 +300,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
         
+//       code below originally in master
+//        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
+//            destCoordinates = coordinate
+//        }
+
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
