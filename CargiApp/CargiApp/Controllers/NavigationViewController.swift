@@ -877,7 +877,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
         db.insertAction("gas")
-        let numCheapGasStations = 3
+        let numCheapGasStations = 5
         let numNearbyGasStations = 3
         
         let visibleRegion = self.mapView.projection.visibleRegion()
