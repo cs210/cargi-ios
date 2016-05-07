@@ -152,22 +152,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         layer.shadowRadius = 1.5
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
-        
-        // Design of Buttons
-        callButton.layer.shadowOffset = CGSizeMake(3, 3)
-        callButton.layer.shadowColor = UIColor.blackColor().CGColor
-        callButton.layer.shadowRadius = 2
-        callButton.layer.shadowOpacity = 0.27
-        
-        textButton.layer.shadowOffset = CGSizeMake(-3, 3)
-        textButton.layer.shadowColor = UIColor.blackColor().CGColor
-        textButton.layer.shadowRadius = 2
-        textButton.layer.shadowOpacity = 0.27
-        
-//        contactView.layer.shadowOffset = CGSizeMake(0, -1)
-//        contactView.layer.shadowColor = UIColor.blackColor().CGColor
-//        contactView.layer.shadowRadius = 1.5
-//        contactView.layer.shadowOpacity = 0.7
 
         contactView.layer.shadowOffset = CGSizeMake(0, -1)
         contactView.layer.shadowColor = UIColor.blackColor().CGColor
