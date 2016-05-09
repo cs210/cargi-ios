@@ -890,7 +890,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                     for cheapStation in cheapGasFinder.stations {
                                         if number! == cheapStation.number! {
                                             // Getting location info from Google, so should include place_id.
-                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
+                                            dispatch_async(dispatch_get_main_queue()) {
+                                                self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
+                                            }
                                             bounds = bounds.includingCoordinate(station.coordinates!)
                                             priceFound = true
                                             break
@@ -909,7 +911,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //                                        }
                                     }
                                     if !priceFound {
-                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
+                                        dispatch_async(dispatch_get_main_queue()) {
+                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
+                                        }
                                         bounds = bounds.includingCoordinate(station.coordinates!)
                                     }
                                 }
@@ -920,13 +924,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                         let locationGeocoder = LocationGeocoder()
                                         locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
                                             if success {
-                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+                                                dispatch_async(dispatch_get_main_queue()) {
+                                                    self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+                                                }
                                                 bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
                                             }
                                             // if the last cheap gas was found, stop animating activity indicator.
                                             if i == numCheapGasStations - 1 {
-                                                self.activityIndicatorView.stopAnimating()
-                                                self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                                dispatch_async(dispatch_get_main_queue()) {
+                                                    self.activityIndicatorView.stopAnimating()
+                                                    self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                                }
+                                                
                                             }
                                         }
                                     }

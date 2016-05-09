@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if loggedIn {
 //                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
                 let emailString = prefs.stringForKey("userEmail")!
-//                print("deviceID:", deviceID)
+
                 if prefs.objectForKey("userID") != nil {
                     let userID = prefs.stringForKey("userID")
                     self.db.userID = userID
@@ -50,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             print("userID initialized: ", self.db.userID)
                             //
                             self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                        } else {
+                            self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
                         }
                     }
                 }
