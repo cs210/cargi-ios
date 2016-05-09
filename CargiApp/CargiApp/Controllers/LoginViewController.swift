@@ -76,7 +76,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         let prefs = NSUserDefaults.standardUserDefaults()
                                         prefs.setBool(true, forKey: "loggedIn") // set as logged in
                                         prefs.setValue(emailString, forKey: "userEmail")
-
+                                        prefs.setValue(self.db.userID!, forKey: "userID")
                                         self.activityIndicatorView.stopAnimating()
                                         self.performSegueWithIdentifier("login", sender: nil)
 

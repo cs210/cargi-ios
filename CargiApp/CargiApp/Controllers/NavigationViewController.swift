@@ -1076,6 +1076,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             let prefs = NSUserDefaults.standardUserDefaults()
             prefs.setBool(false, forKey: "loggedIn") // set as logged in
             prefs.setValue("", forKey: "userEmail")
+            prefs.setValue("", forKey: "userID")
 
             self.mapView.removeObserver(self, forKeyPath: "myLocation")
             
