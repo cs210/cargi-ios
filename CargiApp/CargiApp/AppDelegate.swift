@@ -45,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         print("userID initialized: ", self.db.userID)
                         //
                         self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                    } else {
+                        self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
                     }
                 }
                 print("you're logged in")

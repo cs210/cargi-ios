@@ -779,7 +779,7 @@
                             </label>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3mH-Bw-nPP">
                                 <rect key="frame" x="282" y="281" width="37" height="37"/>
-                                <color key="color" red="0.2784313725" green="0.70196078429999997" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="color" red="0.18431372939999999" green="0.74901962280000001" blue="0.93333339689999995" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -810,6 +810,7 @@
                     <connections>
                         <outlet property="activityIndicatorView" destination="3mH-Bw-nPP" id="uSq-Rn-Tcx"/>
                         <outlet property="emailTextField" destination="ZCd-HY-xrw" id="rBM-nd-YuN"/>
+                        <outlet property="loginButton" destination="gLP-rX-P2s" id="Mfo-7m-bVp"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="login" id="MyH-Ys-aGa"/>
                     </connections>
                 </viewController>
@@ -885,6 +886,10 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mJ1-HW-otX">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                                <color key="color" red="0.18431372939999999" green="0.74901962280000001" blue="0.93333339689999995" alpha="1" colorSpace="deviceRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -900,8 +905,10 @@
                             <constraint firstItem="G1F-sa-nzU" firstAttribute="leading" secondItem="HLl-T5-S7u" secondAttribute="leading" constant="58" id="jNe-zQ-WjB"/>
                             <constraint firstItem="kO3-uu-gFq" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="0.7376" id="mAO-Jq-1W9"/>
                             <constraint firstItem="G1F-sa-nzU" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="0.3298" id="mjW-ta-Kz6"/>
+                            <constraint firstItem="mJ1-HW-otX" firstAttribute="centerX" secondItem="HLl-T5-S7u" secondAttribute="centerX" id="nvu-hy-QE2"/>
                             <constraint firstItem="Y1f-e0-umN" firstAttribute="leading" secondItem="G1F-sa-nzU" secondAttribute="leading" id="qFc-Bn-fib"/>
                             <constraint firstItem="MGC-YV-nzY" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="1.826" id="sqg-mz-0rm"/>
+                            <constraint firstItem="mJ1-HW-otX" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" id="vrf-aO-4Z9"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -910,8 +917,10 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="mJ1-HW-otX" id="Wrq-SQ-gt8"/>
                         <outlet property="emailTextField" destination="hJN-n0-Eoy" id="dNP-yl-hFd"/>
                         <outlet property="nameTextField" destination="kO3-uu-gFq" id="nZf-Ic-Tod"/>
+                        <outlet property="signupButton" destination="Y1f-e0-umN" id="oId-CP-cKg"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="signup" id="ew2-US-zHJ"/>
                     </connections>
                 </viewController>
@@ -965,7 +974,7 @@
     </scenes>
     <resources>
         <image name="calendar-icon.png" width="18" height="20"/>
-        <image name="callbutton.png" width="108" height="75"/>
+        <image name="callbutton.png" width="108" height="76"/>
         <image name="gasbutton.png" width="35" height="38"/>
         <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
@@ -978,10 +987,10 @@
         <image name="screen4.png" width="375" height="667"/>
         <image name="search.png" width="24" height="24"/>
         <image name="settingsbutton.png" width="33" height="34"/>
-        <image name="textbutton.png" width="110" height="75"/>
+        <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="ew2-US-zHJ"/>
         <segue reference="3lO-8O-DOT"/>
-        <segue reference="MyH-Ys-aGa"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -42,7 +42,7 @@ class GasFinder {
         let request = NSURL(string: requestURL)
         
         // Get and parse the response.
-        dispatch_async(dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             guard let url = request else {
                 completionHandler(status: "url is not valid", success: false)
                 return

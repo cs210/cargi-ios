@@ -13,7 +13,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var emailTextField: UITextField!
     lazy var db = AzureDatabase.sharedInstance
+    @IBOutlet weak var loginButton: UIButton!
 
+    
+    
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         super.viewWillAppear(animated)
@@ -45,6 +48,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func loginButtonClicked(sender: UIButton) {
+        loginButton.enabled = false
         let email = emailTextField.text
         if (email == nil) {
             // TODO: some error message or red error text under the login name
@@ -55,6 +59,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if (!db.validateEmail(emailString)) {
                 // TODO: some error message or red error text under the login name, if we know it's an invalid email
                 // can also do nothing, unless we want a better UX (let users know they have a typo for instance)
+                loginButton.enabled = true
                 showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
             } else {
                 activityIndicatorView.startAnimating()
@@ -62,6 +67,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     if (!exists) { // if email doesn't exist, user needs to sign up
                         // TODO: some error message or red error text under the login name
                         // "Looks like you don't have an account yet" ??
+                        self.loginButton.enabled = true
                         self.activityIndicatorView.stopAnimating()
                         self.showAlertViewController(title: "Login Failed", message: "An account does not exist with this email.")
                     } else {
@@ -77,10 +83,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         prefs.setBool(true, forKey: "loggedIn") // set as logged in
                                         prefs.setValue(emailString, forKey: "userEmail")
 
+                                        self.loginButton.enabled = true
                                         self.activityIndicatorView.stopAnimating()
                                         self.performSegueWithIdentifier("login", sender: nil)
 
                                     } else {
+                                        self.loginButton.enabled = true
                                         self.activityIndicatorView.stopAnimating()
                                         self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
 //                                        self.showAlertViewController(title: "Server Error", message: status)
@@ -88,6 +96,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 }
                                 
                             } else {
+                                self.loginButton.enabled = true
                                 self.activityIndicatorView.stopAnimating()
                                 // print error message about incorrect email login
                                 self.showAlertViewController(title: "Login Failed", message: "Login information entered is not correct.")
