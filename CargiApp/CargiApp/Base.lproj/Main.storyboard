@@ -196,7 +196,7 @@
                                     </mask>
                                 </variation>
                             </activityIndicatorView>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Djw-Nl-X5i">
+                            <pickerView contentMode="scaleToFill" showsSelectionIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Djw-Nl-X5i">
                                 <rect key="frame" x="0.0" y="420" width="600" height="110"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="216" id="XB4-oR-3F1"/>

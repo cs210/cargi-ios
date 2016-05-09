@@ -38,20 +38,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if loggedIn {
 //                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
                 let emailString = prefs.stringForKey("userEmail")!
-
+                print(emailString)
                 if prefs.objectForKey("userID") != nil {
                     let userID = prefs.stringForKey("userID")
                     self.db.userID = userID
-                    self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                    initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
 
                 } else {
+                    print(emailString)
                     db.initializeUserIDWithEmail(emailString) { (status, success) in
                         if success {
                             print("userID initialized: ", self.db.userID)
                             //
-                            self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                            prefs.setValue(self.db.userID!, forKey: "userID")
+                            print("SUCCESS")
+                            initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
                         } else {
-                            self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+                            print("FAIL")
+                            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
                         }
                     }
                 }
