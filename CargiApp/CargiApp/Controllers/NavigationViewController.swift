@@ -589,21 +589,35 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            let firstName = self.contact?.componentsSeparatedByString(" ").first
-            print(contact)
-            print(firstName)
+            var name = String()
+            if let firstName = self.contact?.componentsSeparatedByString(" ").first {
+                name = firstName
+            }
             
-            if dest.address == nil {
+            print(contact)
+            print(name)
+            
+            if dest.address == nil && dest.coordinates == nil {
                 controller.body = ""
             } else {
-                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest1: dest.coordinates!.latitude, dest2: dest.coordinates!.longitude) { (status, success) in
+                var destString = String()
+                if let address = dest.address {
+                    destString = address
+                } else if let coords = dest.coordinates {
+                    destString = "\(coords.latitude),\(coords.longitude)"
+                } else {
+                    self.showAlertViewController(title: "Error", message: "No destination specified")
+                    return
+                }
+
+                distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest: destString) { (status, success) in
                     print(status)
                     if success {
                         let duration = self.distanceTasks.durationInTrafficText
                         if let destination = self.dest.name {
-                            controller.body = "Hi \(firstName!), I will arrive at \(destination) in \(duration)."
+                            controller.body = "Hi \(name), I will arrive at \(destination) in \(duration)."
                         } else {
-                            controller.body = "Hi \(firstName!), I will arrive in \(duration)."
+                            controller.body = "Hi \(name), I will arrive in \(duration)."
                         }
                         print(controller.body)
                     } else {

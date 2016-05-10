@@ -555,13 +555,14 @@ class AzureDatabase {
         // TODO: should we check if self.userID / self.curEventID / self.contactID exist?
         // the way we use the code, we will have initialized all variables
         let commObj = ["user_id": self.userID!, "event_id": self.curEventID!, "contact_id": self.contactID!, "method": method]
-
-        communicationHistoryTable.insert(commObj) {
-            (insertedItem, error) in
-            if  error != nil {
-                print("Error in inserting a communication" + error!.description)
-            } else {
-                print("Communication inserted, id: " + String(insertedItem!["id"]))
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            self.communicationHistoryTable.insert(commObj) {
+                (insertedItem, error) in
+                if  error != nil {
+                    print("Error in inserting a communication" + error!.description)
+                } else {
+                    print("Communication inserted, id: " + String(insertedItem!["id"]))
+                }
             }
         }
     }

@@ -60,14 +60,32 @@ class DistanceMatrixTasks {
     }
     
     
-    /// Makes a request to get the estimated time from origin to destination using coordinates.
+    /*
+     Get ETA to a destination using GPS coordinates.
+     Makes a request to get the estimated time from origin to destination.
+     */
     func getETA(origin1: CLLocationDegrees, origin2: CLLocationDegrees, dest1: CLLocationDegrees, dest2: CLLocationDegrees, completionHandler: ((status: String, success: Bool) -> Void)) {
         // URL for making request to the Google Distance Matrix API.
+        let dest = "\(dest1),\(dest2))"
+        getETA(origin1, origin2: origin2, dest: dest, completionHandler: completionHandler)
+        
+        /*
         let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
         let request = NSURL(string: requestURL)
         parseResponse(request, completionHandler: completionHandler)
+         */
     }
     
+    /*
+     Get ETA to a destination using address.
+     Makes a request to get the estimated time from origin to destination.
+     */
+    func getETA(origin1: CLLocationDegrees, origin2: CLLocationDegrees, dest: String, completionHandler: ((status: String, success: Bool) -> Void)) {
+        // URL for making request to the Google Distance Matrix API.
+        let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
+        let request = NSURL(string: requestURL)
+        parseResponse(request, completionHandler: completionHandler)
+    }
     
     // Parse response and store into the instance variables defined above.
     private func parseResponse(request: NSURL?, completionHandler: ((status: String, success: Bool) -> Void)) {
