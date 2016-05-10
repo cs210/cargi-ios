@@ -991,6 +991,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             marker.icon = UIImage(named: "gascheap")
         } else {
             // blue
+            marker.icon = UIImage(named: "gasnearby")
 //            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
             
         }
