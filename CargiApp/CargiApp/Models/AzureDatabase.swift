@@ -74,7 +74,7 @@ class AzureDatabase {
      **/
     func initializeAndCreateUserID(deviceID: String, completionHandler: (status: String, success: Bool) -> Void)  {
         let userCheckPredicate = NSPredicate(format: "device_id == [c] %@", deviceID)
-        
+
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)
@@ -175,7 +175,7 @@ class AzureDatabase {
             }
         }
     }
-    
+
     /**
      * Given an array of contacts, this method inserts all contacts of the user (associated with the userID).
      *
@@ -196,6 +196,25 @@ class AzureDatabase {
                 
             }
                 
+        }
+    }
+
+    // needs testing
+    func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
+        var event = ""
+        if eventName != nil {
+            event = eventName!
+        }
+        
+        let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
+        
+        eventTable.insert(eventObj) {
+            (insertedItem, error) in
+            if error != nil {
+                print("Error in inserting an event" + error!.description)
+            } else {
+                print("Event inserted, id: " + String(insertedItem!["id"]))
+            }
         }
     }
     
@@ -600,8 +619,8 @@ class AzureDatabase {
     /*
     * Creates new user with email & name, and initializes user ID
     */
-    func createUser(deviceID: String, email: String, fullname: String, completionHandler: (status: String, success: Bool) -> Void) {
-        let user = ["device_id": deviceID, "name": fullname, "email": email]
+    func createUser(email: String, fullname: String, completionHandler: (status: String, success: Bool) -> Void) {
+        let user = ["name": fullname, "email": email]
         userTable.insert(user) {
             (insertedItem, error) in
             if error != nil {

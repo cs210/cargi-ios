@@ -153,22 +153,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         layer.shadowRadius = 1.5
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
-        
-        // Design of Buttons
-        callButton.layer.shadowOffset = CGSizeMake(3, 3)
-        callButton.layer.shadowColor = UIColor.blackColor().CGColor
-        callButton.layer.shadowRadius = 2
-        callButton.layer.shadowOpacity = 0.27
-        
-        textButton.layer.shadowOffset = CGSizeMake(-3, 3)
-        textButton.layer.shadowColor = UIColor.blackColor().CGColor
-        textButton.layer.shadowRadius = 2
-        textButton.layer.shadowOpacity = 0.27
-        
-//        contactView.layer.shadowOffset = CGSizeMake(0, -1)
-//        contactView.layer.shadowColor = UIColor.blackColor().CGColor
-//        contactView.layer.shadowRadius = 1.5
-//        contactView.layer.shadowOpacity = 0.7
 
         contactView.layer.shadowOffset = CGSizeMake(0, -1)
         contactView.layer.shadowColor = UIColor.blackColor().CGColor
@@ -189,23 +173,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
 
-//        let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
-//
-//        db.initializeUserID(deviceID) { (status, success) in
-//            if (success) {
-//                print("initialized user id:", self.db.userID!)
-//                // need to wait until userID is successfully initialized before we can reset and sync the data, to ensure
-//                // that calls to the database are successful
-//                self.resetData()
-//                self.syncData()
-//            } else {
-//                print(status)
-//                // TODO: if unable to initialize userID, need to perhaps set db.userID to be a dummy string, so that
-//                // none of the database inserts will crash (if userID is nil)
-//                self.resetData()
-//                self.syncData()
-//            }
-//        }
         self.resetData()
         self.syncData()
     }
@@ -322,6 +289,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
         
+//       code below originally in master
+//        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
+//            destCoordinates = coordinate
+//        }
+
         if let loc = ev.location {
             let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
             if locArr.count > 1 {
@@ -882,7 +854,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
         db.insertAction("gas")
-        let numCheapGasStations = 3
+        let numCheapGasStations = 5
         let numNearbyGasStations = 3
         
         let visibleRegion = self.mapView.projection.visibleRegion()
@@ -923,7 +895,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                     for cheapStation in cheapGasFinder.stations {
                                         if number! == cheapStation.number! {
                                             // Getting location info from Google, so should include place_id.
-                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
+                                            dispatch_async(dispatch_get_main_queue()) {
+                                                self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
+                                            }
                                             bounds = bounds.includingCoordinate(station.coordinates!)
                                             priceFound = true
                                             break
@@ -942,7 +916,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //                                        }
                                     }
                                     if !priceFound {
-                                        self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
+                                        dispatch_async(dispatch_get_main_queue()) {
+                                            self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
+                                        }
                                         bounds = bounds.includingCoordinate(station.coordinates!)
                                     }
                                 }
@@ -953,13 +929,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                         let locationGeocoder = LocationGeocoder()
                                         locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
                                             if success {
-                                                self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+                                                dispatch_async(dispatch_get_main_queue()) {
+                                                    self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+                                                }
                                                 bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
                                             }
                                             // if the last cheap gas was found, stop animating activity indicator.
                                             if i == numCheapGasStations - 1 {
-                                                self.activityIndicatorView.stopAnimating()
-                                                self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                                dispatch_async(dispatch_get_main_queue()) {
+                                                    self.activityIndicatorView.stopAnimating()
+                                                    self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                                                }
+                                                
                                             }
                                         }
                                     }
@@ -1012,9 +993,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         marker.title = title
         if cheap {
             // green
-            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 71/256, green: 179/256, blue: 91/256, alpha: 1.0))
+            marker.icon = UIImage(named: "gascheap")
         } else {
             // blue
+            marker.icon = UIImage(named: "gasnearby")
 //            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
             
         }
@@ -1109,6 +1091,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             let prefs = NSUserDefaults.standardUserDefaults()
             prefs.setBool(false, forKey: "loggedIn") // set as logged in
             prefs.setValue("", forKey: "userEmail")
+            prefs.setValue("", forKey: "userID")
 
             self.mapView.removeObserver(self, forKeyPath: "myLocation")
             

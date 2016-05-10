@@ -12,6 +12,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var signupButton: UIButton!
+    @IBOutlet weak var spinnerView: SpinnerView!
+    
     
     lazy var db = AzureDatabase.sharedInstance
 
@@ -42,6 +45,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     @IBAction func signupButtonClicked(sender: UIButton) {
         let name = nameTextField.text
         let email = emailTextField.text
+        signupButton.enabled = false
         
         if (email == nil || name == nil) {
             // TODO: some error message or red error text under the login name
@@ -51,18 +55,26 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             let emailString = email!
             let nameString = name!
             if (db.validateEmail(emailString) && nameString != "") {
+                self.spinnerView.animate()
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user can use this email to sign up with
                         print("Email does not exist yet, signing up")
-                        self.db.createUser(UIDevice.currentDevice().identifierForVendor!.UUIDString, email: emailString, fullname: nameString) { (status, success) in
+                        self.db.createUser(emailString, fullname: nameString) { (status, success) in
                             if (success) {
                                 let prefs = NSUserDefaults.standardUserDefaults()
                                 prefs.setBool(true, forKey: "loggedIn")
                                 prefs.setValue(emailString, forKey: "userEmail")
+
+                                prefs.setValue(self.db.userID!, forKey: "userID")
+                                self.signupButton.enabled = true
+                                self.spinnerView.stopAnimation()
+
                                 self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
                                     self.performSegueWithIdentifier("signup", sender: nil)
                                 }
                             } else {
+                                self.signupButton.enabled = true
+                                self.spinnerView.stopAnimation()
                                 self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
                             }
                         }
@@ -73,12 +85,16 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                         // they can just check if the email exists or not, and go back to the login page.
                         
                         // TODO: there should be some kind of button that redirects user back to login page, they might have forgotten that they already signed up before (?)
+                        self.signupButton.enabled = true
+                        self.spinnerView.stopAnimation()
                         self.showAlertViewController(title: "Email in Use", message: "An account already exists with this email!")
                     }
                 }
             } else {
                 // TODO: some error message or red error text under the login name
                 // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
+                self.signupButton.enabled = true
+                self.spinnerView.stopAnimation()
                 showAlertViewController(title: "Error", message: "Please input a valid email or name.")
             }
         }

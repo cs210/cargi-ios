@@ -10,10 +10,13 @@ import UIKit
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var emailTextField: UITextField!
     lazy var db = AzureDatabase.sharedInstance
+    @IBOutlet weak var loginButton: UIButton!
 
+    @IBOutlet weak var spinnerView: SpinnerView!
+    
+    
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         super.viewWillAppear(animated)
@@ -45,6 +48,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func loginButtonClicked(sender: UIButton) {
+        loginButton.enabled = false
         let email = emailTextField.text
         if (email == nil) {
             // TODO: some error message or red error text under the login name
@@ -55,14 +59,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if (!db.validateEmail(emailString)) {
                 // TODO: some error message or red error text under the login name, if we know it's an invalid email
                 // can also do nothing, unless we want a better UX (let users know they have a typo for instance)
+                loginButton.enabled = true
                 showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
             } else {
-                activityIndicatorView.startAnimating()
+                spinnerView.animate()
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user needs to sign up
                         // TODO: some error message or red error text under the login name
                         // "Looks like you don't have an account yet" ??
-                        self.activityIndicatorView.stopAnimating()
+                        self.loginButton.enabled = true
+                        self.spinnerView.stopAnimation()
                         self.showAlertViewController(title: "Login Failed", message: "An account does not exist with this email.")
                     } else {
                         // email exists, but not sure if this actually is the right user
@@ -76,19 +82,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         let prefs = NSUserDefaults.standardUserDefaults()
                                         prefs.setBool(true, forKey: "loggedIn") // set as logged in
                                         prefs.setValue(emailString, forKey: "userEmail")
+                                        prefs.setValue(self.db.userID!, forKey: "userID")
 
-                                        self.activityIndicatorView.stopAnimating()
+                                        self.loginButton.enabled = true
+                                        self.spinnerView.stopAnimation()
                                         self.performSegueWithIdentifier("login", sender: nil)
 
                                     } else {
-                                        self.activityIndicatorView.stopAnimating()
+                                        self.loginButton.enabled = true
+                                        self.spinnerView.stopAnimation()
                                         self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
 //                                        self.showAlertViewController(title: "Server Error", message: status)
                                     }
                                 }
                                 
                             } else {
-                                self.activityIndicatorView.stopAnimating()
+                                self.loginButton.enabled = true
+                                self.spinnerView.stopAnimation()
                                 // print error message about incorrect email login
                                 self.showAlertViewController(title: "Login Failed", message: "Login information entered is not correct.")
                             }

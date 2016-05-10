@@ -132,9 +132,11 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         if segue.identifier == "eventPicked" {
             print("HI")
             if let destinationController = segue.destinationViewController as? NavigationViewController {
-                events = EventDirectory().getAllCalendarEvents()!
-                let event = events[tableView.indexPathForSelectedRow!.row]
-                destinationController.syncEvent(event)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.events = EventDirectory().getAllCalendarEvents()!
+                    let event = self.events[self.tableView.indexPathForSelectedRow!.row]
+                    destinationController.syncEvent(event)
+                }
             }
         }
     }

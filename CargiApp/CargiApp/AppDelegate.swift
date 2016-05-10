@@ -38,15 +38,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if loggedIn {
 //                let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
                 let emailString = prefs.stringForKey("userEmail")!
+                print(emailString)
+                if prefs.objectForKey("userID") != nil {
+                    let userID = prefs.stringForKey("userID")
+                    self.db.userID = userID
+                    initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
 
-//                print("deviceID:", deviceID)
-                db.initializeUserIDWithEmail(emailString) { (status, success) in
-                    if success {
-                        print("userID initialized: ", self.db.userID)
-                        //
-                        self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                } else {
+                    print(emailString)
+                    db.initializeUserIDWithEmail(emailString) { (status, success) in
+                        if success {
+                            print("userID initialized: ", self.db.userID)
+                            //
+                            prefs.setValue(self.db.userID!, forKey: "userID")
+                            print("SUCCESS")
+                            initialViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+                        } else {
+                            print("FAIL")
+                            initialViewController = storyboard.instantiateViewControllerWithIdentifier("LoginScreenVC")
+                        }
                     }
                 }
+               
+//                self.window?.rootViewController = storyboard.instantiateViewControllerWithIdentifier("MainScreenVC")
+
                 print("you're logged in")
                 // TODO: direct to home screen
 
@@ -79,7 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        print("entering background", NSDate())
         db.backgroundTaskIdentifier =
             UIApplication.sharedApplication().beginBackgroundTaskWithName(
                 "log",
@@ -102,7 +116,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        print("entering foreground", NSDate())
         startTime = NSDate()
     }
 

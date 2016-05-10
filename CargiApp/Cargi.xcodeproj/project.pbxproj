@@ -14,13 +14,16 @@
 		630A71831CD757E00045D8BF /* screen2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A717F1CD757E00045D8BF /* screen2@2x.png */; };
 		630A71841CD757E00045D8BF /* screen3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 630A71801CD757E00045D8BF /* screen3@2x.png */; };
 		630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */; };
-		636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E01CCBF7A0006D2936 /* callbutton@2x.png */; };
 		636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E21CCC0039006D2936 /* settingsbutton@2x.png */; };
 		636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E31CCC0039006D2936 /* musicbutton@2x.png */; };
-		636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636E32E41CCC0039006D2936 /* textbutton@2x.png */; };
 		6381DC651CD6C06F000CB520 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6381DC641CD6C06F000CB520 /* TutorialViewController.swift */; };
 		63C6587B1CD8606600F9C6C5 /* EventPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6587A1CD8606600F9C6C5 /* EventPickerTableViewCell.swift */; };
 		63C6587D1CD8794A00F9C6C5 /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */; };
+		63C658801CDE80C100F9C6C5 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */; };
+		63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */; };
+		63C658831CE157D100F9C6C5 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C658821CE157D100F9C6C5 /* SpinnerView.swift */; };
+		63C658901CE2304200F9C6C5 /* gascheap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6588E1CE2304200F9C6C5 /* gascheap@2x.png */; };
+		63C658911CE2304200F9C6C5 /* gasnearby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6588F1CE2304200F9C6C5 /* gasnearby@2x.png */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -72,13 +75,16 @@
 		630A717F1CD757E00045D8BF /* screen2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen2@2x.png"; sourceTree = "<group>"; };
 		630A71801CD757E00045D8BF /* screen3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen3@2x.png"; sourceTree = "<group>"; };
 		630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
-		636E32E01CCBF7A0006D2936 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E21CCC0039006D2936 /* settingsbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsbutton@2x.png"; sourceTree = "<group>"; };
 		636E32E31CCC0039006D2936 /* musicbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "musicbutton@2x.png"; sourceTree = "<group>"; };
-		636E32E41CCC0039006D2936 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
 		6381DC641CD6C06F000CB520 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		63C6587A1CD8606600F9C6C5 /* EventPickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPickerTableViewCell.swift; sourceTree = "<group>"; };
 		63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
+		63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
+		63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
+		63C658821CE157D100F9C6C5 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
+		63C6588E1CE2304200F9C6C5 /* gascheap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gascheap@2x.png"; sourceTree = "<group>"; };
+		63C6588F1CE2304200F9C6C5 /* gasnearby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gasnearby@2x.png"; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -209,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
+				63C658821CE157D100F9C6C5 /* SpinnerView.swift */,
 				B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */,
 				740354111CD5D13500155433 /* SignupViewController.swift */,
 				7403540F1CD5D12500155433 /* LoginViewController.swift */,
@@ -248,16 +255,18 @@
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
 				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
 				74962D711CD34CF50078883B /* gasbutton@2x.png */,
+				63C6588E1CE2304200F9C6C5 /* gascheap@2x.png */,
+				63C6588F1CE2304200F9C6C5 /* gasnearby@2x.png */,
 				740354151CD5F95200155433 /* gasmarker@2x.png */,
 				636E32E21CCC0039006D2936 /* settingsbutton@2x.png */,
 				636E32E31CCC0039006D2936 /* musicbutton@2x.png */,
-				636E32E41CCC0039006D2936 /* textbutton@2x.png */,
 				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
 				630A71701CD711E50045D8BF /* refreshbutton@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74F65EFB1CBBA01F00DE068C /* search@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
-				636E32E01CCBF7A0006D2936 /* callbutton@2x.png */,
+				63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */,
+				63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */,
 				74A3D8E91C9127020053D816 /* gas-button@2x.png */,
 				74A3D8EA1C9127020053D816 /* music-button@2x.png */,
 				74A3D8EB1C9127020053D816 /* text-button@2x.png */,
@@ -314,7 +323,7 @@
 				TargetAttributes = {
 					74A2E5F21C7FCBC800C468CC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 44NW45N853;
+						DevelopmentTeam = 9F8W5DM5X2;
 					};
 				};
 			};
@@ -341,10 +350,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63C658801CDE80C100F9C6C5 /* callbutton@2x.png in Resources */,
 				630A71841CD757E00045D8BF /* screen3@2x.png in Resources */,
 				630A71711CD711E50045D8BF /* refreshbutton@2x.png in Resources */,
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
-				636E32E11CCBF7A0006D2936 /* callbutton@2x.png in Resources */,
 				74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */,
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,
 				63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */,
@@ -356,12 +365,14 @@
 				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
-				636E32E71CCC0039006D2936 /* textbutton@2x.png in Resources */,
+				63C658911CE2304200F9C6C5 /* gasnearby@2x.png in Resources */,
+				63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */,
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */,
 				74962D721CD34CF50078883B /* gasbutton@2x.png in Resources */,
 				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
+				63C658901CE2304200F9C6C5 /* gascheap@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
 				630A71831CD757E00045D8BF /* screen2@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
@@ -429,6 +440,7 @@
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
 				63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */,
 				B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */,
+				63C658831CE157D100F9C6C5 /* SpinnerView.swift in Sources */,
 				740354121CD5D13500155433 /* SignupViewController.swift in Sources */,
 				63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */,
 				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
@@ -562,7 +574,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
@@ -587,7 +599,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
