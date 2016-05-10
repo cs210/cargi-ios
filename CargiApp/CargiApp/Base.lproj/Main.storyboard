@@ -781,8 +781,8 @@
                                 <rect key="frame" x="282" y="281" width="37" height="37"/>
                                 <color key="color" red="0.18431372939999999" green="0.74901962280000001" blue="0.93333339689999995" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hfb-kw-y80" customClass="SpinnerView" customModule="Cargi" customModuleProvider="target">
-                                <rect key="frame" x="104" y="271.5" width="20" height="20"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hfb-kw-y80" customClass="SpinnerView" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="107" y="272" width="20" height="20"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="8PM-4P-Hle"/>
@@ -901,10 +901,19 @@
                                 <rect key="frame" x="282" y="281" width="37" height="37"/>
                                 <color key="color" red="0.18431372939999999" green="0.74901962280000001" blue="0.93333339689999995" alpha="1" colorSpace="deviceRGB"/>
                             </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKI-yc-Sn6" customClass="SpinnerView" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="121" y="331.5" width="20" height="20"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="5Ap-bB-6Al"/>
+                                    <constraint firstAttribute="height" constant="20" id="5Y1-g2-slI"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="kO3-uu-gFq" firstAttribute="leading" secondItem="HLl-T5-S7u" secondAttribute="leading" constant="58" id="1wJ-c3-efq"/>
+                            <constraint firstItem="FKI-yc-Sn6" firstAttribute="centerY" secondItem="Y1f-e0-umN" secondAttribute="centerY" id="7ck-FS-2uA"/>
                             <constraint firstItem="kO3-uu-gFq" firstAttribute="top" secondItem="G1F-sa-nzU" secondAttribute="bottom" constant="78" id="CrU-5o-9Ng"/>
                             <constraint firstItem="hJN-n0-Eoy" firstAttribute="leading" secondItem="HLl-T5-S7u" secondAttribute="leading" constant="58" id="MK9-m0-bir"/>
                             <constraint firstItem="hJN-n0-Eoy" firstAttribute="trailing" secondItem="G1F-sa-nzU" secondAttribute="trailing" id="NfK-gD-Mcd"/>
@@ -913,6 +922,7 @@
                             <constraint firstItem="MGC-YV-nzY" firstAttribute="leading" secondItem="HLl-T5-S7u" secondAttribute="leading" constant="58" id="SYR-9g-YzT"/>
                             <constraint firstItem="kO3-uu-gFq" firstAttribute="trailing" secondItem="G1F-sa-nzU" secondAttribute="trailing" id="bJs-zV-MUK"/>
                             <constraint firstItem="hJN-n0-Eoy" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="0.9385" id="dYr-AA-zun"/>
+                            <constraint firstItem="FKI-yc-Sn6" firstAttribute="leading" secondItem="Y1f-e0-umN" secondAttribute="trailing" constant="5" id="fjw-jj-grE"/>
                             <constraint firstItem="G1F-sa-nzU" firstAttribute="leading" secondItem="HLl-T5-S7u" secondAttribute="leading" constant="58" id="jNe-zQ-WjB"/>
                             <constraint firstItem="kO3-uu-gFq" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="0.7376" id="mAO-Jq-1W9"/>
                             <constraint firstItem="G1F-sa-nzU" firstAttribute="centerY" secondItem="HLl-T5-S7u" secondAttribute="centerY" multiplier="0.3298" id="mjW-ta-Kz6"/>
@@ -932,6 +942,7 @@
                         <outlet property="emailTextField" destination="hJN-n0-Eoy" id="dNP-yl-hFd"/>
                         <outlet property="nameTextField" destination="kO3-uu-gFq" id="nZf-Ic-Tod"/>
                         <outlet property="signupButton" destination="Y1f-e0-umN" id="oId-CP-cKg"/>
+                        <outlet property="spinnerView" destination="FKI-yc-Sn6" id="Ns3-gF-DPI"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="signup" id="ew2-US-zHJ"/>
                     </connections>
                 </viewController>
@@ -1001,7 +1012,7 @@
         <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MyH-Ys-aGa"/>
+        <segue reference="ew2-US-zHJ"/>
         <segue reference="3lO-8O-DOT"/>
     </inferredMetricsTieBreakers>
 </document>
