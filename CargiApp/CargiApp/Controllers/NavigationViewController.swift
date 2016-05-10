@@ -988,7 +988,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         marker.title = title
         if cheap {
             // green
-            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 71/256, green: 179/256, blue: 91/256, alpha: 1.0))
+            marker.icon = UIImage(named: "gascheap")
         } else {
             // blue
 //            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))

@@ -15,6 +15,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     lazy var db = AzureDatabase.sharedInstance
     @IBOutlet weak var loginButton: UIButton!
 
+    @IBOutlet weak var spinnerView: SpinnerView!
     
     
     override func viewWillAppear(animated: Bool) {
@@ -62,12 +63,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 loginButton.enabled = true
                 showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
             } else {
-                activityIndicatorView.startAnimating()
+                spinnerView.animate()
+                //activityIndicatorView.startAnimating()
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user needs to sign up
                         // TODO: some error message or red error text under the login name
                         // "Looks like you don't have an account yet" ??
                         self.loginButton.enabled = true
+                        self.spinnerView.stopAnimation()
                         self.activityIndicatorView.stopAnimating()
                         self.showAlertViewController(title: "Login Failed", message: "An account does not exist with this email.")
                     } else {
@@ -85,12 +88,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         prefs.setValue(self.db.userID!, forKey: "userID")
 
                                         self.loginButton.enabled = true
+                                        self.spinnerView.stopAnimation()
                                         self.activityIndicatorView.stopAnimating()
                                         self.performSegueWithIdentifier("login", sender: nil)
 
                                     } else {
                                         self.loginButton.enabled = true
-                                        self.activityIndicatorView.stopAnimating()
+                                        self.spinnerView.stopAnimation()
+                                        //self.activityIndicatorView.stopAnimating()
                                         self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
 //                                        self.showAlertViewController(title: "Server Error", message: status)
                                     }
@@ -98,7 +103,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 
                             } else {
                                 self.loginButton.enabled = true
-                                self.activityIndicatorView.stopAnimating()
+                                self.spinnerView.stopAnimation()
+                                //self.activityIndicatorView.stopAnimating()
                                 // print error message about incorrect email login
                                 self.showAlertViewController(title: "Login Failed", message: "Login information entered is not correct.")
                             }

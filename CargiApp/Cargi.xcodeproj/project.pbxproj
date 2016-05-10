@@ -21,6 +21,8 @@
 		63C6587D1CD8794A00F9C6C5 /* screen4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */; };
 		63C658801CDE80C100F9C6C5 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */; };
 		63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */; };
+		63C658831CE157D100F9C6C5 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C658821CE157D100F9C6C5 /* SpinnerView.swift */; };
+		63C658851CE18C7E00F9C6C5 /* gascheap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -79,6 +81,8 @@
 		63C6587C1CD8794A00F9C6C5 /* screen4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screen4@2x.png"; sourceTree = "<group>"; };
 		63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
 		63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
+		63C658821CE157D100F9C6C5 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
+		63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gascheap@2x.png"; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -209,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */,
+				63C658821CE157D100F9C6C5 /* SpinnerView.swift */,
 				B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */,
 				740354111CD5D13500155433 /* SignupViewController.swift */,
 				7403540F1CD5D12500155433 /* LoginViewController.swift */,
@@ -249,6 +254,7 @@
 				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
 				74962D711CD34CF50078883B /* gasbutton@2x.png */,
 				740354151CD5F95200155433 /* gasmarker@2x.png */,
+				63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */,
 				636E32E21CCC0039006D2936 /* settingsbutton@2x.png */,
 				636E32E31CCC0039006D2936 /* musicbutton@2x.png */,
 				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
@@ -362,6 +368,7 @@
 				74962D721CD34CF50078883B /* gasbutton@2x.png in Resources */,
 				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
+				63C658851CE18C7E00F9C6C5 /* gascheap@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
 				630A71831CD757E00045D8BF /* screen2@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
@@ -429,6 +436,7 @@
 				74B7830D1C9EDBD7003E0391 /* DirectionTasks.swift in Sources */,
 				63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */,
 				B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */,
+				63C658831CE157D100F9C6C5 /* SpinnerView.swift in Sources */,
 				740354121CD5D13500155433 /* SignupViewController.swift in Sources */,
 				63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */,
 				BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */,
