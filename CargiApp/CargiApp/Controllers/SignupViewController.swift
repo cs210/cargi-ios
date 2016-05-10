@@ -13,7 +13,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var signupButton: UIButton!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var spinnerView: SpinnerView!
+    
     
     lazy var db = AzureDatabase.sharedInstance
 
@@ -54,7 +55,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             let emailString = email!
             let nameString = name!
             if (db.validateEmail(emailString) && nameString != "") {
-                activityIndicatorView.startAnimating()
+                self.spinnerView.animate()
                 db.emailExists(emailString) { (status, exists) in
                     if (!exists) { // if email doesn't exist, user can use this email to sign up with
                         print("Email does not exist yet, signing up")
@@ -66,14 +67,14 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
 
                                 prefs.setValue(self.db.userID!, forKey: "userID")
                                 self.signupButton.enabled = true
-                                self.activityIndicatorView.stopAnimating()
+                                self.spinnerView.stopAnimation()
 
                                 self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
                                     self.performSegueWithIdentifier("signup", sender: nil)
                                 }
                             } else {
                                 self.signupButton.enabled = true
-                                self.activityIndicatorView.stopAnimating()
+                                self.spinnerView.stopAnimation()
                                 self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
                             }
                         }
@@ -85,7 +86,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                         
                         // TODO: there should be some kind of button that redirects user back to login page, they might have forgotten that they already signed up before (?)
                         self.signupButton.enabled = true
-                        self.activityIndicatorView.stopAnimating()
+                        self.spinnerView.stopAnimation()
                         self.showAlertViewController(title: "Email in Use", message: "An account already exists with this email!")
                     }
                 }
@@ -93,7 +94,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 // TODO: some error message or red error text under the login name
                 // "PLEASE INPUT A VALID EMAIL OR NAME (?)"
                 self.signupButton.enabled = true
-                self.activityIndicatorView.stopAnimating()
+                self.spinnerView.stopAnimation()
                 showAlertViewController(title: "Error", message: "Please input a valid email or name.")
             }
         }
