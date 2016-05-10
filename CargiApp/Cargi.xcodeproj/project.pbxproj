@@ -22,7 +22,8 @@
 		63C658801CDE80C100F9C6C5 /* callbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */; };
 		63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */; };
 		63C658831CE157D100F9C6C5 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C658821CE157D100F9C6C5 /* SpinnerView.swift */; };
-		63C658851CE18C7E00F9C6C5 /* gascheap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */; };
+		63C658881CE22D8B00F9C6C5 /* gascheap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C658861CE22D8B00F9C6C5 /* gascheap@2x.png */; };
+		63C658891CE22D8B00F9C6C5 /* gasnearby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C658871CE22D8B00F9C6C5 /* gasnearby@2x.png */; };
 		63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */; };
 		63DE4E071CC5F727002280BA /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */; };
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
@@ -82,7 +83,8 @@
 		63C6587E1CDE80C100F9C6C5 /* callbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callbutton@2x.png"; sourceTree = "<group>"; };
 		63C6587F1CDE80C100F9C6C5 /* textbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbutton@2x.png"; sourceTree = "<group>"; };
 		63C658821CE157D100F9C6C5 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
-		63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gascheap@2x.png"; sourceTree = "<group>"; };
+		63C658861CE22D8B00F9C6C5 /* gascheap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gascheap@2x.png"; sourceTree = "<group>"; };
+		63C658871CE22D8B00F9C6C5 /* gasnearby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gasnearby@2x.png"; sourceTree = "<group>"; };
 		63DE4E041CC5EFB2002280BA /* radiobutton-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-unselected@2x.png"; sourceTree = "<group>"; };
 		63DE4E061CC5F727002280BA /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
@@ -254,11 +256,12 @@
 				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
 				74962D711CD34CF50078883B /* gasbutton@2x.png */,
 				740354151CD5F95200155433 /* gasmarker@2x.png */,
-				63C658841CE18C7E00F9C6C5 /* gascheap@2x.png */,
 				636E32E21CCC0039006D2936 /* settingsbutton@2x.png */,
 				636E32E31CCC0039006D2936 /* musicbutton@2x.png */,
 				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
 				630A71701CD711E50045D8BF /* refreshbutton@2x.png */,
+				63C658861CE22D8B00F9C6C5 /* gascheap@2x.png */,
+				63C658871CE22D8B00F9C6C5 /* gasnearby@2x.png */,
 				74A3D8E71C9127020053D816 /* close-button-dark@2x.png */,
 				74F65EFB1CBBA01F00DE068C /* search@2x.png */,
 				74A3D8E81C9127020053D816 /* close-button-light@2x.png */,
@@ -320,7 +323,7 @@
 				TargetAttributes = {
 					74A2E5F21C7FCBC800C468CC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 44NW45N853;
+						DevelopmentTeam = 9F8W5DM5X2;
 					};
 				};
 			};
@@ -362,13 +365,14 @@
 				74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */,
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
+				63C658891CE22D8B00F9C6C5 /* gasnearby@2x.png in Resources */,
 				63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */,
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* launchimage@2x.png in Resources */,
 				74962D721CD34CF50078883B /* gasbutton@2x.png in Resources */,
 				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
-				63C658851CE18C7E00F9C6C5 /* gascheap@2x.png in Resources */,
+				63C658881CE22D8B00F9C6C5 /* gascheap@2x.png in Resources */,
 				74A3D8ED1C9127020053D816 /* call-button@2x.png in Resources */,
 				630A71831CD757E00045D8BF /* screen2@2x.png in Resources */,
 				74A3D8EF1C9127020053D816 /* close-button-light@2x.png in Resources */,
@@ -570,7 +574,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
@@ -595,7 +599,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi3;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
