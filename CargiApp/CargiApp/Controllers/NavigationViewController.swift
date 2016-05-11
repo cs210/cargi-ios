@@ -433,9 +433,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         
         
-        
-        guard let destAddress = dest.address else {
-//            showAlertViewController(title: "Error", message: "No destination specified.")
+        if (dest.coordinates != nil) {
             if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
                 self.openGoogleMapsLocation(dest.coordinates!)
             } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
@@ -444,17 +442,44 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
-        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
-        print(query)
-        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
-        
-        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
-            self.openGoogleMapsLocationAddress(address)
-            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
-        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-            self.openAppleMapsLocationAddress(address)
+        if (dest.address != nil) {
+            let destAddress = dest.address
+            let query = destAddress!.componentsSeparatedByString("\n").joinWithSeparator(" ")
+            print(query)
+            let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+            
+            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+                self.openGoogleMapsLocationAddress(address)
+                self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
+            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationAddress(address)
+            }
+            return
         }
+        return
         
+        
+//        guard let destAddress = dest.address else {
+////            showAlertViewController(title: "Error", message: "No destination specified.")
+//            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+//                self.openGoogleMapsLocation(dest.coordinates!)
+//            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+//                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+//            }
+//            return
+//        }
+//        
+//        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
+//        print(query)
+//        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+//        
+//        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+//            self.openGoogleMapsLocationAddress(address)
+//            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
+//        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+//            self.openAppleMapsLocationAddress(address)
+//        }
+//        
         /* Only if Geocoder is needed */
 /*
         switch CLLocationManager.authorizationStatus() {
