@@ -391,6 +391,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         UIApplication.sharedApplication().openURL(url)
     }
     
+    
+    /**
+     Open Apple Maps showing the route to the given coordinates.
+     */
+    func openAppleMapsLocationNoEvent(coordinate: CLLocationCoordinate2D) {
+        let path = "http://maps.apple.com/?daddr=\(coordinate.latitude),\(coordinate.longitude)"
+        guard let url = NSURL(string: path) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    
     /**
         Open Apple Maps showing the route to the given address.
      */
@@ -415,10 +426,24 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //            return
 //        }
         
-        guard let destAddress = dest.address else {
+        
+        if (dest.address == nil && dest.coordinates == nil) {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
         }
+        
+        
+        
+        guard let destAddress = dest.address else {
+//            showAlertViewController(title: "Error", message: "No destination specified.")
+            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+                self.openGoogleMapsLocation(dest.coordinates!)
+            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+            }
+            return
+        }
+        
         let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
         print(query)
         let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
