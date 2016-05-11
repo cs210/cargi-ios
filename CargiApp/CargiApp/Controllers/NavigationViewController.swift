@@ -414,7 +414,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //            openGoogleMapsLocationWaypoints(waypointCoordinates!)
 //            return
 //        }
-
+        
         guard let destAddress = dest.address else {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
@@ -753,6 +753,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
         gasMarker = marker
         let showDestMarker = (dest.address != nil) || (dest.name != nil)
+       
+        dest.coordinates = gasMarker!.position
+        print(gasMarker!.position)
+        dest.name = gasMarker!.title
+        self.searchButton.setTitle(dest.name, forState: .Normal)
+//        dest.address
+        
         
         if let userData = marker.userData as? [String:String] {
             if let placeID = userData["place_id"] {

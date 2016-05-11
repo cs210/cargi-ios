@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Models/DirectionTasks.swift"
-            timestampString = "482660584.947088"
+            filePath = "Controllers/NavigationViewController.swift"
+            timestampString = "484623700.121894"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "getDirections(_:dest:waypoints:completionHandler:)"
+            startingLineNumber = "755"
+            endingLineNumber = "755"
+            landmarkName = "mapView(_:didTapInfoWindowOfMarker:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Models/GasFinder.swift"
-            timestampString = "482661779.324187"
+            filePath = "Controllers/NavigationViewController.swift"
+            timestampString = "484623686.144596"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "getNearbyGas(_:completionHandler:)"
+            startingLineNumber = "407"
+            endingLineNumber = "407"
+            landmarkName = "openMaps()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
