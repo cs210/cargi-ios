@@ -18,15 +18,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchimage.png" translatesAutoresizingMaskIntoConstraints="NO" id="ydh-A9-7Pf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cargi-launch.png" translatesAutoresizingMaskIntoConstraints="NO" id="ydh-A9-7Pf">
                                 <rect key="frame" x="80" y="207.5" width="440" height="185"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ydh-A9-7Pf" secondAttribute="height" multiplier="88:47" id="LgD-uQ-TcF"/>
                                     <constraint firstAttribute="width" secondItem="ydh-A9-7Pf" secondAttribute="height" multiplier="107:45" id="S7E-Dz-o6s"/>
+                                    <constraint firstAttribute="width" secondItem="ydh-A9-7Pf" secondAttribute="height" multiplier="88:37" id="cXb-N5-p4x"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="LgD-uQ-TcF"/>
+                                        <exclude reference="S7E-Dz-o6s"/>
                                     </mask>
                                 </variation>
                             </imageView>
@@ -51,6 +53,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launchimage.png" width="214" height="90"/>
+        <image name="cargi-launch.png" width="214" height="90"/>
     </resources>
 </document>
