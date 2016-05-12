@@ -1222,6 +1222,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func eventSelectedChanged(segue: UIStoryboardSegue) {
         
     }
+    
+    @IBAction func cancelChooseEvent(segue: UIStoryboardSegue) {
+        
+    }
 
 }
 
