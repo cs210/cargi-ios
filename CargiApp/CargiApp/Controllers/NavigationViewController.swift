@@ -24,6 +24,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         case Google // Google Maps
     }
     
+    @IBOutlet weak var spinnerBackground: UIImageView!
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
     
@@ -142,6 +143,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         self.view.bringSubviewToFront(self.activityIndicatorView)
         self.view.bringSubviewToFront(self.picker)
+        self.spinnerBackground.hidden = true
         
         destMarker.icon = UIImage(named: "destination_icon")
         
@@ -391,6 +393,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         UIApplication.sharedApplication().openURL(url)
     }
     
+    
+    /**
+     Open Apple Maps showing the route to the given coordinates.
+     */
+    func openAppleMapsLocationNoEvent(coordinate: CLLocationCoordinate2D) {
+        let path = "http://maps.apple.com/?daddr=\(coordinate.latitude),\(coordinate.longitude)"
+        guard let url = NSURL(string: path) else { return }
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
+    
     /**
         Open Apple Maps showing the route to the given address.
      */
@@ -414,22 +427,61 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //            openGoogleMapsLocationWaypoints(waypointCoordinates!)
 //            return
 //        }
-
-        guard let destAddress = dest.address else {
+        
+        
+        if (dest.address == nil && dest.coordinates == nil) {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
         }
-        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
-        print(query)
-        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
         
-        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
-            self.openGoogleMapsLocationAddress(address)
-            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
-        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-            self.openAppleMapsLocationAddress(address)
+        
+        if (dest.coordinates != nil) {
+            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+                self.openGoogleMapsLocation(dest.coordinates!)
+            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+            }
+            return
         }
         
+        if (dest.address != nil) {
+            let destAddress = dest.address
+            let query = destAddress!.componentsSeparatedByString("\n").joinWithSeparator(" ")
+            print(query)
+            let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+            
+            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+                self.openGoogleMapsLocationAddress(address)
+                self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
+            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationAddress(address)
+            }
+            return
+        }
+        return
+        
+        
+//        guard let destAddress = dest.address else {
+////            showAlertViewController(title: "Error", message: "No destination specified.")
+//            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+//                self.openGoogleMapsLocation(dest.coordinates!)
+//            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+//                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+//            }
+//            return
+//        }
+//        
+//        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
+//        print(query)
+//        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+//        
+//        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+//            self.openGoogleMapsLocationAddress(address)
+//            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
+//        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+//            self.openAppleMapsLocationAddress(address)
+//        }
+//        
         /* Only if Geocoder is needed */
 /*
         switch CLLocationManager.authorizationStatus() {
@@ -753,6 +805,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
         gasMarker = marker
         let showDestMarker = (dest.address != nil) || (dest.name != nil)
+       
+        dest.coordinates = gasMarker!.position
+        print(gasMarker!.position)
+        dest.name = gasMarker!.title
+        self.searchButton.setTitle(dest.name, forState: .Normal)
+//        dest.address
+        
         
         if let userData = marker.userData as? [String:String] {
             if let placeID = userData["place_id"] {
@@ -878,6 +937,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
+        self.spinnerBackground.hidden = false;
         activityIndicatorView.startAnimating()
         
         let geocoder = LocationGeocoder()
@@ -951,6 +1011,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                             // if the last cheap gas was found, stop animating activity indicator.
                                             if i == numCheapGasStations - 1 {
                                                 dispatch_async(dispatch_get_main_queue()) {
+                                                    self.spinnerBackground.hidden = true;
                                                     self.activityIndicatorView.stopAnimating()
                                                     self.updateCamera(bounds, shouldAddEdgeInsets: false)
                                                 }

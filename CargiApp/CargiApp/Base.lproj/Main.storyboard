@@ -189,7 +189,7 @@
                                     <constraint firstAttribute="width" constant="20" id="5CW-J3-rNC"/>
                                     <constraint firstAttribute="height" constant="20" id="bcL-1M-KFb"/>
                                 </constraints>
-                                <color key="color" red="0.2784313725" green="0.70196078429999997" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="5CW-J3-rNC"/>
@@ -197,6 +197,13 @@
                                     </mask>
                                 </variation>
                             </activityIndicatorView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spinnerbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eg9-u8-zBL">
+                                <rect key="frame" x="259" y="261" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="NFV-2u-8JS"/>
+                                    <constraint firstAttribute="height" constant="80" id="aa9-FO-FVK"/>
+                                </constraints>
+                            </imageView>
                             <pickerView contentMode="scaleToFill" showsSelectionIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Djw-Nl-X5i">
                                 <rect key="frame" x="0.0" y="420" width="600" height="110"/>
                                 <constraints>
@@ -491,10 +498,12 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Djw-Nl-X5i" secondAttribute="bottom" id="jUk-md-3Wd"/>
                             <constraint firstAttribute="trailing" secondItem="rnV-DU-HU4" secondAttribute="trailing" id="k6g-lJ-RER"/>
                             <constraint firstAttribute="trailing" secondItem="Fh9-vp-964" secondAttribute="trailing" id="nAZ-oD-474"/>
+                            <constraint firstItem="eg9-u8-zBL" firstAttribute="centerX" secondItem="OWW-sN-WIe" secondAttribute="centerX" id="pOc-iP-f88"/>
                             <constraint firstItem="9uc-ug-Rq5" firstAttribute="height" secondItem="x8s-Be-dRK" secondAttribute="height" id="uof-n4-mxY"/>
                             <constraint firstItem="fcr-FQ-3iI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="wXv-6z-UNG"/>
                             <constraint firstItem="ZBc-OW-OoQ" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1139" id="wtG-rY-XaO"/>
                             <constraint firstItem="fcr-FQ-3iI" firstAttribute="top" secondItem="12n-g8-OfW" secondAttribute="bottom" id="yCN-Om-Z6R"/>
+                            <constraint firstItem="eg9-u8-zBL" firstAttribute="centerY" secondItem="OWW-sN-WIe" secondAttribute="centerY" id="zrG-Dx-zXI"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -528,6 +537,7 @@
                         <outlet property="refreshButton" destination="x8s-Be-dRK" id="91u-V4-AtN"/>
                         <outlet property="searchButton" destination="0Vg-cB-gXm" id="qdD-y9-bxQ"/>
                         <outlet property="settingsButton" destination="8z5-tD-rqd" id="AZB-Ut-wLe"/>
+                        <outlet property="spinnerBackground" destination="eg9-u8-zBL" id="eeA-aQ-ooT"/>
                         <outlet property="textButton" destination="sVK-fw-bF5" id="yM1-63-CgK"/>
                         <segue destination="2UF-mF-Z5E" kind="unwind" identifier="logoutToLogin" unwindAction="logoutToLoginViewController:" id="vfr-xN-i0l"/>
                         <segue destination="2LG-iM-AMA" kind="show" identifier="logout" animates="NO" id="3lO-8O-DOT"/>
@@ -998,6 +1008,7 @@
         <image name="screen4.png" width="375" height="667"/>
         <image name="search.png" width="24" height="24"/>
         <image name="settingsbutton.png" width="33" height="34"/>
+        <image name="spinnerbg.png" width="40" height="40"/>
         <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
