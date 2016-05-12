@@ -175,8 +175,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
 
-        self.resetData()
-        self.syncData()
+        self.resetView()
+        self.syncCalendar()
     }
     
     
@@ -192,21 +192,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     /// Reset Data
-    func resetData() {
-        self.contact = nil
-//        self.eventLabel.text = nil
-//        self.destLabel.text = nil
-//        self.addrLabel.text = nil
-//        waypointCoordinates = nil
+    func resetView() {
         gasMarker = nil
         currentEventButton.setTitle(nil, forState: .Normal)
         searchButton.setTitle(nil, forState: .Normal)
+        contact = nil
         dest = Location()
         mapView.clear()
     }
     
-    private func suggestContact(event: EKEvent?) {
-        guard let ev = event else { return }
+    private func suggestContact(event: EKEvent?) -> String? {
+        guard let ev = event else { return nil }
         let contacts = contactDirectory.getAllPhoneNumbers()
         let separators = NSCharacterSet(charactersInString: "@\\|,;/<> ")
         
@@ -264,15 +260,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         print(possibleContactArr)
         self.pickerData = possibleContactArr
-        updateContact(contact)
+        return contact
     }
     
     private func updateContact(contact: String?) {
         self.contact = contact
-        contactNumbers = contactDirectory.getPhoneNumber(contact)
-        
-        guard let ev = dbEvent else { return }
-        db.insertEvent(currentEvent?.title, latitude: ev.latitude, longitude: ev.longitude, dateTime: ev.dateTime, contactName: self.contact)
+        self.contactNumbers = contactDirectory.getPhoneNumber(contact)
     }
     
     func syncEvent(newEvent: EKEvent?) {
@@ -280,55 +273,56 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         dest = Location()
         currentEvent = newEvent
         print(newEvent)
-        guard let ev = currentEvent else { return }
-        currentEventButton.setTitle(ev.title, forState: .Normal)
-        dest.address = ev.location
-        if let checkIfEmpty = ev.location {
-            if checkIfEmpty.isEmpty {
+
+        currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
+        
+        if let eventLocation = currentEvent?.location {
+            if eventLocation.isEmpty {
                 dest.address = nil
             }
         }
         
-        dest.coordinates = ev.structuredLocation?.geoLocation?.coordinate
-        
-//       code below originally in master
-//        if let coordinate = ev.structuredLocation?.geoLocation?.coordinate {
-//            destCoordinates = coordinate
-//        }
+        dest.coordinates = currentEvent?.structuredLocation?.geoLocation?.coordinate
 
-        if let loc = ev.location {
-            let locArr = loc.characters.split { $0 == "\n" }.map(String.init)
-            if locArr.count > 1 {
-                searchButton.setTitle(locArr.first, forState: .Normal)
-                //                destLabel.text = locArr.first
-                //                addrLabel.text = locArr[1]
+        if let loc = currentEvent?.location {
+            let locationTokens = loc.componentsSeparatedByString("\n")
+//            let locationTokens = loc.characters.split { $0 == "\n" }.map(String.init)
+            if locationTokens.count > 1 {
+                searchButton.setTitle(locationTokens.first, forState: .Normal)
             } else {
-                searchButton.setTitle(locArr.first, forState: .Normal)
-                //                destLabel.text = locArr.first
-                //                addrLabel.text = nil
+                searchButton.setTitle(locationTokens.first, forState: .Normal)
             }
-            dest.name = locArr.first
+            dest.name = locationTokens.first
+            dest.address = locationTokens.joinWithSeparator(" ")
+            
         }
         print("showroute")
         showRoute(showDestMarker: true)
         
         dbEvent = createDBEventForCurrentEvent()
-        suggestContact(ev)
+        let suggestedContact = suggestContact(currentEvent)
+        updateContact(suggestedContact)
+        insertDBEvent()
+    }
+    
+    func syncCalendar() {
+        syncCalendar(refreshCalendar: true)
     }
     
     /// Sync with Apple Calendar to get the current calendar event, and update the labels given this event's information.
-    func syncData() {
-        self.currentEvent = nil
-        
-        guard let events = eventDirectory.getAllCalendarEvents() else { return }
-        for ev in events {
-            if !ev.allDay {
-                if ev.location != nil {
-                    self.currentEvent = ev
-                    break
-                }
-                if currentEvent == nil {
-                    currentEvent = ev
+    func syncCalendar(refreshCalendar refreshCalendar: Bool) {
+        if refreshCalendar {
+            self.currentEvent = nil
+            guard let events = eventDirectory.getAllCalendarEvents() else { return }
+            for ev in events {
+                if !ev.allDay {
+                    if ev.location != nil {
+                        self.currentEvent = ev
+                        break
+                    }
+                    if currentEvent == nil {
+                        currentEvent = ev
+                    }
                 }
             }
         }
@@ -646,15 +640,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
         if (MFMessageComposeViewController.canSendText()) {
             let controller = MFMessageComposeViewController()
-            var name = String()
+            var contactName = String()
             if let firstName = self.contact?.componentsSeparatedByString(" ").first {
-                name = firstName
+                contactName = firstName
             }
             
             print(contact)
-            print(name)
+            print(contactName)
             
-            if dest.address == nil && dest.coordinates == nil {
+            if dest.address == nil && dest.coordinates == nil && dest.name == nil {
                 controller.body = ""
             } else {
                 var destString = String()
@@ -662,6 +656,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     destString = address
                 } else if let coords = dest.coordinates {
                     destString = "\(coords.latitude),\(coords.longitude)"
+                } else if let destName = dest.name {
+                    destString = destName
                 } else {
                     self.showAlertViewController(title: "Error", message: "No destination specified")
                     return
@@ -672,11 +668,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     if success {
                         let duration = self.distanceTasks.durationInTrafficText
                         if let destination = self.dest.name {
-                            controller.body = "Hi \(name), I will arrive at \(destination) in \(duration)."
+                            controller.body = "Hi \(contactName), I will arrive at \(destination) in \(duration)."
                         } else {
-                            controller.body = "Hi \(name), I will arrive in \(duration)."
+                            controller.body = "Hi \(contactName), I will arrive in \(duration)."
                         }
-                        print(controller.body)
+                        print("BODY: \(controller.body)")
+                        print("presenting view controller")
+                        self.presentViewController(controller, animated: true, completion: nil)
                     } else {
                         self.showAlertViewController(title: "Error", message: "No ETA found.")
                     }
@@ -687,8 +685,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             controller.recipients = [numbers.first!] // Send only to the primary number
             print(controller.recipients)
             controller.messageComposeDelegate = self
-            print("presenting view controller")
-            self.presentViewController(controller, animated: true, completion: nil)
         }
     }
     
@@ -768,6 +764,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print(reminders?.description)
     }
     
+    func insertDBEvent() {
+        db.insertEvent( currentEvent?.title,
+            latitude: dest.coordinates?.latitude ?? CLLocationDegrees(),
+            longitude: dest.coordinates?.longitude ?? CLLocationDegrees(),
+            dateTime: currentEvent?.startDate ?? NSDate(),
+            contactName: contact)
+    }
     
     // MARK: Core Bluetooth Manager Methods
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
@@ -829,8 +832,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     
-    
-    
     // MARK: UIPickerVoew Delegate Methods
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
@@ -863,10 +864,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedContact = pickerData[row]
         print(selectedContact)
-        updateContact(selectedContact)
         picker.hidden = true
         contactLabel.hidden = false
         changeContactButton.hidden = false
+        
+        updateContact(selectedContact)
+        insertDBEvent()
     }
     
     
@@ -875,19 +878,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
         db.insertAction("refresh")
-        resetData()
-        syncData()
+        resetView()
+        syncCalendar(refreshCalendar: false)
     }
     
     /// Navigate Button clicked.
     @IBAction func navigateButtonClicked(sender: UIButton) {
-//        db.logNavigated()
         db.insertAction("navigate")
         if let _ = currentEvent {
             openMaps()
         } else {
             if dest.name == nil && dest.address == nil {
-                syncData()
+                syncCalendar()
             }
             openMaps()
         }

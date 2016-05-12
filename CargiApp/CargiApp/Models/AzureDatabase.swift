@@ -527,20 +527,22 @@ class AzureDatabase {
                 event = eventName!
             }
         let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
-        
-        self.eventTable.insert(eventObj) {
-            (insertedItem, error) in
-            if error != nil {
-                print("Error in inserting an event" + error!.description)
-            } else {
-                print("Event inserted, id: " + String(insertedItem!["id"]))
-                print("event contact is ... ", contactName)
-                self.curEventID = String(insertedItem!["id"])
-                if contactName != nil {
-                    self.insertEventContact(contactName!)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+
+            self.eventTable.insert(eventObj) {
+                (insertedItem, error) in
+                if error != nil {
+                    print("Error in inserting an event" + error!.description)
                 } else {
-                    // no contact associated with event
-                    // do nothing for now
+                    print("Event inserted, id: " + String(insertedItem!["id"]))
+                    print("event contact is ... ", contactName)
+                    self.curEventID = String(insertedItem!["id"])
+                    if contactName != nil {
+                        self.insertEventContact(contactName!)
+                    } else {
+                        // no contact associated with event
+                        // do nothing for now
+                    }
                 }
             }
         }
@@ -554,7 +556,11 @@ class AzureDatabase {
     func insertCommunication(method: String) {
         // TODO: should we check if self.userID / self.curEventID / self.contactID exist?
         // the way we use the code, we will have initialized all variables
-        let commObj = ["user_id": self.userID!, "event_id": self.curEventID!, "contact_id": self.contactID!, "method": method]
+        let userID: String = self.userID ?? String()
+        let eventID: String = self.curEventID ?? String()
+        let contactID: String = self.contactID ?? String()
+        
+        let commObj = ["user_id": userID, "event_id": eventID, "contact_id": contactID, "method": method]
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.communicationHistoryTable.insert(commObj) {
                 (insertedItem, error) in
@@ -572,13 +578,14 @@ class AzureDatabase {
     func insertAction(actionTaken: String) {
         
         let actionObj = ["user_id": self.userID!, "action": actionTaken]
-        
-        actionLogTable.insert(actionObj) {
-            (insertedItem, error) in
-            if  error != nil {
-                print("Error in inserting an action" + error!.description)
-            } else {
-                print("Action inserted, id: " + String(insertedItem!["id"]))
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            self.actionLogTable.insert(actionObj) {
+                (insertedItem, error) in
+                if  error != nil {
+                    print("Error in inserting an action" + error!.description)
+                } else {
+                    print("Action inserted, id: " + String(insertedItem!["id"]))
+                }
             }
         }
     }
