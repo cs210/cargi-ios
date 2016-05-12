@@ -15,6 +15,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var spinnerView: SpinnerView!
     
+    var firstTimeOpened: Bool = false
     
     lazy var db = AzureDatabase.sharedInstance
 
@@ -100,6 +101,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func returnToLoginButtonClicked(sender: UIButton) {
+        if firstTimeOpened {
+            // show login view
+            performSegueWithIdentifier("showLoginView", sender: nil)
+        } else {
+            // unwind to login view.
+            performSegueWithIdentifier("unwindToLogin", sender: nil)
+        }
+    }
     
     // MARK: - Navigation
     
@@ -110,6 +120,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         segue.destinationViewController
     }
 
+    @IBAction func returnToSignupViewController(segue: UIStoryboardSegue) { }
+    
 }
 
 

@@ -12,6 +12,16 @@ class LastTutorialViewController: UIViewController {
     
     @IBAction func readyButtonClicked(sender: UIButton) {
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "notFirstLaunchV2.0")
-        self.performSegueWithIdentifier("goToLogin", sender: nil)
+        self.performSegueWithIdentifier("goToSignup", sender: nil)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            if identifier == "goToSignup" {
+                if let destViewController = segue.destinationViewController as? SignupViewController {
+                    destViewController.firstTimeOpened = true
+                }
+            }
+        }
     }
 }
