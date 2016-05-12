@@ -29,6 +29,7 @@
 		63DE4E091CC5FEE6002280BA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */; };
 		63DE4E0B1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */; };
 		63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DE4E0C1CC70844002280BA /* radiobutton-selected@2x.png */; };
+		63F583AF1CE4582E001D3C25 /* spinnerbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F583AE1CE4582E001D3C25 /* spinnerbg@2x.png */; };
 		740354101CD5D12500155433 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403540F1CD5D12500155433 /* LoginViewController.swift */; };
 		740354121CD5D13500155433 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740354111CD5D13500155433 /* SignupViewController.swift */; };
 		740354141CD5E76200155433 /* CheapGasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740354131CD5E76200155433 /* CheapGasFinder.swift */; };
@@ -90,6 +91,7 @@
 		63DE4E081CC5FEE6002280BA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		63DE4E0C1CC70844002280BA /* radiobutton-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radiobutton-selected@2x.png"; sourceTree = "<group>"; };
+		63F583AE1CE4582E001D3C25 /* spinnerbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "spinnerbg@2x.png"; path = "../spinnerbg@2x.png"; sourceTree = "<group>"; };
 		7403540F1CD5D12500155433 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		740354111CD5D13500155433 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		740354131CD5E76200155433 /* CheapGasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheapGasFinder.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				74A3D8E51C9127020053D816 /* calendar-icon@2x.png */,
 				74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */,
 				74A3D8E61C9127020053D816 /* call-button@2x.png */,
+				63F583AE1CE4582E001D3C25 /* spinnerbg@2x.png */,
 				74B783101C9F6A28003E0391 /* navigate_button@2x.png */,
 				74962D711CD34CF50078883B /* gasbutton@2x.png */,
 				63C6588E1CE2304200F9C6C5 /* gascheap@2x.png */,
@@ -353,6 +356,7 @@
 				63C658801CDE80C100F9C6C5 /* callbutton@2x.png in Resources */,
 				630A71841CD757E00045D8BF /* screen3@2x.png in Resources */,
 				630A71711CD711E50045D8BF /* refreshbutton@2x.png in Resources */,
+				63F583AF1CE4582E001D3C25 /* spinnerbg@2x.png in Resources */,
 				74A2E6011C7FCBC800C468CC /* LaunchScreen.storyboard in Resources */,
 				74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */,
 				74131C471C7FD83A00CBB5F4 /* cargi-padding.png in Resources */,

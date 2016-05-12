@@ -24,6 +24,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         case Google // Google Maps
     }
     
+    @IBOutlet weak var spinnerBackground: UIImageView!
     private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
     
@@ -142,6 +143,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         self.view.bringSubviewToFront(self.activityIndicatorView)
         self.view.bringSubviewToFront(self.picker)
+        self.spinnerBackground.hidden = true
         
         destMarker.icon = UIImage(named: "destination_icon")
         
@@ -935,6 +937,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
+        self.spinnerBackground.hidden = false;
         activityIndicatorView.startAnimating()
         
         let geocoder = LocationGeocoder()
@@ -1008,6 +1011,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                             // if the last cheap gas was found, stop animating activity indicator.
                                             if i == numCheapGasStations - 1 {
                                                 dispatch_async(dispatch_get_main_queue()) {
+                                                    self.spinnerBackground.hidden = true;
                                                     self.activityIndicatorView.stopAnimating()
                                                     self.updateCamera(bounds, shouldAddEdgeInsets: false)
                                                 }
