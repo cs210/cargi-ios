@@ -22,7 +22,7 @@ class DistanceMatrixTasks {
     let APIKey: String = "AIzaSyB6LumdXIastAI0rhSiSVTdLNStQb9UUP8"
     
     // For traffic model, we have best_guess, pessimistic, or optimistic.
-    let trafficModel = "best_guess"
+    let trafficModel: TrafficModel = .BestGuess
     
     // Formatted addresses contained in response returned by Directions API.
     var originAddress: String!
@@ -40,6 +40,11 @@ class DistanceMatrixTasks {
     var durationInTrafficText: String!
     var durationInTrafficValue: Int!
     
+    enum TrafficModel: String {
+        case BestGuess = "best_guess"
+        case Pessimistic = "pessimistic"
+        case Optimistic = "optimistic"
+    }
     
     /// Makes a request to get the estimated time from origin to destination using addresses.
     func getETA(origin: String?, dest: String?, completionHandler: ((status: String, success: Bool) -> Void)) {
@@ -54,7 +59,7 @@ class DistanceMatrixTasks {
         }
         
         // URL for making request to the Google Distance Matrix API.
-        let requestURL: String = "\(baseURL)origins=\(originLocation)&destinations=\(destLocation)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
+        let requestURL: String = "\(baseURL)origins=\(originLocation)&destinations=\(destLocation)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel.rawValue)"
         let request = NSURL(string: requestURL)
         parseResponse(request, completionHandler: completionHandler)
     }
@@ -70,7 +75,7 @@ class DistanceMatrixTasks {
         getETA(origin1, origin2: origin2, dest: dest, completionHandler: completionHandler)
         
         /*
-        let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
+        let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest1),\(dest2)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel.rawValue)"
         let request = NSURL(string: requestURL)
         parseResponse(request, completionHandler: completionHandler)
          */
@@ -82,7 +87,16 @@ class DistanceMatrixTasks {
      */
     func getETA(origin1: CLLocationDegrees, origin2: CLLocationDegrees, dest: String, completionHandler: ((status: String, success: Bool) -> Void)) {
         // URL for making request to the Google Distance Matrix API.
-        let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(dest)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel)"
+        guard let destLocation = dest.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) else {
+            completionHandler(status: "Destination is nil", success: false)
+            return
+        }
+        if destLocation.isEmpty {
+            completionHandler(status: "Destination is nil", success: false)
+            return
+        }
+        
+        let requestURL: String = "\(baseURL)origins=\(origin1),\(origin2)&destinations=\(destLocation)&model=driving&key=\(APIKey)&departure_time=now&traffic_model=\(trafficModel.rawValue)"
         let request = NSURL(string: requestURL)
         parseResponse(request, completionHandler: completionHandler)
     }

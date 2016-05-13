@@ -652,10 +652,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 controller.body = ""
             } else {
                 var destString = String()
-                if let address = dest.address {
-                    destString = address
-                } else if let coords = dest.coordinates {
+                if let coords = dest.coordinates {
                     destString = "\(coords.latitude),\(coords.longitude)"
+                } else if let address = dest.address {
+                    destString = address
                 } else if let destName = dest.name {
                     destString = destName
                 } else {

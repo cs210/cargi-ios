@@ -61,7 +61,7 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         
         if (events[indexPath.row].title == currentEventID) {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-            self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
+//            self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
