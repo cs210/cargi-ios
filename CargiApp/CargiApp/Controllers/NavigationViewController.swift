@@ -640,7 +640,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     /// Opens up a message view with a preformatted message that shows destination and ETA.
-    func sendETAMessage(phoneNumbers: [String]?, destination: Location?) {
+    func sendETAMessage(phoneNumbers: [String]?, destination: Location?, isGasStation: Bool) {
         guard let numbers = phoneNumbers else { return }
         
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
@@ -656,11 +656,20 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             
             guard let dest = destination else {
                 controller.body = ""
+                self.presentViewController(controller, animated: true, completion: nil)
                 return
             }
+            print(phoneNumbers)
+            controller.recipients = [numbers.first!] // Send only to the primary number
+            print(controller.recipients)
+            controller.messageComposeDelegate = self
             
             if dest.address == nil && dest.coordinates == nil && dest.name == nil {
                 controller.body = ""
+                self.presentViewController(controller, animated: true, completion: nil)
+            } else if isGasStation {
+                controller.body = "I'm getting gas right now. I'll be there soon."
+                self.presentViewController(controller, animated: true, completion: nil)
             } else {
                 var destString = String()
                 if let coords = dest.coordinates {
@@ -691,11 +700,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     }
                 }
             }
-            
-            print(phoneNumbers)
-            controller.recipients = [numbers.first!] // Send only to the primary number
-            print(controller.recipients)
-            controller.messageComposeDelegate = self
         }
     }
     
@@ -1119,9 +1123,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("message button activated")
         db.insertCommunication("message")
         if let _ = waypoint {
-            self.sendETAMessage(contactNumbers, destination: waypoint)
+            self.sendETAMessage(contactNumbers, destination: waypoint, isGasStation: true)
         } else {
-            self.sendETAMessage(contactNumbers, destination: dest)
+            self.sendETAMessage(contactNumbers, destination: dest, isGasStation: false)
         }
     }
     
@@ -1195,7 +1199,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Settings Button clicked
     @IBAction func settingsButtonClicked(sender: UIButton) {
-        let alert = UIAlertController(title: "Settings", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Logout", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
             let prefs = NSUserDefaults.standardUserDefaults()
