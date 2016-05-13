@@ -70,6 +70,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     var gasMarker: GMSMarker?
     var dest = Location()
+    var waypoint: Location?
     
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
@@ -198,6 +199,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         searchButton.setTitle(nil, forState: .Normal)
         contact = nil
         dest = Location()
+        waypoint = nil
+        stopSpinner()
         mapView.clear()
     }
     
@@ -411,7 +414,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         Open Maps, given the current event's location.
      */
 //    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
-    func openMaps() {
+    func openMaps(destination destination: Location?) {
 
 //        guard let ev = currentEvent else { return }
 //        let queries = ev.location!.componentsSeparatedByString("\n")
@@ -421,7 +424,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 //            openGoogleMapsLocationWaypoints(waypointCoordinates!)
 //            return
 //        }
-        
+        guard let dest = destination else {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
         
         if (dest.address == nil && dest.coordinates == nil) {
             showAlertViewController(title: "Error", message: "No destination specified.")
@@ -634,7 +640,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     /// Opens up a message view with a preformatted message that shows destination and ETA.
-    func sendETAMessage(phoneNumbers: [String]?) {
+    func sendETAMessage(phoneNumbers: [String]?, destination: Location?) {
         guard let numbers = phoneNumbers else { return }
         
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
@@ -648,6 +654,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(contact)
             print(contactName)
             
+            guard let dest = destination else {
+                controller.body = ""
+                return
+            }
+            
             if dest.address == nil && dest.coordinates == nil && dest.name == nil {
                 controller.body = ""
             } else {
@@ -659,7 +670,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 } else if let destName = dest.name {
                     destString = destName
                 } else {
-                    self.showAlertViewController(title: "Error", message: "No destination specified")
+                    controller.body = ""
                     return
                 }
 
@@ -667,7 +678,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     print(status)
                     if success {
                         let duration = self.distanceTasks.durationInTrafficText
-                        if let destination = self.dest.name {
+                        if let destination = dest.name {
                             controller.body = "Hi \(contactName), I will arrive at \(destination) in \(duration)."
                         } else {
                             controller.body = "Hi \(contactName), I will arrive in \(duration)."
@@ -806,17 +817,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // MARK: GMSMapViewDelegate Methods
     
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
+        waypoint = Location()
         gasMarker = marker
         let showDestMarker = (dest.address != nil) || (dest.name != nil)
        
-        dest.coordinates = gasMarker!.position
         print(gasMarker!.position)
-        dest.name = gasMarker!.title
-        self.searchButton.setTitle(dest.name, forState: .Normal)
-//        dest.address
-        
+        waypoint?.name = gasMarker!.title
+        self.searchButton.setTitle(waypoint?.name, forState: .Normal)
+        waypoint?.coordinates = gasMarker!.position
         
         if let userData = marker.userData as? [String:String] {
+            waypoint?.address = userData["address"]
+            
             if let placeID = userData["place_id"] {
                 self.showRouteWithWaypoints(waypoints: ["place_id:\(placeID)"], showDestMarker: showDestMarker)
                 return
@@ -831,6 +843,16 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         self.showRouteWithWaypoints(waypoints: [coord], showDestMarker: showDestMarker)
     }
     
+    
+    func startSpinner() {
+        self.spinnerBackground.hidden = false
+        activityIndicatorView.startAnimating()
+    }
+    
+    func stopSpinner() {
+        self.spinnerBackground.hidden = true
+        self.activityIndicatorView.stopAnimating()
+    }
     
     // MARK: UIPickerVoew Delegate Methods
     
@@ -886,12 +908,21 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func navigateButtonClicked(sender: UIButton) {
         db.insertAction("navigate")
         if let _ = currentEvent {
-            openMaps()
+            if let _ = waypoint {
+                openMaps(destination: waypoint)
+            } else {
+                openMaps(destination: dest)
+            }
         } else {
             if dest.name == nil && dest.address == nil {
                 syncCalendar()
             }
-            openMaps()
+            
+            if let _ = waypoint {
+                openMaps(destination: waypoint)
+            } else {
+                openMaps(destination: dest)
+            }
         }
     }
 
@@ -939,8 +970,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return
         }
         
-        self.spinnerBackground.hidden = false;
-        activityIndicatorView.startAnimating()
+        startSpinner()
         
         let geocoder = LocationGeocoder()
         geocoder.getPostalCode(originLocation) { (status, success) in
@@ -1013,8 +1043,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                             // if the last cheap gas was found, stop animating activity indicator.
                                             if i == numCheapGasStations - 1 {
                                                 dispatch_async(dispatch_get_main_queue()) {
-                                                    self.spinnerBackground.hidden = true;
-                                                    self.activityIndicatorView.stopAnimating()
+                                                    self.stopSpinner()
                                                     self.updateCamera(bounds, shouldAddEdgeInsets: false)
                                                 }
                                                 
@@ -1089,7 +1118,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         db.insertAction("message")
         print("message button activated")
         db.insertCommunication("message")
-        self.sendETAMessage(self.contactNumbers)
+        if let _ = waypoint {
+            self.sendETAMessage(contactNumbers, destination: waypoint)
+        } else {
+            self.sendETAMessage(contactNumbers, destination: dest)
+        }
     }
     
     /// Starts a phone call using the phone number associated with current event.
