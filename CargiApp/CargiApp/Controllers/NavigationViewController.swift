@@ -13,8 +13,9 @@ import MessageUI
 import EventKit
 import QuartzCore
 import SpeechKit
+import AVFoundation
 
-class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, OEEventsObserverDelegate, AVSpeechSynthesizerDelegate  {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -30,6 +31,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     var destLabel: UILabel?
     var addrLabel: UILabel?
+    @IBOutlet weak var speechLabel: UILabel!
     
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var destinationView: UIView!
@@ -48,11 +50,32 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBOutlet var dashboardView: UIView!
     @IBOutlet var contactView: UIView!
     @IBOutlet var contactLabel: UILabel!
-
+    
     @IBOutlet weak var picker: UIPickerView!
     var pickerData: [String] = [String]()
     
     @IBOutlet weak var voiceButton: UIButton!
+    
+    var lmPath:String!
+    var dicPath:String!
+    var words:[String:Int] = [
+        "HEY": -1,
+        "CARGHI": -2,
+        "HELLO": -3,
+        "KARTIK": -4,
+        "TARA": -5,
+        "MAYA": -6,
+        "EDWIN": -7,
+        "EMILY": -8,
+        "ISHITA": -9,
+        "MUSIC": -10,
+        "GAS": -11,
+        "CALL": -12,
+        "TEXT": -13,
+        "CONTACT": -14,
+        "EVENT": -15
+    ]
+    var openEarsEventsObserver: OEEventsObserver!
     
     struct Location {
         var name: String?
@@ -124,7 +147,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // MARK: Constants
     
     let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
-
+    let synth = AVSpeechSynthesizer()
+    
     
     
     // MARK: Methods
@@ -132,7 +156,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         contactView.hidden = true
@@ -156,7 +180,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         layer.shadowRadius = 1.5
         layer.shadowOpacity = 0.7
         layer.shadowPath = UIBezierPath(rect: layer.bounds).CGPath
-
+        
         contactView.layer.shadowOffset = CGSizeMake(0, -1)
         contactView.layer.shadowColor = UIColor.blackColor().CGColor
         contactView.layer.shadowRadius = 1.5
@@ -169,13 +193,20 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         // Observer for changes in myLocation of google's map view
         mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
-
+        
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
+        // Configure speech synthesiser
+        synth.delegate = self
+        
+        // Configure OpenEars
+        loadOpenEars()
+        startListening()
+        
         mapView.settings.compassButton = true
-
+        
         self.resetView()
         self.syncCalendar()
     }
@@ -211,7 +242,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         var possibleContactArr: [String] = []
         let eventTitle = ev.title.lowercaseString
-//        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
+        //        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
         let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(separators);
         print("event title arr: ", eventTitleArr);
         
@@ -276,7 +307,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         dest = Location()
         currentEvent = newEvent
         print(newEvent)
-
+        
         currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
         
         if let eventLocation = currentEvent?.location {
@@ -286,10 +317,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         
         dest.coordinates = currentEvent?.structuredLocation?.geoLocation?.coordinate
-
+        
         if let loc = currentEvent?.location {
             let locationTokens = loc.componentsSeparatedByString("\n")
-//            let locationTokens = loc.characters.split { $0 == "\n" }.map(String.init)
+            //            let locationTokens = loc.characters.split { $0 == "\n" }.map(String.init)
             if locationTokens.count > 1 {
                 searchButton.setTitle(locationTokens.first, forState: .Normal)
             } else {
@@ -331,7 +362,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         syncEvent(currentEvent)
     }
-
+    
     
     private func createDBEventForCurrentEvent() -> DBEvent {
         var eventDateTime: NSDate
@@ -350,9 +381,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         return DBEvent(name: currentEvent?.title, latitude: latitudeNum, longitude: longitudeNum, dateTime: eventDateTime)
     }
-
+    
     /**
-        Open Google Maps showing the route to the given coordinates.
+     Open Google Maps showing the route to the given coordinates.
      */
     func openGoogleMapsLocation(coordinate: CLLocationCoordinate2D) {
         UIApplication.sharedApplication().openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(coordinate.latitude),\(coordinate.longitude)&directionsmode=driving")!)
@@ -360,7 +391,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     /**
-        Open Google Maps showing the route to the given address.
+     Open Google Maps showing the route to the given address.
      */
     func openGoogleMapsLocationAddress(address: String) {
         let path = "comgooglemaps://saddr=&?daddr=\(address)&directionsmode=driving"
@@ -379,7 +410,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     /**
-        Open Apple Maps showing the route to the given coordinates.
+     Open Apple Maps showing the route to the given coordinates.
      */
     func openAppleMapsLocation(coordinate: CLLocationCoordinate2D) {
         guard let query = currentEvent?.location else { return }
@@ -402,7 +433,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     /**
-        Open Apple Maps showing the route to the given address.
+     Open Apple Maps showing the route to the given address.
      */
     func openAppleMapsLocationAddress(address: String) {
         let path = "http://maps.apple.com/?daddr=\(address)&dirflg=d"
@@ -411,19 +442,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     /**
-        Open Maps, given the current event's location.
+     Open Maps, given the current event's location.
      */
-//    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
+    //    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
     func openMaps(destination destination: Location?) {
-
-//        guard let ev = currentEvent else { return }
-//        let queries = ev.location!.componentsSeparatedByString("\n")
-//        print(queries)
         
-//        if waypointCoordinates != nil {
-//            openGoogleMapsLocationWaypoints(waypointCoordinates!)
-//            return
-//        }
+        //        guard let ev = currentEvent else { return }
+        //        let queries = ev.location!.componentsSeparatedByString("\n")
+        //        print(queries)
+        
+        //        if waypointCoordinates != nil {
+        //            openGoogleMapsLocationWaypoints(waypointCoordinates!)
+        //            return
+        //        }
         guard let dest = destination else {
             showAlertViewController(title: "Error", message: "No destination specified.")
             return
@@ -461,48 +492,48 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         return
         
         
-//        guard let destAddress = dest.address else {
-////            showAlertViewController(title: "Error", message: "No destination specified.")
-//            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
-//                self.openGoogleMapsLocation(dest.coordinates!)
-//            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-//                self.openAppleMapsLocationNoEvent(dest.coordinates!)
-//            }
-//            return
-//        }
-//        
-//        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
-//        print(query)
-//        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
-//        
-//        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
-//            self.openGoogleMapsLocationAddress(address)
-//            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
-//        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-//            self.openAppleMapsLocationAddress(address)
-//        }
-//        
+        //        guard let destAddress = dest.address else {
+        ////            showAlertViewController(title: "Error", message: "No destination specified.")
+        //            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+        //                self.openGoogleMapsLocation(dest.coordinates!)
+        //            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+        //                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+        //            }
+        //            return
+        //        }
+        //
+        //        let query = destAddress.componentsSeparatedByString("\n").joinWithSeparator(" ")
+        //        print(query)
+        //        let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+        //
+        //        if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+        //            self.openGoogleMapsLocationAddress(address)
+        //            self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
+        //        } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+        //            self.openAppleMapsLocationAddress(address)
+        //        }
+        //
         /* Only if Geocoder is needed */
-/*
-        switch CLLocationManager.authorizationStatus() {
-            case .AuthorizedAlways, .AuthorizedWhenInUse:
-                let geocoder = LocationGeocoder()
-                geocoder.getCoordinates(ev.location!) { (status, error) in
-                    guard let coordinate = geocoder.coordinate else {
-                        print(error)
-                        return
-                    }
-                    // Use Google Maps if it exists. Otherwise, use Apple Maps.
-                    print(ev.location!)
-                    if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
-                        self.openGoogleMapsLocation(coordinate)
-                    } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-                        self.openAppleMapsLocation(coordinate)
-                    }
-                }
-            default: break
-        }
-*/
+        /*
+         switch CLLocationManager.authorizationStatus() {
+         case .AuthorizedAlways, .AuthorizedWhenInUse:
+         let geocoder = LocationGeocoder()
+         geocoder.getCoordinates(ev.location!) { (status, error) in
+         guard let coordinate = geocoder.coordinate else {
+         print(error)
+         return
+         }
+         // Use Google Maps if it exists. Otherwise, use Apple Maps.
+         print(ev.location!)
+         if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+         self.openGoogleMapsLocation(coordinate)
+         } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+         self.openAppleMapsLocation(coordinate)
+         }
+         }
+         default: break
+         }
+         */
     }
     
     /// Location is updated.
@@ -510,11 +541,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("updating location")
     }
     
-
+    
     
     func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
         mapView.clear()
-//        waypointCoordinates = nil
+        //        waypointCoordinates = nil
         routePolyline.path = nil
         routePolylineBorder.path = nil
         
@@ -627,6 +658,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Starts a phone call with the first phone number in the given list of phone numbers.
     func callPhone(phoneNumbers: [String]?) {
+        say("Calling")
         guard let numbers = phoneNumbers else { return }
         let number = numbers[0] as NSString
         let charactersToRemove = NSCharacterSet.alphanumericCharacterSet().invertedSet
@@ -641,6 +673,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Opens up a message view with a preformatted message that shows destination and ETA.
     func sendETAMessage(phoneNumbers: [String]?, destination: Location?, isGasStation: Bool) {
+        say("Sending the text")
+
         guard let numbers = phoneNumbers else { return }
         
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
@@ -682,7 +716,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     controller.body = ""
                     return
                 }
-
+                
                 distanceTasks.getETA(locValue.latitude, origin2: locValue.longitude, dest: destString) { (status, success) in
                     print(status)
                     if success {
@@ -779,12 +813,124 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print(reminders?.description)
     }
     
+    
+    // AVSpeechSynthesizer delegate
+    
+    func say(str:String!) {
+//        stopListening()
+        let myUtterance = AVSpeechUtterance(string: str)
+        myUtterance.rate = 0.55
+        synth.speakUtterance(myUtterance)
+    }
+    
+    func speechSynthesizer(synthesizer:AVSpeechSynthesizer!, didFinishSpeechUtterance utterance:AVSpeechUtterance!) {
+        print("finished speaking")
+//        startListening()
+    }
+    
+    //OpenEars methods
+    
+    func loadOpenEars() {
+        self.openEarsEventsObserver = OEEventsObserver()
+        self.openEarsEventsObserver.delegate = self
+        
+        let lmGenerator: OELanguageModelGenerator = OELanguageModelGenerator()
+        let name = "LanguageModelFileStarSaver"
+        let list = Array(words.keys)
+        lmGenerator.generateLanguageModelFromArray(list, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
+
+
+        
+        lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModelWithRequestedName(name)
+        dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionaryWithRequestedName(name)
+        print("OpenEars loaded")
+    }
+    
+    func pocketsphinxDidReceiveHypothesis(hypothesis: String?, recognitionScore: String?, utteranceID: String?) {
+//        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
+        print("hypothesis: ", hypothesis)
+        print("recogscore: ", recognitionScore)
+        print("utteranceID:", utteranceID)
+        
+        if hypothesis!.rangeOfString("HEY CARGHI") != nil {
+            print("Hey carghi detected")
+            say("How can carghi help?")
+            let triggerTime = (Int64(NSEC_PER_SEC) * 1)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
+                self.voiceButtonClicked([])
+            })
+//            voiceButtonClicked([])
+            return
+        } else {
+            print("I'm having trouble understanding you")
+//            say("I'm having trouble understanding you")
+            return
+        }
+    }
+    
+    func pocketsphinxDidStartListening() {
+        print("Pocketsphinx is now listening.")
+    }
+    
+    func pocketsphinxDidDetectSpeech() {
+        //		print("Pocketsphinx has detected speech.")
+    }
+    
+    func pocketsphinxDidDetectFinishedSpeech() {
+        //		print("Pocketsphinx has detected a period of silence, concluding an utterance.")
+    }
+    
+    func pocketsphinxDidStopListening() {
+        print("Pocketsphinx has stopped listening.")
+    }
+    
+    func pocketsphinxDidSuspendRecognition() {
+        print("Pocketsphinx has suspended recognition.")
+    }
+    
+    func pocketsphinxDidResumeRecognition() {
+        print("Pocketsphinx has resumed recognition.")
+    }
+    
+    func pocketsphinxDidChangeLanguageModelToFile(newLanguageModelPathAsString: String, newDictionaryPathAsString: String) {
+        print("Pocketsphinx is now using the following language model: \(newLanguageModelPathAsString) and the following dictionary: \(newDictionaryPathAsString)")
+    }
+    
+    func pocketSphinxContinuousSetupDidFailWithReason(reasonForFailure: String) {
+        print("Listening setup wasn't successful and returned the failure reason: \(reasonForFailure)")
+    }
+    
+    func pocketSphinxContinuousTeardownDidFailWithReason(reasonForFailure: String) {
+        print("Listening teardown wasn't successful and returned the failure reason: \(reasonForFailure)")
+    }
+    
+    func testRecognitionCompleted() {
+        print("A test file that was submitted for recognition is now complete.")
+    }
+    
+    func startListening() {
+        do {
+            try OEPocketsphinxController.sharedInstance().setActive(true)
+        } catch {
+            //completionHandler(status: "", success: false)
+        }
+        OEPocketsphinxController.sharedInstance().startListeningWithLanguageModelAtPath(lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"), languageModelIsJSGF: false)
+        //OEPocketsphinxController.sharedInstance().secondsOfSilenceToDetect = 0.4
+        OEPocketsphinxController.sharedInstance().vadThreshold = 3.5
+    }
+    
+    func stopListening() {
+        OEPocketsphinxController.sharedInstance().stopListening()
+    }
+    
+    //OpenEars methods end
+    
     func insertDBEvent() {
         db.insertEvent( currentEvent?.title,
-            latitude: dest.coordinates?.latitude ?? CLLocationDegrees(),
-            longitude: dest.coordinates?.longitude ?? CLLocationDegrees(),
-            dateTime: currentEvent?.startDate ?? NSDate(),
-            contactName: contact)
+                        latitude: dest.coordinates?.latitude ?? CLLocationDegrees(),
+                        longitude: dest.coordinates?.longitude ?? CLLocationDegrees(),
+                        dateTime: currentEvent?.startDate ?? NSDate(),
+                        contactName: contact)
     }
     
     // MARK: Core Bluetooth Manager Methods
@@ -824,7 +970,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         waypoint = Location()
         gasMarker = marker
         let showDestMarker = (dest.address != nil) || (dest.name != nil)
-       
+        
         print(gasMarker!.position)
         waypoint?.name = gasMarker!.title
         self.searchButton.setTitle(waypoint?.name, forState: .Normal)
@@ -929,11 +1075,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
     }
-
+    
     //Start session for voice capture/recognition
-    @IBAction func voiceButtonClicked(sender: AnyObject) {
+//    @IBAction func voiceButtonClicked(sender: AnyObject) {
+    func voiceButtonClicked(sender: AnyObject) {
+//        stopListening()
         print("listening for voice command");
-        voiceButton.setTitle("Listening...", forState: .Normal)
+        
+//        voiceButton.setTitle("Listening...", forState: .Normal)
         let url = "nmsps://NMDPTRIAL_team_cargi_co20160418020749@sslsandbox.nmdp.nuancemobility.net:443"
         let token = "6ff1671b87d0259dc04a734edbf2ab4894184242e68c4cf3fac45545c7c10e37b376523a4677d706c14a549c3cffe5d0182713feb35ff2ad2447f2eb090122bc"
         let session = SKSession(URL: NSURL(string: url), appToken: token)
@@ -948,19 +1097,24 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("Result of Speech Recognition: " + recognition.text)
         if (recognition.text.lowercaseString.rangeOfString("gas") != nil) {
             gasButtonClicked(nil)
+            say("gas clicked")
         }
         if (recognition.text.lowercaseString.rangeOfString("music") != nil) {
             musicButtonClicked(nil)
+            say("music clicked")
         }
         if (recognition.text.lowercaseString.rangeOfString("call") != nil) {
             phoneButtonClicked(nil)
+            say("phone clicked")
         }
         if (recognition.text.lowercaseString.rangeOfString("text") != nil) {
             messageButtonClicked(nil)
+            say("text clicked")
         }
-        voiceButton.setTitle("Listen", forState: .Normal)
+//        voiceButton.setTitle("Listen", forState: .Normal)
+//        startListening()
     }
-
+    
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
         db.insertAction("gas")
@@ -1013,17 +1167,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                                             break
                                         }
                                         
-//                                        let locationGeocoder = LocationGeocoder()
-//                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
-//                                            if success {
-//                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
-//                                                marker.appearAnimation = kGMSMarkerAnimationPop
-//                                                marker.title = station.name
-//                                                marker.icon = UIImage(named: "gasmarker")
-//                                                marker.snippet = station.price
-//                                                marker.map = self.mapView
-//                                            }
-//                                        }
+                                        //                                        let locationGeocoder = LocationGeocoder()
+                                        //                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
+                                        //                                            if success {
+                                        //                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
+                                        //                                                marker.appearAnimation = kGMSMarkerAnimationPop
+                                        //                                                marker.title = station.name
+                                        //                                                marker.icon = UIImage(named: "gasmarker")
+                                        //                                                marker.snippet = station.price
+                                        //                                                marker.map = self.mapView
+                                        //                                            }
+                                        //                                        }
                                     }
                                     if !priceFound {
                                         dispatch_async(dispatch_get_main_queue()) {
@@ -1069,32 +1223,32 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
         
-//        guard let originLocationCoordinates = locationManager.location?.coordinate else {
-//            return
-//        }
-//
-//        let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
-//        print("origin: \(origin)")
-//        gasFinder.getNearbyGasStations(origin, count: 0) { (status: String, success: Bool) in
-//            if success {
-//                for station in self.gasFinder.stations {
-//                    let marker = GMSMarker(position: station.coordinates!)
-//                    marker.appearAnimation = kGMSMarkerAnimationPop
-//                    marker.title = station.name
-//                    marker.icon = UIImage(named: "gasmarker")
-//                    marker.snippet = station.address
-//                    marker.map = self.mapView
-//                }
-////                if self.destLocation != nil {
-//////                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
-////                } else {
-////                    self.destLocation = self.gasFinder.address
-//////                    self.showRoute(showDestMarker: false)
-////                }
-//            } else {
-//                print("Error: \(status)")
-//            }
-//        }
+        //        guard let originLocationCoordinates = locationManager.location?.coordinate else {
+        //            return
+        //        }
+        //
+        //        let origin = "\(originLocationCoordinates.latitude),\(originLocationCoordinates.longitude)"
+        //        print("origin: \(origin)")
+        //        gasFinder.getNearbyGasStations(origin, count: 0) { (status: String, success: Bool) in
+        //            if success {
+        //                for station in self.gasFinder.stations {
+        //                    let marker = GMSMarker(position: station.coordinates!)
+        //                    marker.appearAnimation = kGMSMarkerAnimationPop
+        //                    marker.title = station.name
+        //                    marker.icon = UIImage(named: "gasmarker")
+        //                    marker.snippet = station.address
+        //                    marker.map = self.mapView
+        //                }
+        ////                if self.destLocation != nil {
+        //////                    self.showRouteWithWaypoints(waypoints: ["place_id:\(self.gasFinder.placeID)"], showDestMarker: true)
+        ////                } else {
+        ////                    self.destLocation = self.gasFinder.address
+        //////                    self.showRoute(showDestMarker: false)
+        ////                }
+        //            } else {
+        //                print("Error: \(status)")
+        //            }
+        //        }
     }
     
     private func addMapMarker(position: CLLocationCoordinate2D, title: String?, snippet: String?, userData: AnyObject?, cheap: Bool) {
@@ -1107,7 +1261,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         } else {
             // blue
             marker.icon = UIImage(named: "gasnearby")
-//            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
+            //            marker.icon = GMSMarker.markerImageWithColor(UIColor.init(red: 109/256, green: 180/256, blue: 245/256, alpha: 1.0))
             
         }
         // marker.icon = UIImage(named: "gasmarker")
@@ -1206,14 +1360,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             prefs.setBool(false, forKey: "loggedIn") // set as logged in
             prefs.setValue("", forKey: "userEmail")
             prefs.setValue("", forKey: "userID")
-
+            
             self.mapView.removeObserver(self, forKeyPath: "myLocation")
             
-//            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {
-//                self.performSegueWithIdentifier("logoutToLogin", sender: nil)
-//            } else {
+            //            if self.canPerformUnwindSegueAction(Selector("logoutToLogin"), fromViewController: self, withSender: sender) {
+            //                self.performSegueWithIdentifier("logoutToLogin", sender: nil)
+            //            } else {
             self.performSegueWithIdentifier("logout", sender: nil)
-//            }
+            //            }
         }
         let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
         
@@ -1228,14 +1382,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier {
             switch identifier {
-                case "pickEvent":
+            case "pickEvent":
                 if let eventsTableViewController = segue.destinationViewController as? EventPickerViewController {
                     print("printing from nvc")
                     print("event: \(currentEvent?.eventIdentifier)")
                     print("event: \(currentEvent?.calendarItemIdentifier)")
                     eventsTableViewController.currentEventID = currentEvent?.title
                 }
-                default: break
+            default: break
             }
             
         }
@@ -1265,7 +1419,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func cancelChooseEvent(segue: UIStoryboardSegue) {
         
     }
-
+    
 }
 
 // Extension for using the Google Places API.
@@ -1281,15 +1435,15 @@ extension NavigationViewController: GMSAutocompleteViewControllerDelegate {
         dest.address = place.formattedAddress
         dest.name = place.name
         dest.coordinates = place.coordinate
-//        self.destLabel.text = place.name
+        //        self.destLabel.text = place.name
         self.searchButton.setTitle(place.name, forState: .Normal)
-//        self.addrLabel.text = place.formattedAddress
+        //        self.addrLabel.text = place.formattedAddress
         gasMarker = nil
         self.showRoute(showDestMarker: true)
-//        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
-//        let marker = GMSMarker(position: place.coordinate)
-//        marker.title = place.name
-//        marker.map = mapView
+        //        mapView.camera = GMSCameraPosition.cameraWithTarget(place.coordinate, zoom: 12)
+        //        let marker = GMSMarker(position: place.coordinate)
+        //        marker.title = place.name
+        //        marker.map = mapView
     }
     
     func viewController(viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: NSError) {
