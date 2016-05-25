@@ -173,6 +173,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.startUpdatingLocation()
         
         mapView.settings.compassButton = true
 
@@ -202,6 +203,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         waypoint = nil
         stopSpinner()
         mapView.clear()
+        locationManager.stopUpdatingHeading()
     }
     
     private func suggestContact(event: EKEvent?) -> String? {
@@ -508,8 +510,18 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Location is updated.
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("updating location")
+        if let course = mapView.myLocation?.course {
+            mapView.animateToBearing(course)
+        }
+        
+        if let heading = manager.heading?.trueHeading {
+            print(heading)
+        }
     }
     
+    func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        mapView.animateToBearing(newHeading.trueHeading)
+    }
 
     
     func showRouteWithWaypoints(waypoints waypoints: [String]!, showDestMarker: Bool) {
@@ -820,6 +832,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // MARK: GMSMapViewDelegate Methods
     
+    
+    
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
         waypoint = Location()
         gasMarker = marker
@@ -911,21 +925,43 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Navigate Button clicked.
     @IBAction func navigateButtonClicked(sender: UIButton) {
         db.insertAction("navigate")
-        if let _ = currentEvent {
-            if let _ = waypoint {
-                openMaps(destination: waypoint)
-            } else {
-                openMaps(destination: dest)
-            }
+        
+        locationManager.startUpdatingHeading()
+        
+        if let myLocation = mapView.myLocation {
+            let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
+                                                                    zoom: 17,
+                                                                    bearing: 0,
+                                                                    viewingAngle: 60.0)
+            mapView.animateToCameraPosition(cameraPosition)
         } else {
-            if dest.name == nil && dest.address == nil {
-                syncCalendar()
+            if locationManager.heading == nil {
+                print("true heading doesn't exist")
+            }
+            if mapView.myLocation == nil {
+                print("myLocation for GoogleMaps doesn't exist")
             }
             
-            if let _ = waypoint {
-                openMaps(destination: waypoint)
+        }
+        
+        let shouldOpenMaps = false
+        if shouldOpenMaps {
+            if let _ = currentEvent {
+                if let _ = waypoint {
+                    openMaps(destination: waypoint)
+                } else {
+                    openMaps(destination: dest)
+                }
             } else {
-                openMaps(destination: dest)
+                if dest.name == nil && dest.address == nil {
+                    syncCalendar()
+                }
+                
+                if let _ = waypoint {
+                    openMaps(destination: waypoint)
+                } else {
+                    openMaps(destination: dest)
+                }
             }
         }
     }
