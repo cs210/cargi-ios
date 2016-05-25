@@ -15,7 +15,7 @@ import QuartzCore
 import SpeechKit
 import AVFoundation
 
-class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, OEEventsObserverDelegate, AVSpeechSynthesizerDelegate  {
+class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, OEEventsObserverDelegate, AVSpeechSynthesizerDelegate, SKAudioPlayerDelegate {
     
     @IBOutlet var mapView: GMSMapView!
     
@@ -76,6 +76,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         "EVENT": -15
     ]
     var openEarsEventsObserver: OEEventsObserver!
+    var voice: String!
+    var skSession1:SKSession?
+    var skTransaction1:SKTransaction?
     
     struct Location {
         var name: String?
@@ -209,8 +212,15 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         self.resetView()
         self.syncCalendar()
+        
+        voice = "Ava" //replace VOICE with one of Ava, Allison, Samantha, Susan and Zoe
+        let url = "nmsps://NMDPTRIAL_team_cargi_co20160418020749@sslsandbox.nmdp.nuancemobility.net:443"
+        let token = "6ff1671b87d0259dc04a734edbf2ab4894184242e68c4cf3fac45545c7c10e37b376523a4677d706c14a549c3cffe5d0182713feb35ff2ad2447f2eb090122bc"
+        skSession1 = SKSession(URL: NSURL(string: url), appToken: token)
+        if (skSession1 == nil) {
+            print("Failed to initialize SpeechKit session.")
+        }
     }
-    
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -674,7 +684,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     /// Opens up a message view with a preformatted message that shows destination and ETA.
     func sendETAMessage(phoneNumbers: [String]?, destination: Location?, isGasStation: Bool) {
         say("Sending the text")
-
+        
         guard let numbers = phoneNumbers else { return }
         
         let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
@@ -816,16 +826,45 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // AVSpeechSynthesizer delegate
     
+    /*
+     func say(str:String!) {
+     stopListening()
+     let myUtterance = AVSpeechUtterance(string: str)
+     myUtterance.rate = 0.55
+     synth.speakUtterance(myUtterance)
+     }
+     */
+    
     func say(str:String!) {
-//        stopListening()
-        let myUtterance = AVSpeechUtterance(string: str)
-        myUtterance.rate = 0.55
-        synth.speakUtterance(myUtterance)
+        skTransaction1 = skSession1!.speakString(str, withVoice: voice, delegate: self)
+    }
+    
+    func transaction(transaction: SKTransaction!, didReceiveAudio audio: SKAudio!) {
+        print("didReceiveAudio")
+    }
+    
+    func transaction(transaction: SKTransaction!, didFinishWithSuggestion suggestion: String) {
+        print("didFinishWithSuggestion")
+    }
+    
+    func transaction(transaction: SKTransaction!, didFailWithError error: NSError!, suggestion: String) {
+        print(String(format: "didFailWithError: %@. %@", arguments: [error.description, suggestion]))
+    }
+    
+    // MARK - SKAudioPlayerDelegate
+    
+    func audioPlayer(player: SKAudioPlayer!, willBeginPlaying audio: SKAudio!) {
+        print("willBeginPlaying")
+        // The TTS Audio will begin playing.
+    }
+    
+    func audioPlayer(player: SKAudioPlayer!, didFinishPlaying audio: SKAudio!) {
+        print("didFinishPlaying")
     }
     
     func speechSynthesizer(synthesizer:AVSpeechSynthesizer!, didFinishSpeechUtterance utterance:AVSpeechUtterance!) {
         print("finished speaking")
-//        startListening()
+        startListening()
     }
     
     //OpenEars methods
@@ -838,8 +877,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let name = "LanguageModelFileStarSaver"
         let list = Array(words.keys)
         lmGenerator.generateLanguageModelFromArray(list, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
-
-
+        
+        
         
         lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModelWithRequestedName(name)
         dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionaryWithRequestedName(name)
@@ -847,7 +886,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     func pocketsphinxDidReceiveHypothesis(hypothesis: String?, recognitionScore: String?, utteranceID: String?) {
-//        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
+        //        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
         print("hypothesis: ", hypothesis)
         print("recogscore: ", recognitionScore)
         print("utteranceID:", utteranceID)
@@ -859,11 +898,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
                 self.voiceButtonClicked([])
             })
-//            voiceButtonClicked([])
+            //            voiceButtonClicked([])
             return
         } else {
             print("I'm having trouble understanding you")
-//            say("I'm having trouble understanding you")
+            //            say("I'm having trouble understanding you")
             return
         }
     }
@@ -1077,12 +1116,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     //Start session for voice capture/recognition
-//    @IBAction func voiceButtonClicked(sender: AnyObject) {
+    //    @IBAction func voiceButtonClicked(sender: AnyObject) {
     func voiceButtonClicked(sender: AnyObject) {
-//        stopListening()
+        //        stopListening()
         print("listening for voice command");
         
-//        voiceButton.setTitle("Listening...", forState: .Normal)
+        //        voiceButton.setTitle("Listening...", forState: .Normal)
         let url = "nmsps://NMDPTRIAL_team_cargi_co20160418020749@sslsandbox.nmdp.nuancemobility.net:443"
         let token = "6ff1671b87d0259dc04a734edbf2ab4894184242e68c4cf3fac45545c7c10e37b376523a4677d706c14a549c3cffe5d0182713feb35ff2ad2447f2eb090122bc"
         let session = SKSession(URL: NSURL(string: url), appToken: token)
@@ -1111,8 +1150,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             messageButtonClicked(nil)
             say("text clicked")
         }
-//        voiceButton.setTitle("Listen", forState: .Normal)
-//        startListening()
+        //        voiceButton.setTitle("Listen", forState: .Normal)
+        //        startListening()
     }
     
     /// Gas Button clicked
