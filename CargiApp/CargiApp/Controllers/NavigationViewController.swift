@@ -101,6 +101,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var routePolylineBorder = GMSPolyline()
     var routePath = GMSPath()
     
+    var dashboardIsUp = false
+    
     var distanceTasks = DistanceMatrixTasks()
     
     lazy var db = AzureDatabase.sharedInstance
@@ -176,10 +178,57 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.startUpdatingLocation()
         
         mapView.settings.compassButton = true
+        
+        //dashboard view gesture recognizer
+        let recognizer: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeUp(_:)))
+        recognizer.direction = .Up
+        self.dashboardView.addGestureRecognizer(recognizer)
+        let recognizer2: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeDown(_:)))
+        recognizer2.direction = .Down
+        self.dashboardView.addGestureRecognizer(recognizer2)
 
         self.resetView()
         self.syncCalendar()
     }
+    
+    func swipeUp(recognizer : UISwipeGestureRecognizer) {
+        if dashboardIsUp {
+            return;
+        }
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            var dashboardViewFrame = self.dashboardView.frame
+            dashboardViewFrame.origin.y -= dashboardViewFrame.size.height
+            
+            self.dashboardView.frame = dashboardViewFrame
+            }, completion: { finished in
+                self.dashboardIsUp = true;
+        })
+    }
+    
+    func swipeDown(recognizer : UISwipeGestureRecognizer) {
+        if !dashboardIsUp {
+            return;
+        }
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            var dashboardViewFrame = self.dashboardView.frame
+            dashboardViewFrame.origin.y += dashboardViewFrame.size.height
+            
+            self.dashboardView.frame = dashboardViewFrame
+            }, completion: { finished in
+                self.dashboardIsUp = false;
+        })
+    }
+    
+//    override func viewDidAppear(animated: Bool) {
+//        UIView.animateWithDuration(0.7, delay: 1.0, options: .CurveEaseOut, animations: {
+//            var dashboardViewFrame = self.dashboardView.frame
+//            dashboardViewFrame.origin.y -= dashboardViewFrame.size.height
+//            
+//            self.dashboardView.frame = dashboardViewFrame
+//            }, completion: { finished in
+//                print("Basket doors opened!")
+//        })
+//    }
     
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -914,6 +963,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     
     // MARK: IBAction Methods
+    
+    
+    
     
     /// Refresh Button Clicked
     @IBAction func refreshButtonClicked(sender: UIButton) {
