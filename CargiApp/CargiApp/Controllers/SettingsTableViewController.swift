@@ -35,6 +35,7 @@ class SettingsTableViewController: UITableViewController {
         options += [[String] (), [String] (), [String] ()]
         
         // adding maps
+        options[0] += ["Cargi"]
         if (UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!)) {
             options[0] += ["Google Maps"]
         }

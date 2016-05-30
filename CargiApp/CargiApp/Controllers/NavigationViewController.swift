@@ -71,6 +71,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var gasMarker: GMSMarker?
     var dest = Location()
     var waypoint: Location?
+    var navigationEnabled: Bool = false
     
     var manager: CBCentralManager! // Bluetooth Manager
     var currentEvent: EKEvent? {
@@ -203,6 +204,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         waypoint = nil
         stopSpinner()
         mapView.clear()
+        mapView.animateToViewingAngle(0)
+        mapView.animateToBearing(0)
+        navigationEnabled = false
         locationManager.stopUpdatingHeading()
     }
     
@@ -509,18 +513,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Location is updated.
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("updating location")
-        if let course = mapView.myLocation?.course {
-            mapView.animateToBearing(course)
-        }
-        
-        if let heading = manager.heading?.trueHeading {
-            print(heading)
+        if navigationEnabled {
+            print("updating location")
+            if let location = manager.location {
+                mapView.animateToLocation(location.coordinate)
+            }
+            /*
+            if let course = mapView.myLocation?.course {
+                mapView.animateToBearing(course)
+            }
+             */
         }
     }
     
     func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        mapView.animateToBearing(newHeading.trueHeading)
+        if navigationEnabled {
+            mapView.animateToBearing(newHeading.trueHeading)
+        }
     }
 
     
@@ -537,11 +546,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
         
         var destination: String?
-        if dest.address != nil {
-            destination = dest.address
+        
+        if let destCoordinates = dest.coordinates {
+            destination = "\(destCoordinates.latitude),\(destCoordinates.longitude)"
+        } else if let destAddress = dest.address {
+            destination = destAddress
+        } else if let destName = dest.name {
+            destination = destName
         } else {
             destination = waypoints.first
         }
+        print(destination)
         
         self.directionTasks.getDirections(origin, dest: destination, waypoints: waypoints) { (status, success) in
             print("got directions")
@@ -926,6 +941,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func navigateButtonClicked(sender: UIButton) {
         db.insertAction("navigate")
         
+        navigationEnabled = true
         locationManager.startUpdatingHeading()
         
         if let myLocation = mapView.myLocation {
@@ -1205,7 +1221,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         print("music button activated")
         let appName: String = "spotify"
         
-        let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
+        let appURL: String = "\(appName)://"
         if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
             print(appURL)
             UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
@@ -1256,6 +1272,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         alert.addAction(yesAction)
         alert.addAction(noAction)
         presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func homeButtonClicked(sender: UIButton) {
+        var home = Location()
+        home.address = "710 Bowdoin St. Stanford, CA"
+        home.name = "Home"
+        home.coordinates = nil
+        
+        self.searchButton.setTitle(home.name, forState: .Normal)
+        gasMarker = nil
+        
+        self.dest = home
+        self.showRoute(showDestMarker: true)
     }
     
     
