@@ -53,6 +53,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var pickerData: [String] = [String]()
     
     @IBOutlet weak var voiceButton: UIButton!
+    @IBOutlet weak var bottomView: UIStackView!
     
     struct Location {
         var name: String?
@@ -196,10 +197,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return;
         }
         UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
-            var dashboardViewFrame = self.dashboardView.frame
-            dashboardViewFrame.origin.y -= dashboardViewFrame.size.height
+            var bottomViewFrame = self.bottomView.frame
+            bottomViewFrame.origin.y -= bottomViewFrame.size.height
             
-            self.dashboardView.frame = dashboardViewFrame
+            self.bottomView.frame = bottomViewFrame
             }, completion: { finished in
                 self.dashboardIsUp = true;
         })
@@ -210,10 +211,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             return;
         }
         UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
-            var dashboardViewFrame = self.dashboardView.frame
-            dashboardViewFrame.origin.y += dashboardViewFrame.size.height
+            var bottomViewFrame = self.bottomView.frame
+            bottomViewFrame.origin.y += bottomViewFrame.size.height
             
-            self.dashboardView.frame = dashboardViewFrame
+            self.bottomView.frame = bottomViewFrame
             }, completion: { finished in
                 self.dashboardIsUp = false;
         })
