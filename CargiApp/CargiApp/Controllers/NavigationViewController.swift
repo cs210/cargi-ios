@@ -209,12 +209,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     private func suggestContact(event: EKEvent?) -> String? {
         guard let ev = event else { return nil }
         let contacts = contactDirectory.getAllPhoneNumbers()
-        let separators = NSCharacterSet(charactersInString: "@\\|,;/<> ")
+//        let separators = NSCharacterSet(charactersInString: "\'@\\|,;/<> ")
         
         var possibleContactArr: [String] = []
         let eventTitle = ev.title.lowercaseString
 //        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
-        let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(separators);
+        let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(NSCharacterSet.alphanumericCharacterSet().invertedSet)
+
+//        let eventTitleArr2 = eventTitle.componentsSeparatedByCharactersInSet(separators);
         print("event title arr: ", eventTitleArr);
         
         
@@ -264,8 +266,41 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
         print(possibleContactArr)
+        
+        //sort array based on frequency of communication with main contact
+//        contactFrequency()
+        
         self.pickerData = possibleContactArr
         return contact
+    }
+    
+    
+    func contactFrequency() {
+//        let stringURL = "https://cargiios.azure-mobile.net/api/calculator/add?a=1&b=5"
+        
+        guard let userEmail = NSUserDefaults.standardUserDefaults().stringForKey("userEmail") else { return }
+        let stringURL = "http://cargi.azurewebsites.net/api/filterContacts?email=\(userEmail)&type=frequent"
+        
+        print(stringURL)
+        guard let url = NSURL(string: stringURL) else { return }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            let data = NSData(contentsOfURL: url)
+            print(data)
+            
+            // Convert JSON response into an NSDictionary.
+//            var json: [NSObject:AnyObject]?
+//            do {
+//                json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]
+//            } catch {
+                //completionHandler(status: "", success: false)
+//            }
+            //            print(json!.description)
+            
+//            guard let dict = json else { return }
+//            let result = dict["result"]
+//            print(dict)
+        }
     }
     
     private func updateContact(contact: String?) {
