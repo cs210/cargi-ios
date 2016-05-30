@@ -74,6 +74,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var navigationEnabled: Bool = false
     
     var manager: CBCentralManager! // Bluetooth Manager
+    var peripheralArray = [CBPeripheral]()
+    var connectingPeripheral: CBPeripheral?
     var currentEvent: EKEvent? {
         didSet {
             currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
@@ -126,13 +128,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
 
-    
+    // Put CentralManager in the main queue bluetooth
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+        manager = CBCentralManager(delegate: self, queue: dispatch_get_main_queue())
+        
+    }
     
     // MARK: Methods
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        manager = CBCentralManager (delegate: self, queue: nil)
 
         // Do any additional setup after loading the view.
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
@@ -213,12 +221,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     private func suggestContact(event: EKEvent?) -> String? {
         guard let ev = event else { return nil }
         let contacts = contactDirectory.getAllPhoneNumbers()
-        let separators = NSCharacterSet(charactersInString: "@\\|,;/<> ")
+//        let separators = NSCharacterSet(charactersInString: "\'@\\|,;/<> ")
         
         var possibleContactArr: [String] = []
         let eventTitle = ev.title.lowercaseString
 //        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
-        let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(separators);
+        let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(NSCharacterSet.alphanumericCharacterSet().invertedSet)
+
+//        let eventTitleArr2 = eventTitle.componentsSeparatedByCharactersInSet(separators);
         print("event title arr: ", eventTitleArr);
         
         
@@ -268,8 +278,41 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             }
         }
         print(possibleContactArr)
+        
+        //sort array based on frequency of communication with main contact
+//        contactFrequency()
+        
         self.pickerData = possibleContactArr
         return contact
+    }
+    
+    
+    func contactFrequency() {
+//        let stringURL = "https://cargiios.azure-mobile.net/api/calculator/add?a=1&b=5"
+        
+        guard let userEmail = NSUserDefaults.standardUserDefaults().stringForKey("userEmail") else { return }
+        let stringURL = "http://cargi.azurewebsites.net/api/filterContacts?email=\(userEmail)&type=frequent"
+        
+        print(stringURL)
+        guard let url = NSURL(string: stringURL) else { return }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            let data = NSData(contentsOfURL: url)
+            print(data)
+            
+            // Convert JSON response into an NSDictionary.
+//            var json: [NSObject:AnyObject]?
+//            do {
+//                json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? [NSObject:AnyObject]
+//            } catch {
+                //completionHandler(status: "", success: false)
+//            }
+            //            print(json!.description)
+            
+//            guard let dict = json else { return }
+//            let result = dict["result"]
+//            print(dict)
+        }
     }
     
     private func updateContact(contact: String?) {
@@ -817,6 +860,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // MARK: Core Bluetooth Manager Methods
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Peripheral: \(peripheral)")
+        self.connectingPeripheral=peripheral
+        if (!self.peripheralArray.contains(peripheral)) {
+            self.peripheralArray.append(peripheral)
+        }
+        print(peripheralArray)
+        
     }
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
@@ -844,7 +893,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             manager.scanForPeripheralsWithServices(nil, options: nil)
         }
     }
-    
     // MARK: GMSMapViewDelegate Methods
     
     
