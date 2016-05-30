@@ -198,11 +198,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
             var bottomViewFrame = self.bottomView.frame
-            bottomViewFrame.origin.y -= bottomViewFrame.size.height
+            var dashboardViewFrame = self.dashboardView.frame
+            
+            bottomViewFrame.origin.y -= dashboardViewFrame.size.height
+            dashboardViewFrame.size.height *= 2
             
             self.bottomView.frame = bottomViewFrame
+            self.dashboardView.frame = dashboardViewFrame
+            
             }, completion: { finished in
                 self.dashboardIsUp = true;
+                //self.dashboardView.frame.size.height *= 2
         })
     }
     
@@ -212,9 +218,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
         UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
             var bottomViewFrame = self.bottomView.frame
-            bottomViewFrame.origin.y += bottomViewFrame.size.height
+            var dashboardViewFrame = self.dashboardView.frame
+            
+            bottomViewFrame.origin.y += ((dashboardViewFrame.size.height)/2)
+            dashboardViewFrame.size.height /= 2
             
             self.bottomView.frame = bottomViewFrame
+            self.dashboardView.frame = dashboardViewFrame
+            
             }, completion: { finished in
                 self.dashboardIsUp = false;
         })
