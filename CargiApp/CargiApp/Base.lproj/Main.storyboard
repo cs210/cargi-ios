@@ -30,6 +30,7 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -427,14 +428,14 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="8z5-tD-rqd" secondAttribute="height" multiplier="1:1" id="RzY-gL-ybP"/>
                                         </constraints>
-                                        <state key="normal" image="personicon.png"/>
+                                        <state key="normal" image="settingsbutton.png"/>
                                         <connections>
                                             <action selector="settingsButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B8L-0D-jR4"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjM-hz-hgJ">
-                                        <rect key="frame" x="167" y="20" width="46" height="30"/>
-                                        <state key="normal" title="Button"/>
+                                        <rect key="frame" x="100" y="20" width="41" height="30"/>
+                                        <state key="normal" title="Home"/>
                                         <connections>
                                             <action selector="homeButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oWX-Uj-adC"/>
                                         </connections>
@@ -445,7 +446,7 @@
                                     <constraint firstAttribute="trailing" secondItem="8z5-tD-rqd" secondAttribute="trailing" constant="20" id="2AB-Vn-fVN"/>
                                     <constraint firstItem="Fjn-zk-nly" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="3k5-V1-qRU"/>
                                     <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="5hu-B1-V45"/>
-                                    <constraint firstItem="zjM-hz-hgJ" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="167" id="9Kw-ti-Obp"/>
+                                    <constraint firstItem="zjM-hz-hgJ" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="100" id="9Kw-ti-Obp"/>
                                     <constraint firstItem="8z5-tD-rqd" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="EM2-Lg-kGj"/>
                                     <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="rnV-DU-HU4" secondAttribute="height" id="G7u-RZ-oMR"/>
                                     <constraint firstItem="6G2-NS-cp7" firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="width" id="JXH-di-N8H"/>
@@ -551,6 +552,7 @@
                         <outlet property="textButton" destination="sVK-fw-bF5" id="yM1-63-CgK"/>
                         <segue destination="2UF-mF-Z5E" kind="unwind" identifier="logoutToLogin" unwindAction="logoutToLoginViewController:" id="vfr-xN-i0l"/>
                         <segue destination="2LG-iM-AMA" kind="show" identifier="logout" animates="NO" id="3lO-8O-DOT"/>
+                        <segue destination="ed9-Ds-r3K" kind="show" identifier="showSettings" id="Sae-bi-Wc2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -609,6 +611,63 @@
                                     <outlet property="radioButtonView" destination="1VG-zw-Dvr" id="YL4-79-ahf"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldTableViewCell" id="tnv-dM-vEX" customClass="SettingsTextFieldTableViewCell" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="156" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tnv-dM-vEX" id="QvE-Q2-NaP">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St, San Francisco, CA" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zsT-Ta-5ht">
+                                            <rect key="frame" x="28" y="3" width="544" height="30"/>
+                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="zsT-Ta-5ht" firstAttribute="centerY" secondItem="QvE-Q2-NaP" secondAttribute="centerY" id="41h-jO-rT4"/>
+                                        <constraint firstItem="zsT-Ta-5ht" firstAttribute="leading" secondItem="QvE-Q2-NaP" secondAttribute="leadingMargin" constant="20" id="6uy-2u-V4D"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="zsT-Ta-5ht" secondAttribute="trailing" constant="20" id="r25-1i-JJG"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textfield" destination="zsT-Ta-5ht" id="eRA-QW-SY6"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DoneTableViewCell" id="lDw-Zd-ND1">
+                                <rect key="frame" x="0.0" y="192" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lDw-Zd-ND1" id="O3v-qd-NT6">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="dym-rB-W5k">
+                                            <rect key="frame" x="234" y="3" width="132" height="30"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1b-s8-7gC">
+                                                    <rect key="frame" x="0.0" y="0.0" width="34" height="30"/>
+                                                    <state key="normal" title="Save"/>
+                                                    <connections>
+                                                        <action selector="saveButtonClicked:" destination="ed9-Ds-r3K" eventType="touchUpInside" id="SI8-r7-jFA"/>
+                                                        <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="g0V-nh-otn"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUK-aL-2JT">
+                                                    <rect key="frame" x="84" y="0.0" width="48" height="30"/>
+                                                    <state key="normal" title="Cancel"/>
+                                                    <connections>
+                                                        <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="ONz-YV-DEp"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dym-rB-W5k" firstAttribute="centerX" secondItem="O3v-qd-NT6" secondAttribute="centerX" id="Jwx-cY-D0f"/>
+                                        <constraint firstItem="dym-rB-W5k" firstAttribute="centerY" secondItem="O3v-qd-NT6" secondAttribute="centerY" id="ZzQ-nP-9zN"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
@@ -620,6 +679,7 @@
                     <navigationItem key="navigationItem" title="Settings" id="mXD-1J-LUc"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qvT-Wb-N7P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="0Ee-LU-472" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1802" y="646"/>
         </scene>
@@ -1033,7 +1093,6 @@
         <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
         <image name="navigate_button.png" width="20" height="20"/>
-        <image name="personicon.png" width="38" height="38"/>
         <image name="radiobutton-unselected.png" width="18" height="18"/>
         <image name="refreshbutton.png" width="20" height="20"/>
         <image name="screen1.png" width="375" height="667"/>
@@ -1041,12 +1100,13 @@
         <image name="screen3.png" width="375" height="667"/>
         <image name="screen4.png" width="375" height="667"/>
         <image name="search.png" width="24" height="24"/>
+        <image name="settingsbutton.png" width="33" height="34"/>
         <image name="spinnerbg.png" width="40" height="40"/>
         <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="MyH-Ys-aGa"/>
+        <segue reference="3lO-8O-DOT"/>
         <segue reference="J0y-QS-aGI"/>
-        <segue reference="0Ac-rO-xYH"/>
-        <segue reference="ew2-US-zHJ"/>
     </inferredMetricsTieBreakers>
 </document>

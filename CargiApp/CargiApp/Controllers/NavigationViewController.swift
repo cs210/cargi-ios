@@ -864,7 +864,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         if (!self.peripheralArray.contains(peripheral)) {
             self.peripheralArray.append(peripheral)
         }
-        print(peripheralArray)
+//        print(peripheralArray)
         
     }
     
@@ -889,8 +889,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print("BLE service is powered off")
         case.PoweredOn:
             print("BLE service is powered on")
-            print("Start Scanning")
-            manager.scanForPeripheralsWithServices(nil, options: nil)
+//            print("Start Scanning")
+//            manager.scanForPeripheralsWithServices(nil, options: nil)
         }
     }
     // MARK: GMSMapViewDelegate Methods
@@ -1299,6 +1299,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Settings Button clicked
     @IBAction func settingsButtonClicked(sender: UIButton) {
+        self.performSegueWithIdentifier("showSettings", sender: nil)
+ /*
         let alert = UIAlertController(title: "Logout", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
@@ -1320,13 +1322,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         alert.addAction(yesAction)
         alert.addAction(noAction)
         presentViewController(alert, animated: true, completion: nil)
+ */
     }
     
     @IBAction func homeButtonClicked(sender: UIButton) {
         var home = Location()
-        home.address = "710 Bowdoin St. Stanford, CA"
         home.name = "Home"
         home.coordinates = nil
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let homeAddress = userDefaults.stringForKey("home_address") {
+            home.address = homeAddress
+        } else {
+            home.address = "710 Bowdoin St. Stanford, CA"
+        }
         
         self.searchButton.setTitle(home.name, forState: .Normal)
         gasMarker = nil
@@ -1376,6 +1384,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func cancelChooseEvent(segue: UIStoryboardSegue) {
+        
+    }
+    
+    @IBAction func cancelSaveSettings(segue: UIStoryboardSegue) {
         
     }
 
