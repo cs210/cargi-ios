@@ -11,8 +11,12 @@
 
 //#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
+#import <RapidEarsDemo/OEPocketsphinxController+RapidEars.h>
 #import <OpenEars/OELanguageModelGenerator.h>
+#import <RejectoDemo/OELanguageModelGenerator+Rejecto.h>
+#import <RuleORamaDemo/OELanguageModelGenerator+RuleORama.h>
 #import <OpenEars/OEAcousticModel.h>
 #import <OpenEars/OEPocketsphinxController.h>
 #import <OpenEars/OEEventsObserver.h>
+#import <RapidEarsDemo/OEEventsObserver+RapidEars.h>
 #endif /* CargiApp_Bridging_Header_h */

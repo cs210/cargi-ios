@@ -61,20 +61,21 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var words:[String:Int] = [
         "HEY": -1,
         "CARGHI": -2,
-        "HELLO": -3,
-        "KARTIK": -4,
-        "TARA": -5,
-        "MAYA": -6,
-        "EDWIN": -7,
-        "EMILY": -8,
-        "ISHITA": -9,
-        "MUSIC": -10,
-        "GAS": -11,
-        "CALL": -12,
-        "TEXT": -13,
-        "CONTACT": -14,
-        "EVENT": -15
+//        "HELLO": -3,
+//        "KARTIK": -4,
+//        "TARA": -5,
+//        "MAYA": -6,
+//        "EDWIN": -7,
+//        "EMILY": -8,
+//        "ISHITA": -9,
+//        "MUSIC": -10,
+//        "GAS": -11,
+//        "CALL": -12,
+//        "TEXT": -13,
+//        "CONTACT": -14,
+//        "EVENT": -15
     ]
+    var grammarDict = [ThisWillBeSaidOnce : ["HEY CARGHI"]]
     var openEarsEventsObserver: OEEventsObserver!
     
     struct Location {
@@ -817,7 +818,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // AVSpeechSynthesizer delegate
     
     func say(str:String!) {
-//        stopListening()
+        stopListening()
         let myUtterance = AVSpeechUtterance(string: str)
         myUtterance.rate = 0.55
         synth.speakUtterance(myUtterance)
@@ -825,7 +826,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     func speechSynthesizer(synthesizer:AVSpeechSynthesizer!, didFinishSpeechUtterance utterance:AVSpeechUtterance!) {
         print("finished speaking")
-//        startListening()
+        startListening()
     }
     
     //OpenEars methods
@@ -837,20 +838,83 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let lmGenerator: OELanguageModelGenerator = OELanguageModelGenerator()
         let name = "LanguageModelFileStarSaver"
         let list = Array(words.keys)
+//        lmGenerator.generateRejectingLanguageModelFromArray(list, withFilesNamed: name,  withOptionalExclusions:nil,usingVowelsOnly:false, withWeight:nil, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
         lmGenerator.generateLanguageModelFromArray(list, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
-
+//        lmGenerator.generateFastGrammarFromDictionary(grammarDict, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
 
         
         lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModelWithRequestedName(name)
         dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionaryWithRequestedName(name)
+//        lmPath = lmGenerator.pathToSuccessfullyGeneratedRuleORamaRulesetWithRequestedName(name)
+//        dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionaryWithRequestedName(name)
         print("OpenEars loaded")
     }
     
-    func pocketsphinxDidReceiveHypothesis(hypothesis: String?, recognitionScore: String?, utteranceID: String?) {
-//        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
+//    func pocketsphinxDidReceiveHypothesis(hypothesis: String?, recognitionScore: String?, utteranceID: String?) {
+////        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
+//        print("hypothesis: ", hypothesis)
+//        print("recogscore: ", recognitionScore)
+//        print("utteranceID:", utteranceID)
+//        
+//        if hypothesis!.rangeOfString("HEY CARGHI") != nil {
+//            print("Hey carghi detected")
+//            say("How can carghi help?")
+//            let triggerTime = (Int64(NSEC_PER_SEC) * 1)
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
+//                self.voiceButtonClicked([])
+//            })
+////            voiceButtonClicked([])
+//            return
+//        } else {
+//            print("I'm having trouble understanding you")
+////            say("I'm having trouble understanding you")
+//            return
+//        }
+//    }
+//    
+//    func pocketsphinxDidStartListening() {
+//        print("Pocketsphinx is now listening.")
+//    }
+//    
+//    func pocketsphinxDidDetectSpeech() {
+//        //		print("Pocketsphinx has detected speech.")
+//    }
+//    
+//    func pocketsphinxDidDetectFinishedSpeech() {
+//        //		print("Pocketsphinx has detected a period of silence, concluding an utterance.")
+//    }
+//    
+//    func pocketsphinxDidStopListening() {
+//        print("Pocketsphinx has stopped listening.")
+//    }
+//    
+//    func pocketsphinxDidSuspendRecognition() {
+//        print("Pocketsphinx has suspended recognition.")
+//    }
+//    
+//    func pocketsphinxDidResumeRecognition() {
+//        print("Pocketsphinx has resumed recognition.")
+//    }
+//    
+//    func pocketsphinxDidChangeLanguageModelToFile(newLanguageModelPathAsString: String, newDictionaryPathAsString: String) {
+//        print("Pocketsphinx is now using the following language model: \(newLanguageModelPathAsString) and the following dictionary: \(newDictionaryPathAsString)")
+//    }
+//    
+//    func pocketSphinxContinuousSetupDidFailWithReason(reasonForFailure: String) {
+//        print("Listening setup wasn't successful and returned the failure reason: \(reasonForFailure)")
+//    }
+//    
+//    func pocketSphinxContinuousTeardownDidFailWithReason(reasonForFailure: String) {
+//        print("Listening teardown wasn't successful and returned the failure reason: \(reasonForFailure)")
+//    }
+//    
+//    func testRecognitionCompleted() {
+//        print("A test file that was submitted for recognition is now complete.")
+//    }
+    func rapidEarsDidReceiveLiveSpeechHypothesis(hypothesis: String?, recognitionScore: String?) {
+        //        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
         print("hypothesis: ", hypothesis)
         print("recogscore: ", recognitionScore)
-        print("utteranceID:", utteranceID)
         
         if hypothesis!.rangeOfString("HEY CARGHI") != nil {
             print("Hey carghi detected")
@@ -859,53 +923,19 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
                 self.voiceButtonClicked([])
             })
-//            voiceButtonClicked([])
+            //            voiceButtonClicked([])
             return
         } else {
             print("I'm having trouble understanding you")
-//            say("I'm having trouble understanding you")
+            //            say("I'm having trouble understanding you")
             return
         }
     }
     
-    func pocketsphinxDidStartListening() {
-        print("Pocketsphinx is now listening.")
-    }
-    
-    func pocketsphinxDidDetectSpeech() {
-        //		print("Pocketsphinx has detected speech.")
-    }
-    
-    func pocketsphinxDidDetectFinishedSpeech() {
-        //		print("Pocketsphinx has detected a period of silence, concluding an utterance.")
-    }
-    
-    func pocketsphinxDidStopListening() {
-        print("Pocketsphinx has stopped listening.")
-    }
-    
-    func pocketsphinxDidSuspendRecognition() {
-        print("Pocketsphinx has suspended recognition.")
-    }
-    
-    func pocketsphinxDidResumeRecognition() {
-        print("Pocketsphinx has resumed recognition.")
-    }
-    
-    func pocketsphinxDidChangeLanguageModelToFile(newLanguageModelPathAsString: String, newDictionaryPathAsString: String) {
-        print("Pocketsphinx is now using the following language model: \(newLanguageModelPathAsString) and the following dictionary: \(newDictionaryPathAsString)")
-    }
-    
-    func pocketSphinxContinuousSetupDidFailWithReason(reasonForFailure: String) {
-        print("Listening setup wasn't successful and returned the failure reason: \(reasonForFailure)")
-    }
-    
-    func pocketSphinxContinuousTeardownDidFailWithReason(reasonForFailure: String) {
-        print("Listening teardown wasn't successful and returned the failure reason: \(reasonForFailure)")
-    }
-    
-    func testRecognitionCompleted() {
-        print("A test file that was submitted for recognition is now complete.")
+    func rapidEarsDidReceiveFinishedSpeechHypothesis(hypothesis: String?, recognitionScore: String?) {
+        //        speechLabel.text = "\(hypothesis!) (\(recognitionScore!), \(utteranceID!))"
+        print("hypothesis finish: ", hypothesis)
+        print("recogscore finish: ", recognitionScore)
     }
     
     func startListening() {
@@ -914,7 +944,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         } catch {
             //completionHandler(status: "", success: false)
         }
-        OEPocketsphinxController.sharedInstance().startListeningWithLanguageModelAtPath(lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"), languageModelIsJSGF: false)
+        OEPocketsphinxController.sharedInstance().startRealtimeListeningWithLanguageModelAtPath(lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))//, languageModelIsJSGF: false)
         //OEPocketsphinxController.sharedInstance().secondsOfSilenceToDetect = 0.4
         OEPocketsphinxController.sharedInstance().vadThreshold = 3.5
     }
