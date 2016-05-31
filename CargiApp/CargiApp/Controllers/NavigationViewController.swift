@@ -1,4 +1,4 @@
-//
+﻿//
 //  NavigationViewController.swift
 //  CargiApp
 //
@@ -75,6 +75,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         "CONTACT": -14,
         "EVENT": -15
     ]
+    var grammarArray = ["HEY CARGHI"]
+    var grammarDict = [ThisWillBeSaidOnce: grammarArray]
     var openEarsEventsObserver: OEEventsObserver!
     var voice: String!
     var skSession1:SKSession?
@@ -876,11 +878,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let lmGenerator: OELanguageModelGenerator = OELanguageModelGenerator()
         let name = "LanguageModelFileStarSaver"
         let list = Array(words.keys)
-        lmGenerator.generateLanguageModelFromArray(list, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
-        
-        
-        
-        lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModelWithRequestedName(name)
+        lmGenerator.generateFastGrammarFromDictionary(grammarDict, withFilesNamed: name, forAcousticModelAtPath: OEAcousticModel.pathToModel("AcousticModelEnglish"))
+        lmPath = lmGenerator.pathToSuccessfullyGeneratedRuleORamaRulesetWithRequestedName(name)
         dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionaryWithRequestedName(name)
         print("OpenEars loaded")
     }

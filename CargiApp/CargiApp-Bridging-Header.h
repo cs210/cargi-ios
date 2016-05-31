@@ -1,4 +1,4 @@
-//
+﻿//
 //  CargiApp-Bridging-Header.h
 //  Cargi
 //
@@ -12,6 +12,7 @@
 //#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
 #import <OpenEars/OELanguageModelGenerator.h>
+#import <RuleORamaDemo/OELanguageModelGenerator+RuleORama.h>
 #import <OpenEars/OEAcousticModel.h>
 #import <OpenEars/OEPocketsphinxController.h>
 #import <OpenEars/OEEventsObserver.h>
