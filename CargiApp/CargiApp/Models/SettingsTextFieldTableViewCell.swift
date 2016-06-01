@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsTextFieldTableViewCell: UITableViewCell {
+class SettingsTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     @IBOutlet weak var textfield: UITextField!
     
@@ -21,6 +21,14 @@ class SettingsTextFieldTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField == self.textfield {
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
     }
 
 }

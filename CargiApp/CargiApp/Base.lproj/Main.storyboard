@@ -595,7 +595,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="radiobutton-unselected.png" translatesAutoresizingMaskIntoConstraints="NO" id="1VG-zw-Dvr">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1VG-zw-Dvr">
                                             <rect key="frame" x="41" y="10" width="16" height="16"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0a-SD-izj">
@@ -1093,7 +1093,6 @@
         <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
         <image name="navigate_button.png" width="20" height="20"/>
-        <image name="radiobutton-unselected.png" width="18" height="18"/>
         <image name="refreshbutton.png" width="20" height="20"/>
         <image name="screen1.png" width="375" height="667"/>
         <image name="screen2.png" width="375" height="667"/>

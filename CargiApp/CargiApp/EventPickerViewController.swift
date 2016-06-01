@@ -70,6 +70,17 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         return cell
     }
     
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else { return indexPath }
+        for selectedIndexPath in selectedIndexPaths {
+            print("$$$$$$$$$$")
+            print(selectedIndexPath.row)
+            print("$$$$$$$$$$")
+            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        }
+        return indexPath
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
         cell.accessoryType = UITableViewCellAccessoryType.Checkmark

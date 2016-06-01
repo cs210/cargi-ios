@@ -20,12 +20,24 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // Types of Maps that can be used.
     private enum MapsType {
+        case Cargi // Cargi
         case Apple // Apple Maps
         case Google // Google Maps
     }
     
+    // Types of Music Apps that can be opened.
+    private enum MusicType {
+        case Apple
+        case Spotify
+    }
+    
+    // Types of Text that can be sent.
+    private enum TextType {
+        case ETA
+        case Default
+    }
+    
     @IBOutlet weak var spinnerBackground: UIImageView!
-    private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
     
     var destLabel: UILabel?
@@ -459,11 +471,48 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         UIApplication.sharedApplication().openURL(url)
     }
     
+    
     /**
-        Open Maps, given the current event's location.
+     Open Apple Maps, given the current event's location.
      */
-//    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
-    func openMaps(destination destination: Location?) {
+    func openAppleMaps(destination destination: Location?) {
+        guard let dest = destination else {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
+        
+        if (dest.address == nil && dest.coordinates == nil) {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
+        
+        
+        if (dest.coordinates != nil) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+            }
+            return
+        }
+        
+        if (dest.address != nil) {
+            let destAddress = dest.address
+            let query = destAddress!.componentsSeparatedByString("\n").joinWithSeparator(" ")
+            print(query)
+            let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+            
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationAddress(address)
+            }
+            return
+        }
+        return
+    }
+    
+    
+    /**
+        Open Google Maps, given the current event's location.
+     */
+    func openGoogleMaps(destination destination: Location?) {
 
 //        guard let ev = currentEvent else { return }
 //        let queries = ev.location!.componentsSeparatedByString("\n")
@@ -485,10 +534,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         
         if (dest.coordinates != nil) {
-            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
                 self.openGoogleMapsLocation(dest.coordinates!)
-            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-                self.openAppleMapsLocationNoEvent(dest.coordinates!)
             }
             return
         }
@@ -499,11 +546,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(query)
             let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
             
-            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
                 self.openGoogleMapsLocationAddress(address)
                 self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
-            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-                self.openAppleMapsLocationAddress(address)
             }
             return
         }
@@ -647,6 +692,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Shows a pin at the destination on the map.
     private func configureMap() {
+        let destMarker = GMSMarker()
+        destMarker.icon = UIImage(named: "destination_icon")
         destMarker.position = directionTasks.destCoordinate
         destMarker.map = mapView
         print(destMarker.position)
@@ -734,12 +781,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(controller.recipients)
             controller.messageComposeDelegate = self
             
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            if let textPreference = userDefaults.stringForKey(Constants.SettingsText) {
+                if textPreference == Constants.TextDefault {
+                    controller.body = "Hi \(contactName), \(Constants.TextDefault)"
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    return
+                }
+            }
+            
             if dest.address == nil && dest.coordinates == nil && dest.name == nil {
                 controller.body = ""
                 self.presentViewController(controller, animated: true, completion: nil)
+                return
             } else if isGasStation {
                 controller.body = "I'm getting gas right now. I'll be there soon."
                 self.presentViewController(controller, animated: true, completion: nil)
+                return
             } else {
                 var destString = String()
                 if let coords = dest.coordinates {
@@ -750,6 +808,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     destString = destName
                 } else {
                     controller.body = ""
+                    self.presentViewController(controller, animated: true, completion: nil)
                     return
                 }
 
@@ -975,6 +1034,69 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         insertDBEvent()
     }
     
+    /* Begins navigation using Cargi. // Returns true if opened successfully, otherwise false. */
+    private func openCargiNavigation() {
+        if let myLocation = mapView.myLocation {
+            navigationEnabled = true
+            locationManager.startUpdatingHeading()
+            let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
+                                                                    zoom: 17,
+                                                                    bearing: 0,
+                                                                    viewingAngle: 60.0)
+            mapView.animateToCameraPosition(cameraPosition)
+//            return true
+        } else {
+            if locationManager.heading == nil {
+                print("true heading doesn't exist")
+            }
+            if mapView.myLocation == nil {
+                print("myLocation for GoogleMaps doesn't exist")
+            }
+//            return false
+        }
+    }
+    
+    /* Begins navigation using Google Maps. // Returns true if opened successfully, otherwise false. */
+    private func openGoogleNavigation() {
+        if let _ = currentEvent {
+            if let _ = waypoint {
+                openGoogleMaps(destination: waypoint)
+            } else {
+                openGoogleMaps(destination: dest)
+            }
+        } else {
+            if dest.name == nil && dest.address == nil {
+                syncCalendar()
+            }
+            
+            if let _ = waypoint {
+                openGoogleMaps(destination: waypoint)
+            } else {
+                openGoogleMaps(destination: dest)
+            }
+        }
+    }
+    
+    /* Begins navigation using Apple Maps. // Returns true if opened successfully, otherwise false. */
+    private func openAppleNavigation() {
+        if let _ = currentEvent {
+            if let _ = waypoint {
+                openAppleMaps(destination: waypoint)
+            } else {
+                openAppleMaps(destination: dest)
+            }
+        } else {
+            if dest.name == nil && dest.address == nil {
+                syncCalendar()
+            }
+            
+            if let _ = waypoint {
+                openAppleMaps(destination: waypoint)
+            } else {
+                openAppleMaps(destination: dest)
+            }
+        }
+    }
     
     // MARK: IBAction Methods
     
@@ -989,44 +1111,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func navigateButtonClicked(sender: UIButton) {
         db.insertAction("navigate")
         
-        navigationEnabled = true
-        locationManager.startUpdatingHeading()
-        
-        if let myLocation = mapView.myLocation {
-            let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
-                                                                    zoom: 17,
-                                                                    bearing: 0,
-                                                                    viewingAngle: 60.0)
-            mapView.animateToCameraPosition(cameraPosition)
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let mapsApp = userDefaults.stringForKey(Constants.SettingsMap) {
+            switch mapsApp {
+            case Constants.MapsCargi:
+                openCargiNavigation()
+            case Constants.MapsGoogle:
+                openGoogleNavigation()
+            case Constants.MapsApple:
+                openAppleNavigation()
+            case Constants.MapsWaze:
+                showAlertViewController(title: "Maps Error", message: "Waze is not yet supported.")
+            default:
+                openCargiNavigation()
+                break
+            }
         } else {
-            if locationManager.heading == nil {
-                print("true heading doesn't exist")
-            }
-            if mapView.myLocation == nil {
-                print("myLocation for GoogleMaps doesn't exist")
-            }
-            
-        }
-        
-        let shouldOpenMaps = false
-        if shouldOpenMaps {
-            if let _ = currentEvent {
-                if let _ = waypoint {
-                    openMaps(destination: waypoint)
-                } else {
-                    openMaps(destination: dest)
-                }
-            } else {
-                if dest.name == nil && dest.address == nil {
-                    syncCalendar()
-                }
-                
-                if let _ = waypoint {
-                    openMaps(destination: waypoint)
-                } else {
-                    openMaps(destination: dest)
-                }
-            }
+            openCargiNavigation()
         }
     }
 
@@ -1267,20 +1368,34 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func musicButtonClicked(sender: UIButton?) {
         db.insertAction("music")
         print("music button activated")
-        let appName: String = "spotify"
         
-        let appURL: String = "\(appName)://"
-        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
-            print(appURL)
-            UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
-        } else {
-            print("Can't use spotify://")
-            let appName: String = "music"
-            let appURL: String = "\(appName)://"
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let musicApp = userDefaults.stringForKey(Constants.SettingsMusic) {
+            var appURL = String()
+            switch musicApp {
+            case Constants.MusicSpotify:
+                appURL = "spotify://"
+            case Constants.MusicApple:
+                appURL = "music://"
+            case Constants.MusicSpotify:
+                appURL = "soundcloud://"
+            case Constants.MusicPandora:
+                appURL = "pandora://"
+            default: break
+            }
             if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
                 print(appURL)
                 UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+                return
             }
+        }
+        
+        let appleMusicURL = "music://"
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appleMusicURL)!)) {
+            UIApplication.sharedApplication().openURL(NSURL(string: appleMusicURL)!)
+        } else {
+            showAlertViewController(title: "Music Error", message: "Failed to open music app")
         }
     }
     
