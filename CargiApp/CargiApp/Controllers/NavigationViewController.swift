@@ -197,9 +197,54 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.startUpdatingLocation()
         
         mapView.settings.compassButton = true
+        
+        
+        let recognizer: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeRight(_:)))
+        recognizer.direction = .Right
+        self.dashboardView.addGestureRecognizer(recognizer)
+        
+        let recognizer2: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeLeft(_:)))
+        recognizer2.direction = .Left
+        self.dashboardView.addGestureRecognizer(recognizer2)
 
         self.resetView()
         self.syncCalendar()
+    }
+    
+    func swipeLeft(recognizer : UISwipeGestureRecognizer) {
+        
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            var dashboardViewFrame = self.dashboardView.frame
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width
+            
+            let iconWidth = CGFloat(70)
+            
+            dashboardViewFrame.origin.x -= screenWidth/2 - 20 - iconWidth/2
+            
+            self.dashboardView.frame = dashboardViewFrame
+            
+            }, completion: { finished in
+                print("swiped")
+        })
+    }
+    
+    func swipeRight(recognizer : UISwipeGestureRecognizer) {
+        
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            var dashboardViewFrame = self.dashboardView.frame
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width
+            
+            let iconWidth = CGFloat(70)
+            
+            dashboardViewFrame.origin.x += screenWidth/2 - 20 - iconWidth/2
+            
+            self.dashboardView.frame = dashboardViewFrame
+            
+            }, completion: { finished in
+                print("swiped")
+        })
     }
     
     
