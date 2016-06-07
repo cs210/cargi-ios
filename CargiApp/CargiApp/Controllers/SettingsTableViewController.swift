@@ -121,10 +121,16 @@ class SettingsTableViewController: UITableViewController {
                 cell.selectionStyle = .None
                 homeCell = cell
                 return cell
-            } else {
-                // Last Row
+            } else if indexPath.row == 1 {
+                // Second to last row
                 print("Done")
                 let cellIdentifier = "DoneTableViewCell"
+                let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
+                cell.selectionStyle = .None
+                return cell
+            } else {
+                // Last Row
+                let cellIdentifier = "LogOutTableViewCell"
                 let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
                 cell.selectionStyle = .None
                 return cell

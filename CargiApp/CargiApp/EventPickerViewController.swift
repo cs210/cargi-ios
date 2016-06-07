@@ -60,12 +60,9 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
         print(events[indexPath.row].calendarItemIdentifier)
         
         if (events[indexPath.row].title == currentEventID) {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-//            self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.None);
         }
-        
+        cell.selectionStyle = .None
         
         return cell
     }
@@ -73,24 +70,21 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         guard let selectedIndexPaths = tableView.indexPathsForSelectedRows else { return indexPath }
         for selectedIndexPath in selectedIndexPaths {
-            print("$$$$$$$$$$")
-            print(selectedIndexPath.row)
-            print("$$$$$$$$$$")
             tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
         return indexPath
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
-        cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+//        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
+//        cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         currentEvent = events[indexPath.row]
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
-        cell.accessoryType = UITableViewCellAccessoryType.None
-    }
+//    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+//        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventPickerTableViewCell
+//        cell.accessoryType = UITableViewCellAccessoryType.None
+//    }
     
     /*
      // Override to support conditional editing of the table view.

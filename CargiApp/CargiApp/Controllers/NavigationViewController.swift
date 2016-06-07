@@ -1164,6 +1164,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
+        locationManager.stopUpdatingHeading()
+        navigationEnabled = false
         db.insertAction("gas")
         let numCheapGasStations = 5
         let numNearbyGasStations = 3
@@ -1495,7 +1497,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func eventSelectedChanged(segue: UIStoryboardSegue) {
-        
+        navigationEnabled = false
     }
     
     @IBAction func cancelChooseEvent(segue: UIStoryboardSegue) {
