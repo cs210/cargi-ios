@@ -1,4 +1,4 @@
-//
+﻿//
 //  AzureDatabase.swift
 //  Cargi
 //
@@ -205,8 +205,10 @@ class AzureDatabase {
         if eventName != nil {
             event = eventName!
         }
-        
-        let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
+
+        var correctUserId = self.userID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        var correctUserId = correctUserId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let eventObj = ["user_id": correctUserId, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
         
         eventTable.insert(eventObj) {
             (insertedItem, error) in
@@ -381,7 +383,9 @@ class AzureDatabase {
     * To avoid inserting duplicate contacts, use the contactExists function to check before inserting.
     */
     func insertContact(fullName: String, completionHandler: (newContactID: String?, success: Bool) -> Void) {
-        let contactObj = ["user_id": self.userID!, "name": fullName]
+        var correctUserId = self.userID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        var correctUserId = correctUserId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let contactObj = ["user_id": correctUserId, "name": fullName]
     
         self.contactsTable.insert(contactObj) { (insertedItem, error) in
             if error != nil {
@@ -407,7 +411,12 @@ class AzureDatabase {
 //                contact_id = contactID
                 self.contactID = contactID
                 let eventID = self.curEventID!
-                let eventContactObj = ["event_id": eventID, "contact_id": self.contactID!]
+                var correctContactId = self.contactID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                var correctContactId = correctContactId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                var correctEventId = self.curEventID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        var correctEventId = correctEventId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+
+                let eventContactObj = ["event_id": correctEventId, "contact_id": correctContactId]
                 self.eventContactsTable.insert(eventContactObj) {
                     (insertedItem, error) in
                     if error != nil {
@@ -428,7 +437,12 @@ class AzureDatabase {
                         self.contactID = newContactID!
                         let eventID = self.curEventID!
 
-                        let eventContactObj = ["event_id": eventID, "contact_id": self.contactID!]
+                        var correctContactId = self.contactID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        var correctContactId = correctContactId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        var correctEventId = self.curEventID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                                var correctEventId = correctEventId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+
+                        let eventContactObj = ["event_id": correctEventId, "contact_id": correctContactId]
                         self.eventContactsTable.insert(eventContactObj) {
                             (insertedItem, error) in
                             if error != nil {
