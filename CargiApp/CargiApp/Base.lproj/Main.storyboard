@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2LG-iM-AMA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2LG-iM-AMA">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -8,6 +8,10 @@
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
@@ -402,59 +406,85 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rnV-DU-HU4">
                                 <rect key="frame" x="0.0" y="530" width="600" height="70"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjn-zk-nly">
-                                        <rect key="frame" x="20" y="0.0" width="70" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FHX-nw-hrd">
+                                        <rect key="frame" x="20" y="0.0" width="560" height="70"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjn-zk-nly">
+                                                <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="1:1" id="HAW-bn-CqQ"/>
+                                                </constraints>
+                                                <state key="normal" image="gasbutton.png"/>
+                                                <connections>
+                                                    <action selector="gasButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GuJ-h4-RLq"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6G2-NS-cp7">
+                                                <rect key="frame" x="164" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="height" multiplier="1:1" id="g3k-6M-HfH"/>
+                                                </constraints>
+                                                <state key="normal" image="musicbutton.png"/>
+                                                <connections>
+                                                    <action selector="musicButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Byi-3B-2dI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjM-hz-hgJ">
+                                                <rect key="frame" x="327" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="zjM-hz-hgJ" secondAttribute="height" multiplier="1:1" id="Fxm-h4-taT"/>
+                                                </constraints>
+                                                <state key="normal" image="homebutton.png"/>
+                                                <connections>
+                                                    <action selector="homeButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oWX-Uj-adC"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8z5-tD-rqd">
+                                                <rect key="frame" x="490" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="8z5-tD-rqd" secondAttribute="height" multiplier="1:1" id="RzY-gL-ybP"/>
+                                                </constraints>
+                                                <state key="normal" image="settingsbutton.png"/>
+                                                <connections>
+                                                    <action selector="settingsButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B8L-0D-jR4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="1:1" id="HAW-bn-CqQ"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="1FN-Zw-gbI"/>
+                                            <constraint firstItem="zjM-hz-hgJ" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="39f-5H-JL5"/>
+                                            <constraint firstItem="6G2-NS-cp7" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="66T-jf-JAD"/>
+                                            <constraint firstItem="8z5-tD-rqd" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="D38-5y-Jib"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="width" secondItem="zjM-hz-hgJ" secondAttribute="height" multiplier="1:1" id="RKu-Qf-2b6"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="8z5-tD-rqd" secondAttribute="height" id="i2g-K5-tK0"/>
+                                            <constraint firstItem="zjM-hz-hgJ" firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="9:14" id="koj-in-sz7"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="zjM-hz-hgJ" secondAttribute="height" id="psg-W8-0JE"/>
                                         </constraints>
-                                        <state key="normal" image="gasbutton.png"/>
-                                        <connections>
-                                            <action selector="gasButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GuJ-h4-RLq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6G2-NS-cp7">
-                                        <rect key="frame" x="265" y="0.0" width="70" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="height" multiplier="1:1" id="g3k-6M-HfH"/>
-                                        </constraints>
-                                        <state key="normal" image="musicbutton.png"/>
-                                        <connections>
-                                            <action selector="musicButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Byi-3B-2dI"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8z5-tD-rqd">
-                                        <rect key="frame" x="510" y="0.0" width="70" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="8z5-tD-rqd" secondAttribute="height" multiplier="1:1" id="RzY-gL-ybP"/>
-                                        </constraints>
-                                        <state key="normal" image="personicon.png"/>
-                                        <connections>
-                                            <action selector="settingsButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B8L-0D-jR4"/>
-                                        </connections>
-                                    </button>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="1FN-Zw-gbI"/>
+                                                <exclude reference="RKu-Qf-2b6"/>
+                                                <exclude reference="i2g-K5-tK0"/>
+                                                <exclude reference="psg-W8-0JE"/>
+                                                <exclude reference="koj-in-sz7"/>
+                                            </mask>
+                                        </variation>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.42352941176470588" green="0.47843137254901957" blue="0.53725490196078429" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="8z5-tD-rqd" secondAttribute="trailing" constant="20" id="2AB-Vn-fVN"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="3k5-V1-qRU"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="5hu-B1-V45"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="EM2-Lg-kGj"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="rnV-DU-HU4" secondAttribute="height" id="G7u-RZ-oMR"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="width" id="JXH-di-N8H"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="20" id="Kh0-vI-gJO"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="Q9T-9S-J3K"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="Qln-je-iBq"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="centerX" secondItem="rnV-DU-HU4" secondAttribute="centerX" id="TKP-hE-rRZ"/>
                                     <constraint firstAttribute="height" constant="102" id="Uu5-H3-8Hk"/>
                                     <constraint firstAttribute="height" constant="53" id="chP-tV-Jeg"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="clP-Ud-Gig"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="centerX" secondItem="rnV-DU-HU4" secondAttribute="centerX" id="cop-mV-6XV"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="leN-3o-MLN"/>
+                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="rnV-DU-HU4" secondAttribute="height" id="f9C-wi-bcW"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="uQF-9k-ZR3"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="20" id="v9O-0r-QzE"/>
+                                    <constraint firstAttribute="trailing" secondItem="FHX-nw-hrd" secondAttribute="trailing" constant="20" id="xwa-wT-QBd"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Uu5-H3-8Hk"/>
                                         <exclude reference="chP-tV-Jeg"/>
-                                        <exclude reference="JXH-di-N8H"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -542,6 +572,7 @@
                         <outlet property="textButton" destination="sVK-fw-bF5" id="yM1-63-CgK"/>
                         <segue destination="2UF-mF-Z5E" kind="unwind" identifier="logoutToLogin" unwindAction="logoutToLoginViewController:" id="vfr-xN-i0l"/>
                         <segue destination="2LG-iM-AMA" kind="show" identifier="logout" animates="NO" id="3lO-8O-DOT"/>
+                        <segue destination="ed9-Ds-r3K" kind="show" identifier="showSettings" id="Sae-bi-Wc2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -584,7 +615,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="radiobutton-unselected.png" translatesAutoresizingMaskIntoConstraints="NO" id="1VG-zw-Dvr">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1VG-zw-Dvr">
                                             <rect key="frame" x="41" y="10" width="16" height="16"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0a-SD-izj">
@@ -600,6 +631,87 @@
                                     <outlet property="radioButtonView" destination="1VG-zw-Dvr" id="YL4-79-ahf"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldTableViewCell" id="tnv-dM-vEX" customClass="SettingsTextFieldTableViewCell" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="156" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tnv-dM-vEX" id="QvE-Q2-NaP">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St, San Francisco, CA" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zsT-Ta-5ht">
+                                            <rect key="frame" x="28" y="3" width="544" height="30"/>
+                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="zsT-Ta-5ht" firstAttribute="centerY" secondItem="QvE-Q2-NaP" secondAttribute="centerY" id="41h-jO-rT4"/>
+                                        <constraint firstItem="zsT-Ta-5ht" firstAttribute="leading" secondItem="QvE-Q2-NaP" secondAttribute="leadingMargin" constant="20" id="6uy-2u-V4D"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="zsT-Ta-5ht" secondAttribute="trailing" constant="20" id="r25-1i-JJG"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textfield" destination="zsT-Ta-5ht" id="eRA-QW-SY6"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DoneTableViewCell" id="lDw-Zd-ND1">
+                                <rect key="frame" x="0.0" y="192" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lDw-Zd-ND1" id="O3v-qd-NT6">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="dym-rB-W5k">
+                                            <rect key="frame" x="234" y="3" width="136" height="33"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1b-s8-7gC">
+                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="33"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                                    <state key="normal" title="Save"/>
+                                                    <connections>
+                                                        <action selector="saveButtonClicked:" destination="ed9-Ds-r3K" eventType="touchUpInside" id="SI8-r7-jFA"/>
+                                                        <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="g0V-nh-otn"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUK-aL-2JT">
+                                                    <rect key="frame" x="85" y="0.0" width="51" height="33"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                                    <state key="normal" title="Cancel"/>
+                                                    <connections>
+                                                        <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="ONz-YV-DEp"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dym-rB-W5k" firstAttribute="centerX" secondItem="O3v-qd-NT6" secondAttribute="centerX" id="Jwx-cY-D0f"/>
+                                        <constraint firstItem="dym-rB-W5k" firstAttribute="centerY" secondItem="O3v-qd-NT6" secondAttribute="centerY" id="ZzQ-nP-9zN"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LogOutTableViewCell" id="iJb-ft-aih" customClass="SettingsLogoutTableViewCell" customModule="Cargi" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="228" width="600" height="36"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iJb-ft-aih" id="jpw-FR-IGf">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wG5-Ed-b25">
+                                            <rect key="frame" x="274" y="1.5" width="52" height="33"/>
+                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                            <state key="normal" title="Logout"/>
+                                            <connections>
+                                                <action selector="logout:" destination="iJb-ft-aih" eventType="touchUpInside" id="f6z-fi-4QF"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="wG5-Ed-b25" firstAttribute="centerY" secondItem="jpw-FR-IGf" secondAttribute="centerY" id="CMd-Eh-Dtd"/>
+                                        <constraint firstItem="wG5-Ed-b25" firstAttribute="centerX" secondItem="jpw-FR-IGf" secondAttribute="centerX" id="jMj-kK-UQB"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
@@ -611,6 +723,7 @@
                     <navigationItem key="navigationItem" title="Settings" id="mXD-1J-LUc"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qvT-Wb-N7P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="0Ee-LU-472" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1802" y="646"/>
         </scene>
@@ -1021,23 +1134,23 @@
         <image name="calendar-icon.png" width="18" height="20"/>
         <image name="callbutton.png" width="108" height="76"/>
         <image name="gasbutton.png" width="35" height="38"/>
+        <image name="homebutton.png" width="45" height="38"/>
         <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
         <image name="navigate_button.png" width="20" height="20"/>
-        <image name="personicon.png" width="38" height="38"/>
-        <image name="radiobutton-unselected.png" width="18" height="18"/>
         <image name="refreshbutton.png" width="20" height="20"/>
         <image name="screen1.png" width="375" height="667"/>
         <image name="screen2.png" width="375" height="667"/>
         <image name="screen3.png" width="375" height="667"/>
         <image name="screen4.png" width="375" height="667"/>
         <image name="search.png" width="24" height="24"/>
+        <image name="settingsbutton.png" width="33" height="34"/>
         <image name="spinnerbg.png" width="40" height="40"/>
         <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="MyH-Ys-aGa"/>
+        <segue reference="3lO-8O-DOT"/>
         <segue reference="J0y-QS-aGI"/>
-        <segue reference="0Ac-rO-xYH"/>
-        <segue reference="ew2-US-zHJ"/>
     </inferredMetricsTieBreakers>
 </document>

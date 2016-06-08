@@ -23,6 +23,11 @@ class SettingsTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        if selected {
+            self.radioButtonView.image = UIImage(named: "radiobutton-selected")
+        } else {
+            self.radioButtonView.image = UIImage(named: "radiobutton-unselected")
+        }
     }
 
 }

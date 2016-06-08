@@ -13,6 +13,7 @@ import MessageUI
 import EventKit
 import QuartzCore
 import SpeechKit
+import MediaPlayer
 
 class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -20,12 +21,24 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // Types of Maps that can be used.
     private enum MapsType {
+        case Cargi // Cargi
         case Apple // Apple Maps
         case Google // Google Maps
     }
     
+    // Types of Music Apps that can be opened.
+    private enum MusicType {
+        case Apple
+        case Spotify
+    }
+    
+    // Types of Text that can be sent.
+    private enum TextType {
+        case ETA
+        case Default
+    }
+    
     @IBOutlet weak var spinnerBackground: UIImageView!
-    private var defaultMap: MapsType = MapsType.Google // hard-coded to Google Maps, but may change depending on user's preference.
     
     
     var destLabel: UILabel?
@@ -71,8 +84,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     var gasMarker: GMSMarker?
     var dest = Location()
     var waypoint: Location?
+    var navigationEnabled: Bool = false
     
     var manager: CBCentralManager! // Bluetooth Manager
+    var peripheralArray = [CBPeripheral]()
+    var connectingPeripheral: CBPeripheral?
     var currentEvent: EKEvent? {
         didSet {
             currentEventButton.setTitle(currentEvent?.title, forState: .Normal)
@@ -121,17 +137,28 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
+    var currentDashOption = 2
+    
     // MARK: Constants
+    
+    let numDashOptions = 4
+    let iconWidth = CGFloat(70)
     
     let stopWords: [String] = ["a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"]
 
-    
+    // Put CentralManager in the main queue bluetooth
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+        manager = CBCentralManager(delegate: self, queue: dispatch_get_main_queue())
+        
+    }
     
     // MARK: Methods
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        manager = CBCentralManager (delegate: self, queue: nil)
 
         // Do any additional setup after loading the view.
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
@@ -176,10 +203,97 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         locationManager.startUpdatingLocation()
         
         mapView.settings.compassButton = true
+        
+        /*
+        let recognizer: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeRight(_:)))
+        recognizer.direction = .Right
+        self.dashboardView.addGestureRecognizer(recognizer)
+        
+        let recognizer2: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeLeft(_:)))
+        recognizer2.direction = .Left
+        
+        self.dashboardView.addGestureRecognizer(recognizer2)
+         */
 
         self.resetView()
         self.syncCalendar()
     }
+    
+/*
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        var dashboardViewFrame = self.dashboardView.frame
+        let newWidth = getWidthForIcons(numDashOptions)!
+        dashboardViewFrame.size.width = newWidth;
+        self.dashboardView.frame =  dashboardViewFrame
+    }
+    
+    func getWidthForIcons(numIcons: Int) -> CGFloat? {
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width
+        
+        if (numIcons <= 3) {
+            return screenWidth
+        }
+        
+        let x = (screenWidth/2 - 20 - iconWidth/2)
+        
+        let extra = x * CGFloat(numIcons-3) + 20
+        
+        print (screenWidth)
+        print (extra)
+        
+        return screenWidth + extra
+        
+    }
+    
+    func swipeLeft(recognizer : UISwipeGestureRecognizer) {
+    
+        if (currentDashOption == (numDashOptions - 1)) {
+            return
+        }
+        
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            
+            var dashboardViewFrame = self.dashboardView.frame
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width
+            
+            //let dashboardViewFrame = self.dashboardView.frame
+            let newWidth = self.getWidthForIcons(self.numDashOptions)!
+            print (newWidth)
+            
+            
+            dashboardViewFrame.origin.x -= screenWidth/2 - 20 - self.iconWidth/2
+            //dashboardViewFrame.size.width = newWidth;
+            
+            self.dashboardView.frame = dashboardViewFrame
+            
+            }, completion: { finished in
+                self.currentDashOption += 1
+        })
+    }
+    
+    func swipeRight(recognizer : UISwipeGestureRecognizer) {
+        
+        if (currentDashOption == 2) {
+            return
+        }
+        
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: {
+            var dashboardViewFrame = self.dashboardView.frame
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width
+            
+            dashboardViewFrame.origin.x += screenWidth/2 - 20 - self.iconWidth/2
+            
+            self.dashboardView.frame = dashboardViewFrame
+            
+            }, completion: { finished in
+                self.currentDashOption -= 1
+        })
+    }
+ */
     
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -203,6 +317,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         waypoint = nil
         stopSpinner()
         mapView.clear()
+        mapView.animateToViewingAngle(0)
+        mapView.animateToBearing(0)
+        navigationEnabled = false
         locationManager.stopUpdatingHeading()
     }
     
@@ -471,11 +588,48 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         UIApplication.sharedApplication().openURL(url)
     }
     
+    
     /**
-        Open Maps, given the current event's location.
+     Open Apple Maps, given the current event's location.
      */
-//    func openMaps(waypoint waypoint: CLLocationCoordinate2D?) {
-    func openMaps(destination destination: Location?) {
+    func openAppleMaps(destination destination: Location?) {
+        guard let dest = destination else {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
+        
+        if (dest.address == nil && dest.coordinates == nil) {
+            showAlertViewController(title: "Error", message: "No destination specified.")
+            return
+        }
+        
+        
+        if (dest.coordinates != nil) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationNoEvent(dest.coordinates!)
+            }
+            return
+        }
+        
+        if (dest.address != nil) {
+            let destAddress = dest.address
+            let query = destAddress!.componentsSeparatedByString("\n").joinWithSeparator(" ")
+            print(query)
+            let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
+            
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
+                self.openAppleMapsLocationAddress(address)
+            }
+            return
+        }
+        return
+    }
+    
+    
+    /**
+        Open Google Maps, given the current event's location.
+     */
+    func openGoogleMaps(destination destination: Location?) {
 
 //        guard let ev = currentEvent else { return }
 //        let queries = ev.location!.componentsSeparatedByString("\n")
@@ -497,10 +651,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         
         if (dest.coordinates != nil) {
-            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
                 self.openGoogleMapsLocation(dest.coordinates!)
-            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-                self.openAppleMapsLocationNoEvent(dest.coordinates!)
             }
             return
         }
@@ -511,11 +663,9 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(query)
             let address = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet())!
             
-            if self.defaultMap == MapsType.Google && UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
+            if UIApplication.sharedApplication().canOpenURL(NSURL(string: "comgooglemaps://")!) {
                 self.openGoogleMapsLocationAddress(address)
                 self.openGoogleMapsLocationWaypoints(address, waypoint: CLLocationCoordinate2D(latitude: defaultLatitude, longitude: defaultLongitude))
-            } else if UIApplication.sharedApplication().canOpenURL(NSURL(string: "http://maps.apple.com/")!) {
-                self.openAppleMapsLocationAddress(address)
             }
             return
         }
@@ -568,18 +718,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Location is updated.
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("updating location")
-        if let course = mapView.myLocation?.course {
-            mapView.animateToBearing(course)
-        }
-        
-        if let heading = manager.heading?.trueHeading {
-            print(heading)
+        if navigationEnabled {
+            print("updating location")
+            if let location = manager.location {
+                mapView.animateToLocation(location.coordinate)
+            }
+            /*
+            if let course = mapView.myLocation?.course {
+                mapView.animateToBearing(course)
+            }
+             */
         }
     }
     
     func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        mapView.animateToBearing(newHeading.trueHeading)
+        if navigationEnabled {
+            mapView.animateToBearing(newHeading.trueHeading)
+        }
     }
 
     
@@ -596,11 +751,17 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         let origin = "\(originLocation.latitude),\(originLocation.longitude)"
         
         var destination: String?
-        if dest.address != nil {
-            destination = dest.address
+        
+        if let destCoordinates = dest.coordinates {
+            destination = "\(destCoordinates.latitude),\(destCoordinates.longitude)"
+        } else if let destAddress = dest.address {
+            destination = destAddress
+        } else if let destName = dest.name {
+            destination = destName
         } else {
             destination = waypoints.first
         }
+        print(destination)
         
         self.directionTasks.getDirections(origin, dest: destination, waypoints: waypoints) { (status, success) in
             print("got directions")
@@ -648,6 +809,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Shows a pin at the destination on the map.
     private func configureMap() {
+        let destMarker = GMSMarker()
+        destMarker.icon = UIImage(named: "destination_icon")
         destMarker.position = directionTasks.destCoordinate
         destMarker.map = mapView
         print(destMarker.position)
@@ -735,12 +898,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print(controller.recipients)
             controller.messageComposeDelegate = self
             
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            if let textPreference = userDefaults.stringForKey(Constants.SettingsText) {
+                if textPreference == Constants.TextDefault {
+                    controller.body = "Hi \(contactName), \(Constants.TextDefault)"
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    return
+                }
+            }
+            
             if dest.address == nil && dest.coordinates == nil && dest.name == nil {
                 controller.body = ""
                 self.presentViewController(controller, animated: true, completion: nil)
+                return
             } else if isGasStation {
                 controller.body = "I'm getting gas right now. I'll be there soon."
                 self.presentViewController(controller, animated: true, completion: nil)
+                return
             } else {
                 var destString = String()
                 if let coords = dest.coordinates {
@@ -751,6 +925,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                     destString = destName
                 } else {
                     controller.body = ""
+                    self.presentViewController(controller, animated: true, completion: nil)
                     return
                 }
 
@@ -861,6 +1036,12 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // MARK: Core Bluetooth Manager Methods
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Peripheral: \(peripheral)")
+        self.connectingPeripheral=peripheral
+        if (!self.peripheralArray.contains(peripheral)) {
+            self.peripheralArray.append(peripheral)
+        }
+//        print(peripheralArray)
+        
     }
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
@@ -884,11 +1065,10 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             print("BLE service is powered off")
         case.PoweredOn:
             print("BLE service is powered on")
-            print("Start Scanning")
-            manager.scanForPeripheralsWithServices(nil, options: nil)
+//            print("Start Scanning")
+//            manager.scanForPeripheralsWithServices(nil, options: nil)
         }
     }
-    
     // MARK: GMSMapViewDelegate Methods
     
     
@@ -971,6 +1151,97 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         insertDBEvent()
     }
     
+    /* Begins navigation using Cargi. // Returns true if opened successfully, otherwise false. */
+    private func openCargiNavigation() {
+        if let myLocation = mapView.myLocation {
+            navigationEnabled = true
+            locationManager.startUpdatingHeading()
+            let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
+                                                                    zoom: 17,
+                                                                    bearing: 0,
+                                                                    viewingAngle: 60.0)
+            mapView.animateToCameraPosition(cameraPosition)
+//            return true
+        } else {
+            if locationManager.heading == nil {
+                print("true heading doesn't exist")
+            }
+            if mapView.myLocation == nil {
+                print("myLocation for GoogleMaps doesn't exist")
+            }
+//            return false
+        }
+    }
+    
+    /* Begins navigation using Google Maps. // Returns true if opened successfully, otherwise false. */
+    private func openGoogleNavigation() {
+        if let _ = currentEvent {
+            if let _ = waypoint {
+                openGoogleMaps(destination: waypoint)
+            } else {
+                openGoogleMaps(destination: dest)
+            }
+        } else {
+            if dest.name == nil && dest.address == nil {
+                syncCalendar()
+            }
+            
+            if let _ = waypoint {
+                openGoogleMaps(destination: waypoint)
+            } else {
+                openGoogleMaps(destination: dest)
+            }
+        }
+    }
+    
+    /* Begins navigation using Apple Maps. // Returns true if opened successfully, otherwise false. */
+    private func openAppleNavigation() {
+        if let _ = currentEvent {
+            if let _ = waypoint {
+                openAppleMaps(destination: waypoint)
+            } else {
+                openAppleMaps(destination: dest)
+            }
+        } else {
+            if dest.name == nil && dest.address == nil {
+                syncCalendar()
+            }
+            
+            if let _ = waypoint {
+                openAppleMaps(destination: waypoint)
+            } else {
+                openAppleMaps(destination: dest)
+            }
+        }
+    }
+    
+    // MARK: Music Methods
+    
+    func playMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.prepareToPlay()
+        player.play()
+        print(player.isPreparedToPlay)
+        print(player.indexOfNowPlayingItem)
+        print(player.nowPlayingItem?.artist)
+        print(player.nowPlayingItem?.title)
+    }
+    
+    func pauseMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.pause()
+    }
+    
+    func fastforwardMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.skipToNextItem()
+        print(player.nowPlayingItem?.title)
+    }
+    
+    func rewindMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.skipToPreviousItem()
+    }
     
     // MARK: IBAction Methods
     
@@ -985,43 +1256,23 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func navigateButtonClicked(sender: UIButton) {
         db.insertAction("navigate")
         
-        locationManager.startUpdatingHeading()
-        
-        if let myLocation = mapView.myLocation {
-            let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
-                                                                    zoom: 17,
-                                                                    bearing: 0,
-                                                                    viewingAngle: 60.0)
-            mapView.animateToCameraPosition(cameraPosition)
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let mapsApp = userDefaults.stringForKey(Constants.SettingsMap) {
+            switch mapsApp {
+            case Constants.MapsCargi:
+                openCargiNavigation()
+            case Constants.MapsGoogle:
+                openGoogleNavigation()
+            case Constants.MapsApple:
+                openAppleNavigation()
+            case Constants.MapsWaze:
+                showAlertViewController(title: "Maps Error", message: "Waze is not yet supported.")
+            default:
+                openCargiNavigation()
+                break
+            }
         } else {
-            if locationManager.heading == nil {
-                print("true heading doesn't exist")
-            }
-            if mapView.myLocation == nil {
-                print("myLocation for GoogleMaps doesn't exist")
-            }
-            
-        }
-        
-        let shouldOpenMaps = false
-        if shouldOpenMaps {
-            if let _ = currentEvent {
-                if let _ = waypoint {
-                    openMaps(destination: waypoint)
-                } else {
-                    openMaps(destination: dest)
-                }
-            } else {
-                if dest.name == nil && dest.address == nil {
-                    syncCalendar()
-                }
-                
-                if let _ = waypoint {
-                    openMaps(destination: waypoint)
-                } else {
-                    openMaps(destination: dest)
-                }
-            }
+            openCargiNavigation()
         }
     }
 
@@ -1058,6 +1309,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 
     /// Gas Button clicked
     @IBAction func gasButtonClicked(sender: UIButton?) {
+        locationManager.stopUpdatingHeading()
+        navigationEnabled = false
         db.insertAction("gas")
         let numCheapGasStations = 5
         let numNearbyGasStations = 3
@@ -1261,21 +1514,33 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // Music app options: Spotify (default) and Apple Music
     @IBAction func musicButtonClicked(sender: UIButton?) {
         db.insertAction("music")
-        print("music button activated")
-        let appName: String = "spotify"
         
-        let appURL: String = "\(appName)://spotify:user:spotify:playlist:5FJXhjdILmRA2z5bvz4nzf"
-        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
-            print(appURL)
-            UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
-        } else {
-            print("Can't use spotify://")
-            let appName: String = "music"
-            let appURL: String = "\(appName)://"
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let musicApp = userDefaults.stringForKey(Constants.SettingsMusic) {
+            var appURL = String()
+            switch musicApp {
+            case Constants.MusicSpotify:
+                appURL = "spotify://"
+            case Constants.MusicApple:
+                appURL = "music://"
+            case Constants.MusicSoundCloud:
+                appURL = "soundcloud://"
+            case Constants.MusicPandora:
+                appURL = "pandora://"
+            default: break
+            }
             if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appURL)!)) {
                 print(appURL)
                 UIApplication.sharedApplication().openURL(NSURL(string: appURL)!)
+                return
             }
+        }
+        
+        let appleMusicURL = "music://"
+        if (UIApplication.sharedApplication().canOpenURL(NSURL(string: appleMusicURL)!)) {
+            UIApplication.sharedApplication().openURL(NSURL(string: appleMusicURL)!)
+        } else {
+            showAlertViewController(title: "Music Error", message: "Failed to open music app")
         }
     }
     
@@ -1294,6 +1559,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     /// Settings Button clicked
     @IBAction func settingsButtonClicked(sender: UIButton) {
+        self.performSegueWithIdentifier("showSettings", sender: nil)
+ /*
         let alert = UIAlertController(title: "Logout", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
@@ -1314,6 +1581,37 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         alert.addAction(yesAction)
         alert.addAction(noAction)
+        presentViewController(alert, animated: true, completion: nil)
+ */
+    }
+    
+    @IBAction func homeButtonClicked(sender: UIButton) {
+        var home = Location()
+        home.name = "Home"
+        home.coordinates = nil
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let homeAddress = userDefaults.stringForKey("home_address") {
+            home.address = homeAddress
+            if !homeAddress.isEmpty {
+                // If home address exists, then we set route to navigate home.
+                self.searchButton.setTitle(home.name, forState: .Normal)
+                gasMarker = nil
+                
+                self.dest = home
+                self.showRoute(showDestMarker: true)
+                return
+            }
+        }
+        // Otherwise, show an alert telling user to set home address in the settings.
+        let alert = UIAlertController(title: "Set Home Preferences", message: "Please set your home address in the settings to navigate home.", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
+        let settingsAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in
+            self.performSegueWithIdentifier("showSettings", sender: nil)
+        }
+        
+        alert.addAction(settingsAction)
+        alert.addAction(cancelAction)
         presentViewController(alert, animated: true, completion: nil)
     }
     
@@ -1354,10 +1652,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func eventSelectedChanged(segue: UIStoryboardSegue) {
-        
+        navigationEnabled = false
     }
     
     @IBAction func cancelChooseEvent(segue: UIStoryboardSegue) {
+        
+    }
+    
+    @IBAction func cancelSaveSettings(segue: UIStoryboardSegue) {
         
     }
 
@@ -1410,14 +1712,14 @@ extension CollectionType {
 extension UIViewController {
     func showAlertViewController(title title: String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alert.addAction(alertAction)
         presentViewController(alert, animated: true, completion: nil)
     }
     
     func showAlertViewControllerWithHandler(title title: String?, message: String?, handler: ((action: UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: handler)
+        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: handler)
         alert.addAction(alertAction)
         presentViewController(alert, animated: true, completion: nil)
     }

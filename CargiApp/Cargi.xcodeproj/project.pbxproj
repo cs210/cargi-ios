@@ -39,6 +39,7 @@
 		74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */; };
 		7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7417B5471C868A70005357CB /* ContactDirectory.swift */; };
 		741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CE3781C8D55BF003017CA /* LocationGeocoder.swift */; };
+		7446391D1D08A3C90018CACD /* homebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7446391C1D08A3C90018CACD /* homebutton@2x.png */; };
 		747391691CB2267200BE3E78 /* DistanceMatrixTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */; };
 		747425B61C7FE642006D5F75 /* cargi-square (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 747425B51C7FE642006D5F75 /* cargi-square (1).png */; };
 		74962D721CD34CF50078883B /* gasbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74962D711CD34CF50078883B /* gasbutton@2x.png */; };
@@ -59,6 +60,9 @@
 		74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */; };
 		74B783111C9F6A28003E0391 /* navigate_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783101C9F6A28003E0391 /* navigate_button@2x.png */; };
 		74B783131C9F6A2C003E0391 /* directions_button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74B783121C9F6A2C003E0391 /* directions_button2@2x.png */; };
+		74BE5C7F1CFD89D5007BFA45 /* SettingsTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BE5C7E1CFD89D5007BFA45 /* SettingsTextFieldTableViewCell.swift */; };
+		74BE5C811CFEA677007BFA45 /* CargiConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BE5C801CFEA677007BFA45 /* CargiConstants.swift */; };
+		74BE5C831CFEBB33007BFA45 /* SettingsLogoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BE5C821CFEBB33007BFA45 /* SettingsLogoutTableViewCell.swift */; };
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */; };
 		86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */; };
@@ -102,6 +106,7 @@
 		74131C481C7FDA3500CBB5F4 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		7417B5471C868A70005357CB /* ContactDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDirectory.swift; sourceTree = "<group>"; };
 		741CE3781C8D55BF003017CA /* LocationGeocoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGeocoder.swift; sourceTree = "<group>"; };
+		7446391C1D08A3C90018CACD /* homebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homebutton@2x.png"; sourceTree = "<group>"; };
 		747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceMatrixTasks.swift; sourceTree = "<group>"; };
 		747425B51C7FE642006D5F75 /* cargi-square (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cargi-square (1).png"; sourceTree = "<group>"; };
 		74962D711CD34CF50078883B /* gasbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gasbutton@2x.png"; sourceTree = "<group>"; };
@@ -124,6 +129,9 @@
 		74B7830E1C9F07DB003E0391 /* destination_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "destination_icon@2x.png"; sourceTree = "<group>"; };
 		74B783101C9F6A28003E0391 /* navigate_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigate_button@2x.png"; sourceTree = "<group>"; };
 		74B783121C9F6A2C003E0391 /* directions_button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "directions_button2@2x.png"; sourceTree = "<group>"; };
+		74BE5C7E1CFD89D5007BFA45 /* SettingsTextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		74BE5C801CFEA677007BFA45 /* CargiConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CargiConstants.swift; sourceTree = "<group>"; };
+		74BE5C821CFEBB33007BFA45 /* SettingsLogoutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsLogoutTableViewCell.swift; sourceTree = "<group>"; };
 		74F65EFB1CBBA01F00DE068C /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftAzureMobile.framework; path = CargiApp/Frameworks/MicrosoftAzureMobile.framework; sourceTree = "<group>"; };
 		86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = CargiApp/Frameworks/SpeechKit.framework; sourceTree = "<group>"; };
@@ -234,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */,
+				74BE5C801CFEA677007BFA45 /* CargiConstants.swift */,
 				74B7830C1C9EDBD7003E0391 /* DirectionTasks.swift */,
 				747391681CB2267200BE3E78 /* DistanceMatrixTasks.swift */,
 				BE6504EB1C88166C00C26AAA /* EventDirectory.swift */,
@@ -244,6 +253,8 @@
 				740354131CD5E76200155433 /* CheapGasFinder.swift */,
 				63DE4E0A1CC6F3D4002280BA /* SettingsHeaderTableViewCell.swift */,
 				630E54EC1CC4A3DE00D06B6C /* SettingsTableViewCell.swift */,
+				74BE5C821CFEBB33007BFA45 /* SettingsLogoutTableViewCell.swift */,
+				74BE5C7E1CFD89D5007BFA45 /* SettingsTextFieldTableViewCell.swift */,
 				63C6587A1CD8606600F9C6C5 /* EventPickerTableViewCell.swift */,
 			);
 			path = Models;
@@ -264,6 +275,7 @@
 				63C6588F1CE2304200F9C6C5 /* gasnearby@2x.png */,
 				63F583B21CE4F121001D3C25 /* personicon@2x.png */,
 				740354151CD5F95200155433 /* gasmarker@2x.png */,
+				7446391C1D08A3C90018CACD /* homebutton@2x.png */,
 				636E32E21CCC0039006D2936 /* settingsbutton@2x.png */,
 				636E32E31CCC0039006D2936 /* musicbutton@2x.png */,
 				74B783121C9F6A2C003E0391 /* directions_button2@2x.png */,
@@ -373,6 +385,7 @@
 				74A3D8EE1C9127020053D816 /* close-button-dark@2x.png in Resources */,
 				63DE4E0D1CC70844002280BA /* radiobutton-selected@2x.png in Resources */,
 				63C658911CE2304200F9C6C5 /* gasnearby@2x.png in Resources */,
+				7446391D1D08A3C90018CACD /* homebutton@2x.png in Resources */,
 				63C658811CDE80C100F9C6C5 /* textbutton@2x.png in Resources */,
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* cargi-launch@2x.png in Resources */,
@@ -438,9 +451,11 @@
 				BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */,
 				7417B5481C868A70005357CB /* ContactDirectory.swift in Sources */,
 				63C6587B1CD8606600F9C6C5 /* EventPickerTableViewCell.swift in Sources */,
+				74BE5C811CFEA677007BFA45 /* CargiConstants.swift in Sources */,
 				B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */,
 				740354101CD5D12500155433 /* LoginViewController.swift in Sources */,
 				74131C491C7FDA3500CBB5F4 /* NavigationViewController.swift in Sources */,
+				74BE5C7F1CFD89D5007BFA45 /* SettingsTextFieldTableViewCell.swift in Sources */,
 				630A717D1CD747610045D8BF /* EventPickerViewController.swift in Sources */,
 				74A2E5F71C7FCBC800C468CC /* AppDelegate.swift in Sources */,
 				741CE3791C8D55BF003017CA /* LocationGeocoder.swift in Sources */,
@@ -455,6 +470,7 @@
 				6381DC651CD6C06F000CB520 /* TutorialViewController.swift in Sources */,
 				630E54ED1CC4A3DE00D06B6C /* SettingsTableViewCell.swift in Sources */,
 				740354141CD5E76200155433 /* CheapGasFinder.swift in Sources */,
+				74BE5C831CFEBB33007BFA45 /* SettingsLogoutTableViewCell.swift in Sources */,
 				BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

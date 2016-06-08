@@ -1,14 +1,14 @@
 //
-//  EventPickerTableViewCell.swift
+//  SettingsLogoutTableViewCell.swift
 //  Cargi
 //
-//  Created by Ishita Prasad on 5/2/16.
+//  Created by Edwin Park on 5/31/16.
 //  Copyright © 2016 Cargi. All rights reserved.
 //
 
 import UIKit
 
-class EventPickerTableViewCell: UITableViewCell {
+class SettingsLogoutTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,11 +19,6 @@ class EventPickerTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        if selected {
-            self.accessoryType = .Checkmark
-        } else {
-            self.accessoryType = .None
-        }
     }
 
 }
