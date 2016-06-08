@@ -27,7 +27,7 @@ class AzureDatabase {
         
         return Static.instance!
     }
-
+    
     
     var delegate: AppDelegate
     var client: MSClient
@@ -46,7 +46,7 @@ class AzureDatabase {
     var curEventID: String?
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier =
     UIBackgroundTaskInvalid
-
+    
     
     init() {
         delegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -68,13 +68,13 @@ class AzureDatabase {
      * with this particular device, for easy retrieval of other information about the user stored in the database.
      * If a user is not found, this method automatically creates a user with the device ID, and leaves the name and email
      * fields empty. To update this newly created user, see updateUserData.
-     * 
+     *
      * Example usage of device ID:
      * let deviceID = UIDevice.currentDevice().identifierForVendor!.UUIDString
      **/
     func initializeAndCreateUserID(deviceID: String, completionHandler: (status: String, success: Bool) -> Void)  {
         let userCheckPredicate = NSPredicate(format: "device_id == [c] %@", deviceID)
-
+        
         userTable.readWithPredicate(userCheckPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)
@@ -98,7 +98,7 @@ class AzureDatabase {
                 } else {
                     // TODO: print some error code
                     completionHandler(status: "Failed to create new user", success: false)
-
+                    
                 }
             }
         }
@@ -158,7 +158,7 @@ class AzureDatabase {
             completionHandler(status: "No user found", success: false)
         }
     }
-
+    
     
     /**
      * Given the user's name and email, this function updates the user's email address in the Azure database.
@@ -175,7 +175,7 @@ class AzureDatabase {
             }
         }
     }
-
+    
     /**
      * Given an array of contacts, this method inserts all contacts of the user (associated with the userID).
      *
@@ -195,10 +195,10 @@ class AzureDatabase {
                 }
                 
             }
-                
+            
         }
     }
-
+    
     // needs testing
     func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate) {
         var event = ""
@@ -206,7 +206,9 @@ class AzureDatabase {
             event = eventName!
         }
         
-        let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
+        var correctUserId = self.userID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        correctUserId = correctUserId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let eventObj = ["user_id": correctUserId, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
         
         eventTable.insert(eventObj) {
             (insertedItem, error) in
@@ -293,16 +295,16 @@ class AzureDatabase {
      * If the contact does not exist, the status reflects that and exists is false.
      * Usage:
      *  self.contactExists(fullName) { (status, exists) in
-            if (exists) {
-                // do not insert duplicate contact
-            } else {
-                // getContact
-            }
+     if (exists) {
+     // do not insert duplicate contact
+     } else {
+     // getContact
+     }
      *  }
      */
     func contactExists(contactName: String, completionHandler: (status: String, exists: Bool) -> Void) {
         let contactCheckPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [NSPredicate(format: "user_id == %@", self.userID!), NSPredicate(format: "name = %@", contactName)])
-
+        
         contactsTable.readWithPredicate(contactCheckPredicate) { (result, error) in
             if (error != nil) {
                 print("Error in retrieval", error!.description)
@@ -340,15 +342,15 @@ class AzureDatabase {
                 completionHandler(status: "Email is incorrect, does not match user ID", success: false)
             }
         }
-
+        
     }
     
-
+    
     /**
-    * Checks using regex whether an email is validly formatted.
-    * Valid: "abc@mywebsite.gov.uk", "xyz@STANFORD.edu"
-    * Invalid: "@blah.blah", xyz@", "lwker34@23klazxc"
-    */
+     * Checks using regex whether an email is validly formatted.
+     * Valid: "abc@mywebsite.gov.uk", "xyz@STANFORD.edu"
+     * Invalid: "@blah.blah", xyz@", "lwker34@23klazxc"
+     */
     func validateEmail(candidate: String) -> Bool {
         let regExp = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         return NSPredicate(format:"SELF MATCHES %@", regExp).evaluateWithObject(candidate)
@@ -376,13 +378,15 @@ class AzureDatabase {
     }
     
     /**
-    * Inserts a contact into the database associated with the current user.
-    * 
-    * To avoid inserting duplicate contacts, use the contactExists function to check before inserting.
-    */
+     * Inserts a contact into the database associated with the current user.
+     *
+     * To avoid inserting duplicate contacts, use the contactExists function to check before inserting.
+     */
     func insertContact(fullName: String, completionHandler: (newContactID: String?, success: Bool) -> Void) {
-        let contactObj = ["user_id": self.userID!, "name": fullName]
-    
+        var correctUserId = self.userID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        correctUserId = correctUserId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let contactObj = ["user_id": correctUserId, "name": fullName]
+        
         self.contactsTable.insert(contactObj) { (insertedItem, error) in
             if error != nil {
                 print("Error inserting contact: " + error!.description);
@@ -397,17 +401,22 @@ class AzureDatabase {
     }
     
     /*
-    * Given the full name of a contact associated with an event, this function inserts an event contact into the database.
-    */
+     * Given the full name of a contact associated with an event, this function inserts an event contact into the database.
+     */
     func insertEventContact(fullName: String) {
-//        var contact_id = ""
+        //        var contact_id = ""
         self.getContactID(fullName) { (contactID, success) in
             if (success) {
                 print("found contact ID for", fullName)
-//                contact_id = contactID
+                //                contact_id = contactID
                 self.contactID = contactID
                 let eventID = self.curEventID!
-                let eventContactObj = ["event_id": eventID, "contact_id": self.contactID!]
+                var correctContactId = self.contactID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                correctContactId = correctContactId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                var correctEventId = self.curEventID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                correctEventId = correctEventId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                let eventContactObj = ["event_id": correctEventId, "contact_id": correctContactId]
                 self.eventContactsTable.insert(eventContactObj) {
                     (insertedItem, error) in
                     if error != nil {
@@ -424,11 +433,16 @@ class AzureDatabase {
                 // insert it as an event contact
                 self.insertContact(fullName) { (newContactID, success) in
                     if (success) {
-//                        contact_id = newContactID!
+                        //                        contact_id = newContactID!
                         self.contactID = newContactID!
                         let eventID = self.curEventID!
-
-                        let eventContactObj = ["event_id": eventID, "contact_id": self.contactID!]
+                        
+                        var correctContactId = self.contactID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        correctContactId = correctContactId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        var correctEventId = self.curEventID!.stringByReplacingOccurrencesOfString ("Optional(", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        correctEventId = correctEventId.stringByReplacingOccurrencesOfString(")", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        
+                        let eventContactObj = ["event_id": correctEventId, "contact_id": correctContactId]
                         self.eventContactsTable.insert(eventContactObj) {
                             (insertedItem, error) in
                             if error != nil {
@@ -444,13 +458,13 @@ class AzureDatabase {
                 }
             }
         }
-       
+        
     }
     
     /**
-    * Update event contact
-    *
-//    */
+     * Update event contact
+     *
+     //    */
     func updateEventContact(fullName: String?) {
         if (fullName == nil) { return } // cannot update a nonexisting contact
         self.getContactID(fullName!) { (contactID, success) in
@@ -487,7 +501,7 @@ class AzureDatabase {
                 }
             }
         }
-
+        
         
     }
     
@@ -515,20 +529,20 @@ class AzureDatabase {
             completionHandler(contactID: "", success: false)
         }
     }
-
+    
     /**
-    * Given the event details, this function stores the event in Azure. If no event name (user inputted destination in the search
-    * bar, then the eventName is set as "unknown".
-    * If there is a contact associated with the event, then the event contact table is also updated.
-    */
+     * Given the event details, this function stores the event in Azure. If no event name (user inputted destination in the search
+     * bar, then the eventName is set as "unknown".
+     * If there is a contact associated with the event, then the event contact table is also updated.
+     */
     func insertEvent(eventName: String?, latitude: NSNumber, longitude: NSNumber, dateTime: NSDate, contactName: String?) {
-            var event = "unknown"
-            if eventName != nil {
-                event = eventName!
-            }
+        var event = "unknown"
+        if eventName != nil {
+            event = eventName!
+        }
         let eventObj = ["user_id": self.userID!, "longitude": longitude, "latitude": latitude, "datetime": dateTime, "event_name":event]
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-
+            
             self.eventTable.insert(eventObj) {
                 (insertedItem, error) in
                 if error != nil {
@@ -549,10 +563,10 @@ class AzureDatabase {
     }
     
     /**
-    * The communication history table has the following columns: user_id, event_id, contact_id, and method.
-    * The current event ID is stored as a variable, and is updated each time the user has a new event (whether it is pulled from
-    * the calendar or a destination set by the user).
-    */
+     * The communication history table has the following columns: user_id, event_id, contact_id, and method.
+     * The current event ID is stored as a variable, and is updated each time the user has a new event (whether it is pulled from
+     * the calendar or a destination set by the user).
+     */
     func insertCommunication(method: String) {
         // TODO: should we check if self.userID / self.curEventID / self.contactID exist?
         // the way we use the code, we will have initialized all variables
@@ -605,10 +619,10 @@ class AzureDatabase {
     }
     
     /**
-    * This method inserts a new user into the Azure database table, storing his/her device identifier.
-    *
-    * Returns a status and a success boolean variable; success is true if the user was inserted successfully, false if not.
-    **/
+     * This method inserts a new user into the Azure database table, storing his/her device identifier.
+     *
+     * Returns a status and a success boolean variable; success is true if the user was inserted successfully, false if not.
+     **/
     func createUser(deviceID: String, completionHandler: (status: String, success: Bool) -> Void) {
         let user = ["device_id": deviceID]
         userTable.insert(user) {
@@ -625,8 +639,8 @@ class AzureDatabase {
     }
     
     /*
-    * Creates new user with email & name, and initializes user ID
-    */
+     * Creates new user with email & name, and initializes user ID
+     */
     func createUser(email: String, fullname: String, completionHandler: (status: String, success: Bool) -> Void) {
         let user = ["name": fullname, "email": email]
         userTable.insert(user) {
