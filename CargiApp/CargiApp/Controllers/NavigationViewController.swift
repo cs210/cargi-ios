@@ -1191,6 +1191,34 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         }
     }
     
+    // MARK: Music Methods
+    
+    func playMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.prepareToPlay()
+        player.play()
+        print(player.isPreparedToPlay)
+        print(player.indexOfNowPlayingItem)
+        print(player.nowPlayingItem?.artist)
+        print(player.nowPlayingItem?.title)
+    }
+    
+    func pauseMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.pause()
+    }
+    
+    func fastforwardMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.skipToNextItem()
+        print(player.nowPlayingItem?.title)
+    }
+    
+    func rewindMusic() {
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.skipToPreviousItem()
+    }
+    
     // MARK: IBAction Methods
     
     /// Refresh Button Clicked
@@ -1462,16 +1490,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     // Music app options: Spotify (default) and Apple Music
     @IBAction func musicButtonClicked(sender: UIButton?) {
         db.insertAction("music")
-        print("music button activated")
-        let player = MPMusicPlayerController.systemMusicPlayer()
-        player.prepareToPlay()
-        player.play()
-        print(player.isPreparedToPlay)
-        print(player.indexOfNowPlayingItem)
         
-        if false {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        
         if let musicApp = userDefaults.stringForKey(Constants.SettingsMusic) {
             var appURL = String()
             switch musicApp {
@@ -1497,7 +1517,6 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             UIApplication.sharedApplication().openURL(NSURL(string: appleMusicURL)!)
         } else {
             showAlertViewController(title: "Music Error", message: "Failed to open music app")
-        }
         }
     }
     
@@ -1543,27 +1562,33 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func homeButtonClicked(sender: UIButton) {
-        print("playing")
-        let player = MPMusicPlayerController.systemMusicPlayer()
-        player.skipToNextItem()
-        
-        if false {
         var home = Location()
         home.name = "Home"
         home.coordinates = nil
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let homeAddress = userDefaults.stringForKey("home_address") {
             home.address = homeAddress
-        } else {
-            home.address = "710 Bowdoin St. Stanford, CA"
+            if !homeAddress.isEmpty {
+                // If home address exists, then we set route to navigate home.
+                self.searchButton.setTitle(home.name, forState: .Normal)
+                gasMarker = nil
+                
+                self.dest = home
+                self.showRoute(showDestMarker: true)
+                return
+            }
+        }
+        // Otherwise, show an alert telling user to set home address in the settings.
+        let alert = UIAlertController(title: "Set Home Preferences", message: "Please set your home address in the settings to navigate home.", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
+        let settingsAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in
+            self.performSegueWithIdentifier("showSettings", sender: nil)
         }
         
-        self.searchButton.setTitle(home.name, forState: .Normal)
-        gasMarker = nil
-        
-        self.dest = home
-        self.showRoute(showDestMarker: true)
-        }
+        alert.addAction(settingsAction)
+        alert.addAction(cancelAction)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     
@@ -1663,14 +1688,14 @@ extension CollectionType {
 extension UIViewController {
     func showAlertViewController(title title: String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: nil)
+        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alert.addAction(alertAction)
         presentViewController(alert, animated: true, completion: nil)
     }
     
     func showAlertViewControllerWithHandler(title title: String?, message: String?, handler: ((action: UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default, handler: handler)
+        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: handler)
         alert.addAction(alertAction)
         presentViewController(alert, animated: true, completion: nil)
     }
