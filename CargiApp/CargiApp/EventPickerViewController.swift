@@ -136,7 +136,6 @@ class EventPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "eventPicked" {
-            print("HI")
             if let destinationController = segue.destinationViewController as? NavigationViewController {
                 dispatch_async(dispatch_get_main_queue()) {
                     destinationController.resetView()
