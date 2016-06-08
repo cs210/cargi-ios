@@ -321,14 +321,29 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         guard let ev = event else { return nil }
         let contacts = contactDirectory.getAllPhoneNumbers()
 //        let separators = NSCharacterSet(charactersInString: "\'@\\|,;/<> ")
+//        let eventTitleArr2 = eventTitle.componentsSeparatedByCharactersInSet(separators);
+
         
         var possibleContactArr: [String] = []
         let eventTitle = ev.title.lowercaseString
-//        let eventTitleArr = eventTitle.componentsSeparatedByString(" ")
         let eventTitleArr = eventTitle.componentsSeparatedByCharactersInSet(NSCharacterSet.alphanumericCharacterSet().invertedSet)
 
-//        let eventTitleArr2 = eventTitle.componentsSeparatedByCharactersInSet(separators);
         print("event title arr: ", eventTitleArr);
+        
+        
+        //find event attendees
+//        if let eventAttendees = ev.attendees {
+//            var attendeeNames: [String] = []
+//            for participant in eventAttendees {
+//                var name = participant.name
+//                name = name?.lowercaseString
+//                attendeeNames.append(name!)
+//            }
+//            print("attendee details: ", eventAttendees)
+//            print("attendee names: ", attendeeNames)
+//
+//        }
+        
         
         
         for contact in contacts.keys {
@@ -415,7 +430,16 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
 /*
     private func updateContact(contact: String?) {
-        self.contact = contact
+        var contactName = contact
+        if contact?.characters.count >= 13 {
+            var components = contact?.componentsSeparatedByString(" ");
+            let firstName = components![0]
+            let lastName = components![1]
+            let lastInit = String(lastName[lastName.startIndex.advancedBy(0)])
+            contactName = firstName + " " + lastInit.uppercaseString + "."
+        }
+        
+        self.contact = contactName //contact
         self.contactNumbers = contactDirectory.getPhoneNumber(contact)
     }
  */
