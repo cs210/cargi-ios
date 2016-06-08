@@ -13,6 +13,7 @@ struct Constants {
     static let SettingsMusic = "Connected Music"
     static let SettingsText = "Text Options"
     static let SettingsHome = "Home"
+    static let SettingsLogout = "Account"
     
     static let MapsCargi = "Cargi"
     static let MapsGoogle = "Google Maps"

@@ -14,7 +14,8 @@ class SettingsTableViewController: UITableViewController {
         case    Maps = 0,
                 Music,
                 Text,
-                Home
+                Home,
+                Logout
     }
     
     // MARK: Properties
@@ -49,7 +50,8 @@ class SettingsTableViewController: UITableViewController {
         sectionTitles += [Constants.SettingsMap,
                           Constants.SettingsMusic,
                           Constants.SettingsText,
-                          Constants.SettingsHome]
+                          Constants.SettingsHome,
+                          Constants.SettingsLogout]
         
         options += [[String](), [String](), [String]()]
         
@@ -99,6 +101,8 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == TableSection.Home.rawValue {
+            return 1
+        } else if section == TableSection.Logout.rawValue {
             return 2
         }
         
@@ -121,16 +125,18 @@ class SettingsTableViewController: UITableViewController {
                 cell.selectionStyle = .None
                 homeCell = cell
                 return cell
-            } else if indexPath.row == 1 {
-                // Second to last row
-                print("Done")
-                let cellIdentifier = "DoneTableViewCell"
+            }
+        } else if indexPath.section == TableSection.Logout.rawValue {
+            if indexPath.row == 0 {
+                // First Row
+                let cellIdentifier = "LogOutTableViewCell"
                 let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
                 cell.selectionStyle = .None
                 return cell
             } else {
                 // Last Row
-                let cellIdentifier = "LogOutTableViewCell"
+                print("Done")
+                let cellIdentifier = "DoneTableViewCell"
                 let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
                 cell.selectionStyle = .None
                 return cell
@@ -147,12 +153,12 @@ class SettingsTableViewController: UITableViewController {
         
         if let chosenOption = userDefaults.stringForKey(key) {
             if option == chosenOption {
-                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.Top)
+                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .Top)
                 return cell
             }
         } else {
             if option == options[indexPath.section].first! {
-                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.Top)
+                tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .Top)
                 return cell
             }
         }
@@ -226,6 +232,24 @@ class SettingsTableViewController: UITableViewController {
                 userDefaults.setValue(options[selectedIndexPath.section][selectedIndexPath.row], forKey: sectionTitles[selectedIndexPath.section])
             }
         }
+    }
+    
+    @IBAction func logoutButtonClicked(sender: UIButton) {
+        let alert = UIAlertController(title: "Logout", message: "Would you like to log out?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default) { (action) in
+            let prefs = NSUserDefaults.standardUserDefaults()
+            prefs.setBool(false, forKey: "loggedIn") // set as logged in
+            prefs.setValue("", forKey: "userEmail")
+            prefs.setValue("", forKey: "userID")
+            
+            self.performSegueWithIdentifier("logout", sender: nil)
+        }
+        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     /*

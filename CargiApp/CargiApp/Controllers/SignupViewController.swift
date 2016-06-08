@@ -33,17 +33,17 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         if textField == emailTextField {
             // email text field clicked "done"
             textField.resignFirstResponder()
-            print("Go to the next page")
+            signup()
             return true
         } else if textField == nameTextField {
             // name text field clicked "done"
-            textField.resignFirstResponder()
-            return true
+            emailTextField.becomeFirstResponder()
+            return false
         }
         return true
     }
 
-    @IBAction func signupButtonClicked(sender: UIButton) {
+    private func signup() {
         let name = nameTextField.text
         let email = emailTextField.text
         signupButton.enabled = false
@@ -65,11 +65,11 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                                 let prefs = NSUserDefaults.standardUserDefaults()
                                 prefs.setBool(true, forKey: "loggedIn")
                                 prefs.setValue(emailString, forKey: "userEmail")
-
+                                
                                 prefs.setValue(self.db.userID!, forKey: "userID")
                                 self.signupButton.enabled = true
                                 self.spinnerView.stopAnimation()
-
+                                
                                 self.showAlertViewControllerWithHandler(title: "Success", message: "A new account has been created.") { (action: UIAlertAction) in
                                     self.performSegueWithIdentifier("signup", sender: nil)
                                 }
@@ -99,6 +99,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 showAlertViewController(title: "Error", message: "Please input a valid email or name.")
             }
         }
+    }
+    
+    @IBAction func signupButtonClicked(sender: UIButton) {
+        signup()
     }
     
     @IBAction func returnToLoginButtonClicked(sender: UIButton) {

@@ -104,8 +104,14 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             contactLabel.text = contact
             if contact == nil {
                 contactView.hidden = true
+                dashboardView.layer.shadowOffset = CGSizeMake(0, -1)
+                dashboardView.layer.shadowColor = UIColor.blackColor().CGColor
+                dashboardView.layer.shadowRadius = 1.5
+                dashboardView.layer.shadowOpacity = 0.27
+                
             } else {
                 contactView.hidden = false
+                dashboardView.layer.shadowRadius = 0.0
             }
         }
     }

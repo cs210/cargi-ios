@@ -667,7 +667,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1b-s8-7gC">
                                                     <rect key="frame" x="0.0" y="0.0" width="35" height="33"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                                    <state key="normal" title="Save"/>
+                                                    <state key="normal" title="Save">
+                                                        <color key="titleColor" red="0.42745098040000001" green="0.70588235290000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="saveButtonClicked:" destination="ed9-Ds-r3K" eventType="touchUpInside" id="SI8-r7-jFA"/>
                                                         <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="g0V-nh-otn"/>
@@ -676,7 +678,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUK-aL-2JT">
                                                     <rect key="frame" x="85" y="0.0" width="51" height="33"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                                    <state key="normal" title="Cancel"/>
+                                                    <state key="normal" title="Cancel">
+                                                        <color key="titleColor" red="0.42745098040000001" green="0.70588235290000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <connections>
                                                         <segue destination="0Ee-LU-472" kind="unwind" unwindAction="cancelSaveSettings:" id="ONz-YV-DEp"/>
                                                     </connections>
@@ -698,18 +702,26 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wG5-Ed-b25">
-                                            <rect key="frame" x="274" y="1.5" width="52" height="33"/>
+                                            <rect key="frame" x="28" y="1.5" width="52" height="33"/>
                                             <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                            <state key="normal" title="Logout"/>
+                                            <state key="normal" title="Logout">
+                                                <color key="titleColor" red="0.42745098040000001" green="0.70588235290000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
                                             <connections>
-                                                <action selector="logout:" destination="iJb-ft-aih" eventType="touchUpInside" id="f6z-fi-4QF"/>
+                                                <action selector="logoutButtonClicked:" destination="ed9-Ds-r3K" eventType="touchUpInside" id="Kk8-hh-Svc"/>
                                             </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="wG5-Ed-b25" firstAttribute="centerY" secondItem="jpw-FR-IGf" secondAttribute="centerY" id="CMd-Eh-Dtd"/>
                                         <constraint firstItem="wG5-Ed-b25" firstAttribute="centerX" secondItem="jpw-FR-IGf" secondAttribute="centerX" id="jMj-kK-UQB"/>
+                                        <constraint firstItem="wG5-Ed-b25" firstAttribute="leading" secondItem="jpw-FR-IGf" secondAttribute="leadingMargin" constant="20" id="vZW-yD-n4n"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="jMj-kK-UQB"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -721,11 +733,14 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Settings" id="mXD-1J-LUc"/>
+                    <connections>
+                        <segue destination="2LG-iM-AMA" kind="show" identifier="logout" id="7tI-Ry-VWH"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qvT-Wb-N7P" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="0Ee-LU-472" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1802" y="646"/>
+            <point key="canvasLocation" x="1018" y="-378"/>
         </scene>
         <!--Event Picker View Controller-->
         <scene sceneID="6rK-V0-g4d">
@@ -878,7 +893,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZCd-HY-xrw">
                                 <rect key="frame" x="58" y="211" width="355" height="21"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="go"/>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="pqY-by-aJy">
                                 <rect key="frame" x="58" y="533" width="231" height="30"/>
@@ -999,7 +1014,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="kO3-uu-gFq">
                                 <rect key="frame" x="58" y="211" width="337.5" height="21"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hJN-n0-Eoy">
                                 <rect key="frame" x="58" y="271" width="337.5" height="21"/>
@@ -1149,8 +1164,8 @@
         <image name="textbutton.png" width="110" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MyH-Ys-aGa"/>
-        <segue reference="3lO-8O-DOT"/>
+        <segue reference="ew2-US-zHJ"/>
         <segue reference="J0y-QS-aGI"/>
+        <segue reference="7tI-Ry-VWH"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -39,15 +39,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == emailTextField {
             textField.resignFirstResponder()
-            print("Done typing")
-            print("Should log in now")
+            login()
             // should check whether the email exists or not
-            return false
+            return true
         }
         return true
     }
     
-    @IBAction func loginButtonClicked(sender: UIButton) {
+    private func login() {
         loginButton.enabled = false
         let email = emailTextField.text
         if (email == nil) {
@@ -83,16 +82,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                         prefs.setBool(true, forKey: "loggedIn") // set as logged in
                                         prefs.setValue(emailString, forKey: "userEmail")
                                         prefs.setValue(self.db.userID!, forKey: "userID")
-
+                                        
                                         self.loginButton.enabled = true
                                         self.spinnerView.stopAnimation()
                                         self.performSegueWithIdentifier("login", sender: nil)
-
+                                        
                                     } else {
                                         self.loginButton.enabled = true
                                         self.spinnerView.stopAnimation()
                                         self.showAlertViewController(title: "Server Error", message: "Could not connect with server. Please try again.")
-//                                        self.showAlertViewController(title: "Server Error", message: status)
+                                        //                                        self.showAlertViewController(title: "Server Error", message: status)
                                     }
                                 }
                                 
@@ -107,6 +106,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
+    }
+    
+    @IBAction func loginButtonClicked(sender: UIButton) {
+        login()
     }
 
     @IBAction func returnToLoginViewController(segue: UIStoryboardSegue) {

@@ -24,7 +24,11 @@ class SettingsTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        if textField.resignFirstResponder() {
+            print("success!")
+        } else {
+            print("fail")
+        }
         self.endEditing(true)
         return true
     }
