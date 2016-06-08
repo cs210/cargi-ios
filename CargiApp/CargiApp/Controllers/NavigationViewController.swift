@@ -249,11 +249,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         
         for contact in contacts.keys {
+            
             let lowerContact = contact.lowercaseString
             var contactsArr = lowerContact.componentsSeparatedByString(" ")
             let firstName = contactsArr[0]
             let lastName: String? = contactsArr.count > 1 ? contactsArr[1] : nil
-            
             
             if eventTitle.rangeOfString(lowerContact) != nil { // search for full name - if it exists, don't add any more contacts
                 if contact.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) != "" {

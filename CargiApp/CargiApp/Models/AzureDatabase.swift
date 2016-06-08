@@ -559,7 +559,6 @@ class AzureDatabase {
         let userID: String = self.userID ?? String()
         let eventID: String = self.curEventID ?? String()
         let contactID: String = self.contactID ?? String()
-        
         let commObj = ["user_id": userID, "event_id": eventID, "contact_id": contactID, "method": method]
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.communicationHistoryTable.insert(commObj) {

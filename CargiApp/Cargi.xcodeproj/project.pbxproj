@@ -62,7 +62,6 @@
 		74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F65EFB1CBBA01F00DE068C /* search@2x.png */; };
 		861A9E251CE83C4B00534855 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861A9E231CE83C4B00534855 /* AVFoundation.framework */; };
 		861A9E271CE83CAA00534855 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861A9E261CE83CAA00534855 /* AudioToolbox.framework */; };
-		861A9E311CE848C000534855 /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 861A9E301CE848C000534855 /* AcousticModelEnglish.bundle */; };
 		B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		B3C6C1AA1CFD73390041060D /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C6C1A51CFD73390041060D /* MicrosoftAzureMobile.framework */; };
@@ -71,8 +70,8 @@
 		B3C6C1AD1CFD73390041060D /* Slt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C6C1A81CFD73390041060D /* Slt.framework */; };
 		B3C6C1AE1CFD73390041060D /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C6C1A91CFD73390041060D /* SpeechKit.framework */; };
 		B3C6C1B01CFD73580041060D /* RuleORamaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C6C1AF1CFD73580041060D /* RuleORamaDemo.framework */; };
-		B3C6C1B41CFD74790041060D /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B3C6C1B31CFD74790041060D /* AcousticModelEnglish.bundle */; };
 		B3C6C1B61CFD82610041060D /* RejectoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C6C1B51CFD82610041060D /* RejectoDemo.framework */; };
+		B3C6C1B81CFE61D20041060D /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B3C6C1B71CFE61D10041060D /* AcousticModelEnglish.bundle */; };
 		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
 		BE9B7C191C8D6A5300BB240C /* LocalNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */; };
@@ -137,7 +136,6 @@
 		861A9E221CE83C4B00534855 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		861A9E231CE83C4B00534855 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		861A9E261CE83CAA00534855 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		861A9E301CE848C000534855 /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastTutorialViewController.swift; sourceTree = "<group>"; };
@@ -149,8 +147,8 @@
 		B3C6C1A81CFD73390041060D /* Slt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Slt.framework; sourceTree = "<group>"; };
 		B3C6C1A91CFD73390041060D /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
 		B3C6C1AF1CFD73580041060D /* RuleORamaDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RuleORamaDemo.framework; sourceTree = "<group>"; };
-		B3C6C1B31CFD74790041060D /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
 		B3C6C1B51CFD82610041060D /* RejectoDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RejectoDemo.framework; sourceTree = "<group>"; };
+		B3C6C1B71CFE61D10041060D /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
 		BE201F251CC4D2BA00A691B5 /* GasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasFinder.swift; sourceTree = "<group>"; };
 		BE6504EB1C88166C00C26AAA /* EventDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDirectory.swift; sourceTree = "<group>"; };
 		BE9B7C181C8D6A5300BB240C /* LocalNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalNotifications.swift; sourceTree = "<group>"; };
@@ -180,15 +178,14 @@
 		55F4FEC86663CC9A928EF540 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B3C6C1B71CFE61D10041060D /* AcousticModelEnglish.bundle */,
 				B3C6C1B51CFD82610041060D /* RejectoDemo.framework */,
-				B3C6C1B31CFD74790041060D /* AcousticModelEnglish.bundle */,
 				B3C6C1AF1CFD73580041060D /* RuleORamaDemo.framework */,
 				B3C6C1A51CFD73390041060D /* MicrosoftAzureMobile.framework */,
 				B3C6C1A61CFD73390041060D /* OpenEars.framework */,
 				B3C6C1A71CFD73390041060D /* RapidEarsDemo.framework */,
 				B3C6C1A81CFD73390041060D /* Slt.framework */,
 				B3C6C1A91CFD73390041060D /* SpeechKit.framework */,
-				861A9E301CE848C000534855 /* AcousticModelEnglish.bundle */,
 				861A9E261CE83CAA00534855 /* AudioToolbox.framework */,
 				861A9E221CE83C4B00534855 /* AudioUnit.framework */,
 				861A9E231CE83C4B00534855 /* AVFoundation.framework */,
@@ -414,7 +411,7 @@
 				63DE4E051CC5EFB2002280BA /* radiobutton-unselected@2x.png in Resources */,
 				74A3D8F41C91523D0053D816 /* cargi-launch@2x.png in Resources */,
 				74962D721CD34CF50078883B /* gasbutton@2x.png in Resources */,
-				B3C6C1B41CFD74790041060D /* AcousticModelEnglish.bundle in Resources */,
+				B3C6C1B81CFE61D20041060D /* AcousticModelEnglish.bundle in Resources */,
 				636E32E51CCC0039006D2936 /* settingsbutton@2x.png in Resources */,
 				74A3D8F11C9127020053D816 /* music-button@2x.png in Resources */,
 				63C658901CE2304200F9C6C5 /* gascheap@2x.png in Resources */,
@@ -427,7 +424,6 @@
 				636E32E61CCC0039006D2936 /* musicbutton@2x.png in Resources */,
 				74B7830F1C9F07DB003E0391 /* destination_icon@2x.png in Resources */,
 				74F65EFC1CBBA01F00DE068C /* search@2x.png in Resources */,
-				861A9E311CE848C000534855 /* AcousticModelEnglish.bundle in Resources */,
 				74A3D8EC1C9127020053D816 /* calendar-icon@2x.png in Resources */,
 				63F583B31CE4F121001D3C25 /* personicon@2x.png in Resources */,
 				63C6587D1CD8794A00F9C6C5 /* screen4@2x.png in Resources */,
