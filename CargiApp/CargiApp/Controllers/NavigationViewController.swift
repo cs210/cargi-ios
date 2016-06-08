@@ -13,6 +13,7 @@ import MessageUI
 import EventKit
 import QuartzCore
 import SpeechKit
+import MediaPlayer
 
 class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocationManagerDelegate, CBCentralManagerDelegate, MFMessageComposeViewControllerDelegate, GMSMapViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -203,7 +204,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         mapView.settings.compassButton = true
         
-        
+        /*
         let recognizer: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(NavigationViewController.swipeRight(_:)))
         recognizer.direction = .Right
         self.dashboardView.addGestureRecognizer(recognizer)
@@ -212,11 +213,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         recognizer2.direction = .Left
         
         self.dashboardView.addGestureRecognizer(recognizer2)
+         */
 
         self.resetView()
         self.syncCalendar()
     }
     
+/*
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         var dashboardViewFrame = self.dashboardView.frame
@@ -290,6 +293,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 self.currentDashOption -= 1
         })
     }
+ */
     
     
     /// When the app starts, update the maps view so that it shows the user's current location in the center.
@@ -1459,7 +1463,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     @IBAction func musicButtonClicked(sender: UIButton?) {
         db.insertAction("music")
         print("music button activated")
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.prepareToPlay()
+        player.play()
+        print(player.isPreparedToPlay)
+        print(player.indexOfNowPlayingItem)
         
+        if false {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         
         if let musicApp = userDefaults.stringForKey(Constants.SettingsMusic) {
@@ -1469,7 +1479,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 appURL = "spotify://"
             case Constants.MusicApple:
                 appURL = "music://"
-            case Constants.MusicSpotify:
+            case Constants.MusicSoundCloud:
                 appURL = "soundcloud://"
             case Constants.MusicPandora:
                 appURL = "pandora://"
@@ -1487,6 +1497,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
             UIApplication.sharedApplication().openURL(NSURL(string: appleMusicURL)!)
         } else {
             showAlertViewController(title: "Music Error", message: "Failed to open music app")
+        }
         }
     }
     
@@ -1532,6 +1543,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     }
     
     @IBAction func homeButtonClicked(sender: UIButton) {
+        print("playing")
+        let player = MPMusicPlayerController.systemMusicPlayer()
+        player.skipToNextItem()
+        
+        if false {
         var home = Location()
         home.name = "Home"
         home.coordinates = nil
@@ -1547,6 +1563,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         
         self.dest = home
         self.showRoute(showDestMarker: true)
+        }
     }
     
     

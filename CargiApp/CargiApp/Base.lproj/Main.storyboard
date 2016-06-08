@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2LG-iM-AMA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2LG-iM-AMA">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -406,68 +406,85 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rnV-DU-HU4">
                                 <rect key="frame" x="0.0" y="530" width="600" height="70"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjn-zk-nly">
-                                        <rect key="frame" x="20" y="0.0" width="70" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FHX-nw-hrd">
+                                        <rect key="frame" x="20" y="0.0" width="560" height="70"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjn-zk-nly">
+                                                <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="1:1" id="HAW-bn-CqQ"/>
+                                                </constraints>
+                                                <state key="normal" image="gasbutton.png"/>
+                                                <connections>
+                                                    <action selector="gasButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GuJ-h4-RLq"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6G2-NS-cp7">
+                                                <rect key="frame" x="164" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="height" multiplier="1:1" id="g3k-6M-HfH"/>
+                                                </constraints>
+                                                <state key="normal" image="musicbutton.png"/>
+                                                <connections>
+                                                    <action selector="musicButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Byi-3B-2dI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjM-hz-hgJ">
+                                                <rect key="frame" x="327" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="zjM-hz-hgJ" secondAttribute="height" multiplier="1:1" id="Fxm-h4-taT"/>
+                                                </constraints>
+                                                <state key="normal" image="homebutton.png"/>
+                                                <connections>
+                                                    <action selector="homeButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oWX-Uj-adC"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8z5-tD-rqd">
+                                                <rect key="frame" x="490" y="0.0" width="70" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="8z5-tD-rqd" secondAttribute="height" multiplier="1:1" id="RzY-gL-ybP"/>
+                                                </constraints>
+                                                <state key="normal" image="settingsbutton.png"/>
+                                                <connections>
+                                                    <action selector="settingsButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B8L-0D-jR4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="1:1" id="HAW-bn-CqQ"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="1FN-Zw-gbI"/>
+                                            <constraint firstItem="zjM-hz-hgJ" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="39f-5H-JL5"/>
+                                            <constraint firstItem="6G2-NS-cp7" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="66T-jf-JAD"/>
+                                            <constraint firstItem="8z5-tD-rqd" firstAttribute="height" secondItem="Fjn-zk-nly" secondAttribute="height" id="D38-5y-Jib"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="width" secondItem="zjM-hz-hgJ" secondAttribute="height" multiplier="1:1" id="RKu-Qf-2b6"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="8z5-tD-rqd" secondAttribute="height" id="i2g-K5-tK0"/>
+                                            <constraint firstItem="zjM-hz-hgJ" firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="height" multiplier="9:14" id="koj-in-sz7"/>
+                                            <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="zjM-hz-hgJ" secondAttribute="height" id="psg-W8-0JE"/>
                                         </constraints>
-                                        <state key="normal" image="gasbutton.png"/>
-                                        <connections>
-                                            <action selector="gasButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GuJ-h4-RLq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6G2-NS-cp7">
-                                        <rect key="frame" x="265" y="0.0" width="70" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="height" multiplier="1:1" id="g3k-6M-HfH"/>
-                                        </constraints>
-                                        <state key="normal" image="musicbutton.png"/>
-                                        <connections>
-                                            <action selector="musicButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Byi-3B-2dI"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8z5-tD-rqd">
-                                        <rect key="frame" x="510" y="0.0" width="70" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="8z5-tD-rqd" secondAttribute="height" multiplier="1:1" id="RzY-gL-ybP"/>
-                                        </constraints>
-                                        <state key="normal" image="settingsbutton.png"/>
-                                        <connections>
-                                            <action selector="settingsButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B8L-0D-jR4"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjM-hz-hgJ">
-                                        <rect key="frame" x="100" y="20" width="41" height="30"/>
-                                        <state key="normal" title="Home"/>
-                                        <connections>
-                                            <action selector="homeButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oWX-Uj-adC"/>
-                                        </connections>
-                                    </button>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="1FN-Zw-gbI"/>
+                                                <exclude reference="RKu-Qf-2b6"/>
+                                                <exclude reference="i2g-K5-tK0"/>
+                                                <exclude reference="psg-W8-0JE"/>
+                                                <exclude reference="koj-in-sz7"/>
+                                            </mask>
+                                        </variation>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.42352941176470588" green="0.47843137254901957" blue="0.53725490196078429" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="8z5-tD-rqd" secondAttribute="trailing" constant="20" id="2AB-Vn-fVN"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="3k5-V1-qRU"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="5hu-B1-V45"/>
-                                    <constraint firstItem="zjM-hz-hgJ" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="100" id="9Kw-ti-Obp"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="width" secondItem="6G2-NS-cp7" secondAttribute="width" id="EM2-Lg-kGj"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="rnV-DU-HU4" secondAttribute="height" id="G7u-RZ-oMR"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="width" secondItem="Fjn-zk-nly" secondAttribute="width" id="JXH-di-N8H"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="20" id="Kh0-vI-gJO"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="Q9T-9S-J3K"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="height" secondItem="6G2-NS-cp7" secondAttribute="height" id="Qln-je-iBq"/>
-                                    <constraint firstItem="zjM-hz-hgJ" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="T4f-jU-PDT"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="centerX" secondItem="rnV-DU-HU4" secondAttribute="centerX" id="TKP-hE-rRZ"/>
                                     <constraint firstAttribute="height" constant="102" id="Uu5-H3-8Hk"/>
                                     <constraint firstAttribute="height" constant="53" id="chP-tV-Jeg"/>
-                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="clP-Ud-Gig"/>
-                                    <constraint firstItem="6G2-NS-cp7" firstAttribute="centerX" secondItem="rnV-DU-HU4" secondAttribute="centerX" id="cop-mV-6XV"/>
-                                    <constraint firstItem="8z5-tD-rqd" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="leN-3o-MLN"/>
+                                    <constraint firstItem="Fjn-zk-nly" firstAttribute="height" secondItem="rnV-DU-HU4" secondAttribute="height" id="f9C-wi-bcW"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="centerY" secondItem="rnV-DU-HU4" secondAttribute="centerY" id="uQF-9k-ZR3"/>
+                                    <constraint firstItem="FHX-nw-hrd" firstAttribute="leading" secondItem="rnV-DU-HU4" secondAttribute="leading" constant="20" id="v9O-0r-QzE"/>
+                                    <constraint firstAttribute="trailing" secondItem="FHX-nw-hrd" secondAttribute="trailing" constant="20" id="xwa-wT-QBd"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Uu5-H3-8Hk"/>
                                         <exclude reference="chP-tV-Jeg"/>
-                                        <exclude reference="JXH-di-N8H"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -858,22 +875,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZCd-HY-xrw">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZCd-HY-xrw">
                                 <rect key="frame" x="58" y="211" width="355" height="21"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="pqY-by-aJy">
-                                <rect key="frame" x="58" y="533" width="242" height="30"/>
+                                <rect key="frame" x="58" y="533" width="231" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ena-oI-Wey">
-                                        <rect key="frame" x="0.0" y="0.0" width="182" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="175" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <color key="textColor" red="0.69803921568627447" green="0.69803921568627447" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ga7-4Y-x0I">
-                                        <rect key="frame" x="186" y="0.0" width="56" height="30"/>
+                                        <rect key="frame" x="179" y="0.0" width="52" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                         <state key="normal" title="Sign up.">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -884,7 +901,7 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLP-rX-P2s">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLP-rX-P2s">
                                 <rect key="frame" x="58" y="265" width="41" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Login">
@@ -894,7 +911,7 @@
                                     <action selector="loginButtonClicked:" destination="2LG-iM-AMA" eventType="touchUpInside" id="Xhh-dm-Gvi"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Welcome! Sign in to start using Cargi." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tm9-Rf-Yk3">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome! Sign in to start using Cargi." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tm9-Rf-Yk3">
                                 <rect key="frame" x="58" y="70" width="355" height="58"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="222" id="i3J-op-MlM"/>
@@ -965,7 +982,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Signing up is quick and easy." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1F-sa-nzU">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Signing up is quick and easy." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1F-sa-nzU">
                                 <rect key="frame" x="58" y="84" width="337.5" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="222" id="Ty0-oA-mIZ"/>
@@ -979,17 +996,17 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="kO3-uu-gFq">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="kO3-uu-gFq">
                                 <rect key="frame" x="58" y="211" width="337.5" height="21"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hJN-n0-Eoy">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hJN-n0-Eoy">
                                 <rect key="frame" x="58" y="271" width="337.5" height="21"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="join"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1f-e0-umN">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1f-e0-umN">
                                 <rect key="frame" x="58" y="325" width="58" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Sign Up">
@@ -1000,16 +1017,16 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="MGC-YV-nzY">
-                                <rect key="frame" x="58" y="533" width="247" height="30"/>
+                                <rect key="frame" x="58" y="533" width="237" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Already have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPI-u1-SBH">
-                                        <rect key="frame" x="0.0" y="0.0" width="197" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="190" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <color key="textColor" red="0.69803921570000005" green="0.69803921570000005" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nyy-D6-jff">
-                                        <rect key="frame" x="201" y="0.0" width="46" height="30"/>
+                                        <rect key="frame" x="194" y="0.0" width="43" height="30"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                         <state key="normal" title="Log in.">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1020,7 +1037,7 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FKI-yc-Sn6" customClass="SpinnerView" customModule="Cargi" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FKI-yc-Sn6" customClass="SpinnerView" customModule="Cargi" customModuleProvider="target">
                                 <rect key="frame" x="121" y="331.5" width="20" height="20"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1117,6 +1134,7 @@
         <image name="calendar-icon.png" width="18" height="20"/>
         <image name="callbutton.png" width="108" height="76"/>
         <image name="gasbutton.png" width="35" height="38"/>
+        <image name="homebutton.png" width="45" height="38"/>
         <image name="launchimage.png" width="214" height="90"/>
         <image name="musicbutton.png" width="33" height="37"/>
         <image name="navigate_button.png" width="20" height="20"/>
