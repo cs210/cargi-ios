@@ -68,6 +68,8 @@
 		86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D71CCB19FD006F2400 /* MicrosoftAzureMobile.framework */; };
 		86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FE85D91CCB2CD5006F2400 /* SpeechKit.framework */; };
 		B346C7371CD8D1E800A17FAF /* LastTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */; };
+		B36FD2A91CFD5AB40067FCFC /* RuleORamaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B36FD2A81CFD5AB40067FCFC /* RuleORamaDemo.framework */; };
+		B36FD2AB1CFD5AEB0067FCFC /* RapidEarsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B36FD2AA1CFD5AEB0067FCFC /* RapidEarsDemo.framework */; };
 		B39CE0A51CB20709001EB723 /* AzureDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39CE0A41CB20709001EB723 /* AzureDatabase.swift */; };
 		BE201F261CC4D2BA00A691B5 /* GasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE201F251CC4D2BA00A691B5 /* GasFinder.swift */; };
 		BE6504EC1C88166C00C26AAA /* EventDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6504EB1C88166C00C26AAA /* EventDirectory.swift */; };
@@ -141,6 +143,8 @@
 		88F9FD606E2E2A74FFAEBE36 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CargiApp/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A44D8D9CE1E4323107188D46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B346C7361CD8D1E800A17FAF /* LastTutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastTutorialViewController.swift; sourceTree = "<group>"; };
+		B36FD2A81CFD5AB40067FCFC /* RuleORamaDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RuleORamaDemo.framework; sourceTree = "<group>"; };
+		B36FD2AA1CFD5AEB0067FCFC /* RapidEarsDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RapidEarsDemo.framework; sourceTree = "<group>"; };
 		B39CE0A31CB205E0001EB723 /* CargiApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CargiApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B39CE0A41CB20709001EB723 /* AzureDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureDatabase.swift; sourceTree = "<group>"; };
 		BE201F251CC4D2BA00A691B5 /* GasFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasFinder.swift; sourceTree = "<group>"; };
@@ -157,8 +161,10 @@
 				861A9E271CE83CAA00534855 /* AudioToolbox.framework in Frameworks */,
 				861A9E251CE83C4B00534855 /* AVFoundation.framework in Frameworks */,
 				861A9E211CE83C4100534855 /* Slt.framework in Frameworks */,
+				B36FD2AB1CFD5AEB0067FCFC /* RapidEarsDemo.framework in Frameworks */,
 				86FE85DA1CCB2CD5006F2400 /* SpeechKit.framework in Frameworks */,
 				86FE85D81CCB19FD006F2400 /* MicrosoftAzureMobile.framework in Frameworks */,
+				B36FD2A91CFD5AB40067FCFC /* RuleORamaDemo.framework in Frameworks */,
 				407A10860F4D7B4F679B72CE /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +175,8 @@
 		55F4FEC86663CC9A928EF540 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B36FD2AA1CFD5AEB0067FCFC /* RapidEarsDemo.framework */,
+				B36FD2A81CFD5AB40067FCFC /* RuleORamaDemo.framework */,
 				861A9E301CE848C000534855 /* AcousticModelEnglish.bundle */,
 				861A9E2E1CE848B400534855 /* OpenEars.framework */,
 				861A9E261CE83CAA00534855 /* AudioToolbox.framework */,
@@ -350,7 +358,7 @@
 				TargetAttributes = {
 					74A2E5F21C7FCBC800C468CC = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = 44NW45N853;
+						DevelopmentTeam = 766R9FB7WR;
 					};
 				};
 			};
@@ -604,7 +612,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi2;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";
@@ -629,7 +637,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi;
+				PRODUCT_BUNDLE_IDENTIFIER = co.cargi.AppCargi2;
 				PRODUCT_NAME = Cargi;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CargiApp-Bridging-Header.h";

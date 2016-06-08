@@ -76,7 +76,8 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         "EVENT": -15
     ]
     var grammarArray = ["HEY CARGHI"]
-    var grammarDict = [ThisWillBeSaidOnce: grammarArray]
+//    var grammarDict = [ThisWillBeSaidOnce: grammarArray]
+    var grammarDict = [ThisWillBeSaidOnce : ["HEY CARGHI"]]
     var openEarsEventsObserver: OEEventsObserver!
     var voice: String!
     var skSession1:SKSession?
