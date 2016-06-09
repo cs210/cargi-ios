@@ -155,12 +155,13 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     
     // MARK: Methods
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        manager = CBCentralManager (delegate: self, queue: nil)
 
         // Do any additional setup after loading the view.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateMusicView"), name: UIApplicationWillEnterForegroundNotification, object: nil)
+        
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         contactView.hidden = true
         self.mapView.delegate = self
@@ -217,6 +218,11 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
 
         self.resetView()
         self.syncCalendar()
+    }
+    
+    func updateMusicView() {
+        print("updatemusicview!!!")
+        
     }
     
 /*
@@ -1180,6 +1186,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
     private func openCargiNavigation() {
         if let myLocation = mapView.myLocation {
             navigationEnabled = true
+            
             locationManager.startUpdatingHeading()
             let cameraPosition = GMSCameraPosition.cameraWithTarget(myLocation.coordinate,
                                                                     zoom: 17,
