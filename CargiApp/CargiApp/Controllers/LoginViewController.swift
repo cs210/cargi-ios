@@ -59,10 +59,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 // TODO: some error message or red error text under the login name, if we know it's an invalid email
                 // can also do nothing, unless we want a better UX (let users know they have a typo for instance)
                 loginButton.enabled = true
-                showAlertViewController(title: "Invalid Error", message: "Please input a valid email or name.")
+                showAlertViewController(title: "Invalid Error", message: "Please input a valid email.")
             } else {
                 spinnerView.animate()
                 db.emailExists(emailString) { (status, exists) in
+                    // server is down
+                    if (!exists && status != "Email does not exist") {
+                        self.loginButton.enabled = true
+                        self.spinnerView.stopAnimation()
+                        let alert = UIAlertController(title: "Server Error", message: "Server is currently down. Would you like to continue as an anonymous user?", preferredStyle: UIAlertControllerStyle.Alert)
+                        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
+                        let yesAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+                            self.performSegueWithIdentifier("login", sender: nil)
+                        }
+                        alert.addAction(noAction)
+                        alert.addAction(yesAction)
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                    
                     if (!exists) { // if email doesn't exist, user needs to sign up
                         // TODO: some error message or red error text under the login name
                         // "Looks like you don't have an account yet" ??

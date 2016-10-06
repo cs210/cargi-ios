@@ -39,7 +39,7 @@ class AzureDatabase {
     var locationHistoryTable: MSTable
     var communicationHistoryTable: MSTable
     var actionLogTable: MSTable
-    var userID: String?
+    var userID: String? = "0"
     var contactDirectory = ContactDirectory()
     var contactID: String?
     var eventContactID: String?
