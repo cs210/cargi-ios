@@ -1346,7 +1346,7 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
         navigationEnabled = false
         db.insertAction("gas")
         let numCheapGasStations = 5
-        let numNearbyGasStations = 3
+        let numNearbyGasStations = 5
         
         let visibleRegion = self.mapView.projection.visibleRegion()
         var bounds = GMSCoordinateBounds(coordinate: visibleRegion.farLeft, coordinate: visibleRegion.nearRight)
@@ -1372,78 +1372,87 @@ class NavigationViewController: UIViewController, SKTransactionDelegate, CLLocat
                 self.gasFinder.getNearbyGasStations(origin, count: numNearbyGasStations) { (status: String, success: Bool) in
                     print("Gas Finder: \(status)")
                     if success {
-                        let cheapGasFinder = CheapGasFinder()
-                        cheapGasFinder.getCheapGasByPostalCode(postalCode) { (status, success) in
-                            print("Cheap Gas Finder: \(status)")
-                            if success {
+//                        let cheapGasFinder = CheapGasFinder()
+//                        cheapGasFinder.getCheapGasByPostalCode(postalCode) { (status, success) in
+//                            print("Cheap Gas Finder: \(status)")
+//                            if success {
+                            var i = 0
                                 for station in self.gasFinder.stations {
-                                    print(station)
-                                    let number = station.address?.componentsSeparatedByString(" ").first
-                                    var priceFound = false
+//                                    print(station)
+//                                    let number = station.address?.componentsSeparatedByString(" ").first
+//                                    var priceFound = false
                                     let userData: [String:String] = ["place_id" : station.placeID!,
                                                                      "address"  : station.address!]
-                                    
-                                    for cheapStation in cheapGasFinder.stations {
-                                        if number! == cheapStation.number! {
-                                            // Getting location info from Google, so should include place_id.
-                                            dispatch_async(dispatch_get_main_queue()) {
-                                                self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
-                                            }
-                                            bounds = bounds.includingCoordinate(station.coordinates!)
-                                            priceFound = true
-                                            break
-                                        }
-                                        
-//                                        let locationGeocoder = LocationGeocoder()
-//                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
-//                                            if success {
-//                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
-//                                                marker.appearAnimation = kGMSMarkerAnimationPop
-//                                                marker.title = station.name
-//                                                marker.icon = UIImage(named: "gasmarker")
-//                                                marker.snippet = station.price
-//                                                marker.map = self.mapView
+//
+//                                    for cheapStation in cheapGasFinder.stations {
+//                                        if number! == cheapStation.number! {
+//                                            // Getting location info from Google, so should include place_id.
+//                                            dispatch_async(dispatch_get_main_queue()) {
+//                                                self.addMapMarker(station.coordinates!, title: station.name, snippet: cheapStation.price, userData: userData, cheap: false)
 //                                            }
+//                                            bounds = bounds.includingCoordinate(station.coordinates!)
+//                                            priceFound = true
+//                                            break
 //                                        }
-                                    }
-                                    if !priceFound {
+//                                        
+////                                        let locationGeocoder = LocationGeocoder()
+////                                        locationGeocoder.getCoordinates(station.address!) { (status, success) in
+////                                            if success {
+////                                                let marker = GMSMarker(position: locationGeocoder.coordinate!)
+////                                                marker.appearAnimation = kGMSMarkerAnimationPop
+////                                                marker.title = station.name
+////                                                marker.icon = UIImage(named: "gasmarker")
+////                                                marker.snippet = station.price
+////                                                marker.map = self.mapView
+////                                            }
+////                                        }
+//                                    }
+//                                    if !priceFound {
                                         dispatch_async(dispatch_get_main_queue()) {
                                             self.addMapMarker(station.coordinates!, title: station.name, snippet: station.address, userData: userData, cheap: false)
                                         }
                                         bounds = bounds.includingCoordinate(station.coordinates!)
-                                    }
+//                                    }
+                                    i += 1
                                 }
+                        if i == numNearbyGasStations {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.stopSpinner()
+                                self.updateCamera(bounds, shouldAddEdgeInsets: false)
+                            }
+                        }
+                        
                                 
-                                for i in 0..<numCheapGasStations {
-                                    if let cheapStation = cheapGasFinder.stations[safe: i] {
-                                        let userData: [String:String] = ["address"  : cheapStation.address!]
-                                        let locationGeocoder = LocationGeocoder()
-                                        locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
-                                            if success {
-                                                dispatch_async(dispatch_get_main_queue()) {
-                                                    self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
-                                                }
-                                                bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
-                                            }
-                                            // if the last cheap gas was found, stop animating activity indicator.
-                                            if i == numCheapGasStations - 1 {
-                                                dispatch_async(dispatch_get_main_queue()) {
-                                                    self.stopSpinner()
-                                                    self.updateCamera(bounds, shouldAddEdgeInsets: false)
-                                                }
-                                                
-                                            }
-                                        }
-                                    }
-                                }
-                                
+//                                for i in 0..<numCheapGasStations {
+//                                    if let cheapStation = cheapGasFinder.stations[safe: i] {
+//                                        let userData: [String:String] = ["address"  : cheapStation.address!]
+//                                        let locationGeocoder = LocationGeocoder()
+//                                        locationGeocoder.getCoordinates(cheapStation.address!) { (status, success) in
+//                                            if success {
+//                                                dispatch_async(dispatch_get_main_queue()) {
+//                                                    self.addMapMarker(locationGeocoder.coordinate!, title: cheapStation.name, snippet: cheapStation.price, userData: userData, cheap: true)
+//                                                }
+//                                                bounds = bounds.includingCoordinate(locationGeocoder.coordinate!)
+//                                            }
+//                                            // if the last cheap gas was found, stop animating activity indicator.
+//                                            if i == numCheapGasStations - 1 {
+//                                                dispatch_async(dispatch_get_main_queue()) {
+//                                                    self.stopSpinner()
+//                                                    self.updateCamera(bounds, shouldAddEdgeInsets: false)
+//                                                }
+//                                                
+//                                            }
+//                                        }
+//                                    }
+//                                }
+                        
                                 
                             }
                         }
-                    } else {
-                        print("Error: \(status)")
-                    }
-                }
+//                    } else {
+//                        print("Error: \(status)")
+//                    }
+//                }
             } else {
                 print("FAIL")
                 return
