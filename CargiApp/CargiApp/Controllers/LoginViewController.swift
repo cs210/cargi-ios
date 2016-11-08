@@ -70,6 +70,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         let alert = UIAlertController(title: "Server Error", message: "Server is currently down. Would you like to continue as an anonymous user?", preferredStyle: UIAlertControllerStyle.Alert)
                         let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: nil)
                         let yesAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+                            let prefs = NSUserDefaults.standardUserDefaults()
+                            prefs.setBool(true, forKey: "loggedIn") // set as logged in
                             self.performSegueWithIdentifier("login", sender: nil)
                         }
                         alert.addAction(noAction)
